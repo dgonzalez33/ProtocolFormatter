@@ -3,10 +3,6 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
 class ScriptWindow(Gtk.Window):
-
-        def read_file(self, filename):
-            file_object = open(filename, "r+")
-            return file_object
         
         def __init__(self):
                 Gtk.Window.__init__(self, title="Script Window")
@@ -35,7 +31,7 @@ class ScriptWindow(Gtk.Window):
                 self.scriptContainer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=20)
                 
                 self.scriptBuffer = Gtk.TextBuffer()
-                filetext = read_file(self, 'filterWindow.py')
+                filetext = read_file(self, 'scriptWindow.py')
                 self.scriptBuffer.set_text(filetext)
                 self.scriptView = Gtk.TextView()
                 self.scriptView.set_buffer(self.scriptBuffer)
@@ -49,9 +45,7 @@ class ScriptWindow(Gtk.Window):
         def on_New_clicked(self, widget):
             print("new was clicked")
             
-        
-        
-
+       
                 
                 
 def read_file(self, filename):
