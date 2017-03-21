@@ -2,9 +2,12 @@
 For software 2!
 
 # Getting Started
-Installatio Details
+Installation Details
+
 Development Environment:
+
 Kali 2016.v2
+
 LiClipse
  
 Workspace setup
