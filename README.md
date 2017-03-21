@@ -11,12 +11,13 @@ Installation Details
 -LiClipse
  
 Workspace setup
+
 -Create a new branch on gitHub based off the Master branch
 
 -Start a new python project on LiClipse and call it "ProtocolFormatter"
 copy the contents of the clone into your python project 
  
-# Creating a widget 
+# Creating a widget
 -Create a new python file in the windows folder called [widgetname]Widget.py
 
 -A widget should have a function called create_widget(self)
