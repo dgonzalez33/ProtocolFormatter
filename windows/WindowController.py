@@ -5,13 +5,30 @@ from scriptWidget import ScriptWidget
 from filterWidget import FilterWidget
 from editorWidget import EditorWidget
 
+"""
+Because our windows need to be customizable 
+we have a Windowcontroller
+With this controller we can create 
+a window with a widget or multiple widgets 
+"""
 class WindowController:
+    
+    """
+    The __init__ constructor is currently being used 
+    as a way to start our windows but we should only 
+    construct the default window here in the future 
+    Other windows will be created via button press 
+    """
     def __init__(self):
         self.create_default_window()
         self.create_script_window()
         self.create_filter_window()
         self.create_editor_window()
     
+    """
+    This function creates the default window
+    by combining 5 widget in 4 containers 
+    """
     def create_default_window(self):
         self.window_main = Gtk.Window()
         self.title = "Protocol Formatter System"
@@ -31,22 +48,26 @@ class WindowController:
         self.insert_widget_to_Frame("Icon Bar", second_widget,
                                     second_container, self.mainbox)
         
-        third_widget = EditorWidget().create_widget()
+        third_widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         third_container = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         self.insert_widget_to_Frame("Filter Bar",third_widget,
                                     third_container, self.mainbox)
         
-        fourth_widget = ScriptWidget().create_widget()
+        fourth_widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         fourth_container = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
         self.insert_widget_to_Frame("Packet Window", fourth_widget, 
                                     fourth_container, self.mainbox)
         
-        fifth_widget = FilterWidget().create_widget()
+        fifth_widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         self.insert_widget_to_Frame("Formatter Window",fifth_widget,
                                     fourth_container, self.mainbox)
         
         self.window_main.show_all()
     
+    """
+    create stand alone widget windows 
+    by declaring a function like these 
+    """
     def create_editor_window(self):
         self.editorbox = EditorWidget().create_widget()
         self.insert_widget_to_window("Editor Window", self.editorbox)
@@ -66,6 +87,10 @@ class WindowController:
         #Gtk.main_quit()
         print("destroyed! \m/")
     
+    """
+    Given a widget, we can place 
+    it on a window on a default frame
+    """
     def insert_widget_to_window(self, windowtitle, widget):
         vbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
         window= Gtk.Window()
@@ -78,7 +103,10 @@ class WindowController:
         self.insert_widget_to_Frame(windowtitle, widget, 
                                     first_container, vbox)
         window.show_all()
-        
+    """
+    Given a widget and a particular container and window
+    we can create more complicated windows 
+    """
     def insert_widget_to_Frame(self,label, vbox,frameContainer, wbox):
         
         wbox.pack_start(frameContainer, True, True, 6)
