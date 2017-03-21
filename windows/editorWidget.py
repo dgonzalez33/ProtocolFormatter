@@ -1,12 +1,11 @@
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-from filterRow import FilterRow
 
 
-class EditorWindow(Gtk.Window):
+class EditorWidget:
 
-        def __init__(self):
+        def create_widget(self):
 
             def makeFieldBox(self,fieldName):
                 fieldBox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
@@ -82,10 +81,8 @@ class EditorWindow(Gtk.Window):
                 valueBox.pack_start(treeview,False,False,0)
                 return valueBox
 
-            Gtk.Window.__init__(self, title="Editor Window")
+            
             vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-            self.set_border_width(10)
-            self.add(vbox)
             packetLabel = Gtk.Label()
             packetLabel.set_markup("<b>Packet #1</b>")
             packetLabel.set_alignment(xalign=0, yalign=1) 
@@ -111,6 +108,8 @@ class EditorWindow(Gtk.Window):
             annotateEntry = Gtk.Entry()
             annotateEntry.set_text("Annotate")
             legendBox.pack_start(annotateEntry,True,True,0)
+            
+            return vbox
         def on_hide_toggled(self, button, name):
             if button.get_active():
                 state = "on"
@@ -125,7 +124,3 @@ class EditorWindow(Gtk.Window):
             print("Added "+text+"!")
 
         
-win = EditorWindow()
-win.connect("delete-event", Gtk.main_quit)
-win.show_all()
-Gtk.main()
