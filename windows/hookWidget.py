@@ -44,7 +44,7 @@ class HookWidget:
             self.scriptWrapper = Gtk.Box(spacing=6)
             self.context.pack_start(self.scriptWrapper,False,False,0)
             self.createBut = Gtk.Button(label="Create Script")
-            # self.createBut.connect("clicked", self.on_includeBut_clicked)
+            self.createBut.connect("clicked", self.on_includeBut_clicked)
             self.scriptWrapper.pack_start(self.createBut,False,False,0)
             self.scriptPathEntry = Gtk.Entry()
             self.scriptPathEntry.set_text("<File Path>")
