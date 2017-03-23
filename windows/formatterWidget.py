@@ -35,14 +35,52 @@ class FormatterWidget:
             row = FilterRow(self.listbox,"proto","tcp")
             self.listbox.add(row.getRow())  
 
-            self.context = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-            vbox.pack_start(self.context,False,False,0)
-            contextLabel = Gtk.Label()
-            contextLabel.set_markup("<b>Applied Rules for <Protocol X>Based on <Filter A> </b>")
-            contextLabel.set_alignment(xalign=0, yalign=1) 
-            self.context.pack_start(contextLabel,False,False,0)
+            # self.context = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+            # vbox.pack_start(self.context,False,False,0)
+            # contextLabel = Gtk.Label()
+            # contextLabel.set_markup("<b>Applied Rules for <Protocol X>Based on <Filter A> </b>")
+            # contextLabel.set_alignment(xalign=0, yalign=1) 
+            # self.context.pack_start(contextLabel,False,False,0)
 
-            # self.rulebox = Gtk.listBox()
+            # appliedRulesContainer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+            vbox.pack_start(appliedFormattersContainer,True,True,0)
+            RulesContainer = Gtk.Box(spacing=6)
+
+            appliedRulesLabel = Gtk.Label()
+            appliedRulesLabel.set_markup("<b>Applied Rules</b>")
+            appliedRulesLabel.set_alignment(xalign=0, yalign=1)
+            appliedFormattersContainer.pack_start(appliedRulesLabel, True, True,0)
+            # appliedFormattersContainer.pack_start(appliedRulesContainer, True, True, 0)
+            appliedFormattersContainer.pack_start(RulesContainer, True, True, 0)
+
+            self.rulesListbox = Gtk.ListBox()
+            self.rulesListbox.set_selection_mode(Gtk.SelectionMode.NONE)
+            RulesContainer.pack_start(self.rulesListbox, True, True, 0)
+            Rulerow = FilterRow(self.listbox,"Rule","action")
+            self.rulesListbox.add(Rulerow.getRow())
+
+
+            # self.newRuleListbox = Gtk.ListBox()
+            # self.istbox.set_selection_mode(Gtk.SelectionMode.NONE)
+            # newRulesContainer = Gtk.Box(spacing=6)
+            # newRuleLabel = Gtk.Label()
+            # newRuleLabel.set_markup("Construction of New Rule")
+            # newRuleLabel.set_alignment(xalign=0, yalign=1)
+            # appliedFormattersContainer.pack_start(newRuleLabel,True, True, 0)
+            # appliedFormattersContainer.pack_start(newRulesContainer, True, True, 0)
+
+
+            # self.newRulesListBox = Gtk.ListBox()
+            # self.newRulesListBox.set_selection_mode(Gtk.SelectionMode.NONE)
+            # newRulesContainer.pack_start(self.newRulesListBox, True, True, 0)
+            # newRulerow = FilterRow(self.listbox, "Action")
+            # self.newRulesListBox.add(newRulerow.getRow())
+
+            
+            return vbox
+
+
+
             # self.includeWrapper = Gtk.Box(spacing=6)
             # self.context.pack_start(self.includeWrapper,False,False,0)
             # self.includeBut = Gtk.Button(label="Include")
@@ -62,21 +100,8 @@ class FormatterWidget:
             # self.excludeEntry.set_text("<Enter String>")
             # self.excludeWrapper.pack_start(self.excludeEntry,True,True,0)
 
-            self.box = Gtk.Box(spacing=6)
-            vbox.pack_start(self.box,False,False,0)
-            customLabel = Gtk.Label("Custom Name: ")
-            self.box.pack_start(customLabel,False,False,0)
-            self.customName = Gtk.Entry()
-            self.customName.set_text("<Name of filter>")
-            self.box.pack_start(self.customName, False, False, 0)
-            self.butCreate = Gtk.Button(label="Create|Apply Filter")
-            self.butCreate.connect("clicked", self.on_butCreate_clicked)
-            self.box.pack_start(self.butCreate,False,False,0)
-            self.butReset = Gtk.Button(label="Reset Filter")
-            self.butReset.connect("clicked",self.on_butReset_clicked)
-            self.box.pack_start(self.butReset,False,False,0)
-            
-            return vbox
+            # self.box = Gtk.Box(spacing=6)
+            # vbox.pack_start(self.box,False,False,0)
             
         def on_butCreate_clicked(self, widget):
             print("Applying Filter!")
