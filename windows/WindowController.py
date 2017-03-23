@@ -84,7 +84,7 @@ class WindowController:
 
     def create_hook_window(self):
         self.hookbox = HookWidget().create_widget()
-        self.isert_widget_to_window("Fileter Window", self.hookbox)
+        self.insert_widget_to_window("Fileter Window", self.hookbox)
         
     def main(self):
         Gtk.main()
