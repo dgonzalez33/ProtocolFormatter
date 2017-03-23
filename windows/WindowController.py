@@ -5,6 +5,7 @@ from scriptWidget import ScriptWidget
 from filterWidget import FilterWidget
 from editorWidget import EditorWidget
 from packetWidget import PacketWidget
+from menuBar import menuBar
 from iconBar import iconBar
 
 """
@@ -41,7 +42,7 @@ class WindowController:
         self.mainbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         self.window_main.add(self.mainbox)
         
-        first_widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+        first_widget = menuBar().create_widget()
         first_container = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         self.insert_widget_to_Frame("Menu Bar", first_widget,
                                     first_container, self.mainbox)
