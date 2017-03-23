@@ -25,6 +25,7 @@ class WindowController:
         self.create_script_window()
         self.create_filter_window()
         self.create_editor_window()
+        self.create_hook_window()
     
     """
     This function creates the default window
