@@ -4,6 +4,7 @@ from gi.repository import Gtk
 from scriptWidget import ScriptWidget
 from filterWidget import FilterWidget
 from editorWidget import EditorWidget
+from packetWidget import PacketWidget
 
 """
 Because our windows need to be customizable 
@@ -24,6 +25,7 @@ class WindowController:
         self.create_script_window()
         self.create_filter_window()
         self.create_editor_window()
+	self.create_packet_window()
     
     """
     This function creates the default window
@@ -79,6 +81,10 @@ class WindowController:
     def create_filter_window(self):
         self.filterbox = FilterWidget().create_widget()
         self.insert_widget_to_window("Filter Window", self.filterbox)
+
+    def create_packet_window(self):
+	self.packetbox = PacketWidget().create_widget()
+	self.insert_widget_to_window("Packet Window", self.packetbox)
         
     def main(self):
         Gtk.main()
