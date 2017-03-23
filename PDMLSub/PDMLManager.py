@@ -3,7 +3,7 @@ from PDMLParser import pdmlparser
 class pdmlmanager:
     
 
-    parser = pdmlparser('dns_query_response2.pdml')
+    parser = pdmlparser('../FileSub/rand.pdml')
     
     def __init__(self):
         self.create_self()
@@ -17,7 +17,7 @@ class pdmlmanager:
         print("packet with id 1", self.get_packet_of_id(1))
         print("all packets:",self.get_all_packets())
         print("all proto names", self.get_all_protocol_names())
-        print("field'udp.length'of udp in packet1 :",self.get_field_element(1,"udp","udp.length"))
+        print("field'udp.length'of udp in packet1 :",self.get_field_element(1,"sll","sll.pkttype"))
         return 0
         
         

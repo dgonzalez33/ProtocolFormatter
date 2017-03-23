@@ -8,8 +8,10 @@ from CommandLineWidget import CommandLineWidget
 from HistoricalCopyWidget import HistoricalCopyWidget
 from editorWidget import EditorWidget
 from packetWidget import PacketWidget
+from formatterWidget import FormatterWidget
 from menuBar import menuBar
 from iconBar import iconBar
+from FilterBarWidget import FilterBarWidget
 
 """
 Because our windows need to be customizable 
@@ -48,20 +50,20 @@ class WindowController:
     def create_default_window(self):
 
 
-	# create main window
+        #create main window
         self.window_main = Gtk.Window()
         self.title = "Protocol Formatter System"
         self.window_main.set_title(self.title)
-        self.window_main.set_size_request( -1, -1)
+        self.window_main.set_size_request( 1000, 600)
         self.window_main.connect("destroy", self.destroy)
         self.mainbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         
         self.menu_bar = Gtk.MenuBar()
 
-	# create file drop down menu
+        #create file drop down menu
         file_menu = Gtk.Menu()
            
-	# begin creating items for the drop down menu 
+        #begin creating items for the drop down menu 
         open_item = Gtk.MenuItem("Open")
         open_item.connect_object("activate",self.on_Open_clicked, "open")
 
@@ -69,7 +71,7 @@ class WindowController:
 
         close_item = Gtk.MenuItem("Close")
         
-	# insert items into the drop down menu
+        #insert items into the drop down menu
         file_menu.append(open_item)
         file_menu.append(save_item)
         file_menu.append(close_item)
@@ -78,10 +80,10 @@ class WindowController:
         save_item.show()
         close_item.show()
         
-	# create edit drop down menu
+        #create edit drop down menu
         edit_menu = Gtk.Menu()
             
-	# begin creating items for the drop down menu
+        #begin creating items for the drop down menu
         undo_item = Gtk.MenuItem("Undo")
 
         redo_item = Gtk.MenuItem("Redo")
@@ -94,7 +96,7 @@ class WindowController:
 
         restore_item = Gtk.MenuItem("Restore")
         
-	# insert items into the drop down menu
+        #insert items into the drop down menu
         edit_menu.append(undo_item)
         edit_menu.append(redo_item)
         edit_menu.append(copy_item)
@@ -112,7 +114,7 @@ class WindowController:
         # create window drop down menu
         window_menu = Gtk.Menu()
 
-	# begin creating items for the drop down menu            
+        #begin creating items for the drop down menu            
         filter_item = Gtk.MenuItem("Filter")
         filter_item.connect("activate",self.create_filter_window)
 
@@ -126,12 +128,12 @@ class WindowController:
         hook_item.connect("activate",self.create_hook_window)
 
         commandline_item = Gtk.MenuItem("CommandLine")
-	commandline_item.connect("activate",self.create_commandline_window)
+        commandline_item.connect("activate",self.create_commandline_window)
 
         historical_item = Gtk.MenuItem("Historical")
-	historical_item.connect("activate", self.create_historical_window)
+        historical_item.connect("activate", self.create_historical_window)
 
-	# insert items into the drop down menu        
+        #insert items into the drop down menu        
         window_menu.append(filter_item)
         window_menu.append(editor_item)
         window_menu.append(script_item)
@@ -174,23 +176,23 @@ class WindowController:
         menu_bar.append(window_root)
         menu_bar.append(help_root)
 
-	# Create icon bar  
+        #Create icon bar  
         second_widget = iconBar().create_widget()
         second_container = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         self.insert_widget_to_Frame("<Mode of Operation>", second_widget,
                                     second_container, self.mainbox)
          
-        third_widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+        third_widget = FilterBarWidget().create_widget()
         third_container = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         self.insert_widget_to_Frame("Filter Bar",third_widget,
                                     third_container, self.mainbox)
          
-        fourth_widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+        fourth_widget = PacketWidget().create_widget()
         fourth_container = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
         self.insert_widget_to_Frame("Packet Window", fourth_widget, 
                                     fourth_container, self.mainbox)
          
-        fifth_widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+        fifth_widget = FormatterWidget().create_widget()
         self.insert_widget_to_Frame("Formatter Window",fifth_widget,
                                     fourth_container, self.mainbox)
 #         
@@ -201,46 +203,46 @@ class WindowController:
     by declaring a function like these 
     """
     def create_editor_window(self, widget):
-	global editorOpen
-	if(not editorOpen):
-           self.editorbox = EditorWidget().create_widget()
-           self.insert_widget_to_window("Editor Window", self.editorbox)
-	   editorOpen = True
+        global editorOpen
+        if(not editorOpen):
+            self.editorbox = EditorWidget().create_widget()
+            self.insert_widget_to_window("Editor Window", self.editorbox)
+            editorOpen = True
             
     def create_script_window(self, widget):
-	global scriptOpen
-	if(not scriptOpen):
-           self.scriptbox = ScriptWidget().create_widget()
-           self.insert_widget_to_window("Script Window", self.scriptbox)
-	   scriptOpen = True
+        global scriptOpen
+        if(not scriptOpen):
+            self.scriptbox = ScriptWidget().create_widget()
+            self.insert_widget_to_window("Script Window", self.scriptbox)
+            scriptOpen = True
         
     def create_filter_window(self, widget):
-	global filterOpen
-	if(not filterOpen):
-           self.filterbox = FilterWidget().create_widget()
-           self.insert_widget_to_window("Filter Window", self.filterbox)
-	   filterOpen = True
+        global filterOpen
+        if(not filterOpen):
+            self.filterbox = FilterWidget().create_widget()
+            self.insert_widget_to_window("Filter Window", self.filterbox)
+            filterOpen = True
 
     def create_hook_window(self, widget):
-	global hookOpen
-	if(not hookOpen):
-           self.hookbox = HookWidget().create_widget()
-           self.insert_widget_to_window("Hook Window", self.hookbox)
-	   hookOpen = True
+        global hookOpen
+        if(not hookOpen):
+            self.hookbox = HookWidget().create_widget()
+            self.insert_widget_to_window("Hook Window", self.hookbox)
+            hookOpen = True
 
     def create_commandline_window(self,widget):
-	global commOpen
-	if(not commOpen):
-	   self.commandbox = CommandLineWidget().create_widget()
-	   self.insert_widget_to_window("Command Line Window", self.commandbox)
-	   commOpen = True
+        global commOpen
+        if(not commOpen):
+            self.commandbox = CommandLineWidget().create_widget()
+            self.insert_widget_to_window("Command Line Window", self.commandbox)
+            commOpen = True
 
     def create_historical_window(self,widget):
-	global histOpen
-	if(not histOpen):
-	   self.historybox = HistoricalCopyWidget().create_widget()
-	   self.insert_widget_to_window("Historical Copy Window", self.historybox)
-	   histOpen = True
+        global histOpen
+        if(not histOpen):
+            self.historybox = HistoricalCopyWidget().create_widget()
+            self.insert_widget_to_window("Historical Copy Window", self.historybox)
+            histOpen = True
 
 
 
@@ -255,34 +257,34 @@ class WindowController:
         print("destroyed! \m/")
 
     def destroyComm(self, w):
-	print("destroyed! \m/")
-	global commOpen
-	commOpen = False
+        print("destroyed! \m/")
+        global commOpen
+        commOpen = False
 
     def destroyEditor(self, w):
-	print("destroyed! \m/")
-	global editorOpen
-	editorOpen = False   
+        print("destroyed! \m/")
+        global editorOpen
+        editorOpen = False   
 
     def destroyFilter(self, w):
-	print("destroyed! \m/")
-	global filterOpen
-	filterOpen = False 
+        print("destroyed! \m/")
+        global filterOpen
+        filterOpen = False 
 
     def destroyHook(self, w):
-	print("destroyed! \m/")
-	global hookOpen
-	hookOpen = False 
+        print("destroyed! \m/")
+        global hookOpen
+        hookOpen = False 
 
     def destroyHist(self, w):
-	print("destroyed! \m/")
-	global histOpen
-	histOpen = False 
+        print("destroyed! \m/")
+        global histOpen
+        histOpen = False 
 
     def destroyScript(self, w):
-	print("destroyed! \m/")
-	global scriptOpen
-	scriptOpen = False 
+        print("destroyed! \m/")
+        global scriptOpen
+        scriptOpen = False 
 
     """
     Given a widget, we can place 
@@ -294,20 +296,20 @@ class WindowController:
         title = windowtitle
         window.set_title(title)
         window.set_size_request( -1, -1)
-	if(title == "Command Line Window"):
-	   window.connect("destroy", self.destroyComm)
-	elif(title == "Editor Window"):
-	   window.connect("destroy", self.destroyEditor)
-	elif(title == "Filter Window"):
-	   window.connect("destroy", self.destroyFilter)
-	elif(title == "Hook Window"):
-	   window.connect("destroy", self.destroyHook)
-	elif(title == "Historical Copy Window"):
-	   window.connect("destroy", self.destroyHist)
-	elif(title == "Script Window"):
-	   window.connect("destroy", self.destroyScript)
-	else:
-	   window.connect("destroy", self.destroy)
+        if(title == "Command Line Window"):
+            window.connect("destroy", self.destroyComm)
+        elif(title == "Editor Window"):
+            window.connect("destroy", self.destroyEditor)
+        elif(title == "Filter Window"):
+            window.connect("destroy", self.destroyFilter)
+        elif(title == "Hook Window"):
+            window.connect("destroy", self.destroyHook)
+        elif(title == "Historical Copy Window"):
+            window.connect("destroy", self.destroyHist)
+        elif(title == "Script Window"):
+            window.connect("destroy", self.destroyScript)
+        else:
+            window.connect("destroy", self.destroy)
         window.add(vbox)
         first_container = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         self.insert_widget_to_Frame(windowtitle, widget, 
