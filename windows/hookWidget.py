@@ -76,18 +76,18 @@ class HookWidget:
             
             return vbox
             
-        # def on_butCreate_clicked(self, widget):
-        #     print("Applying Filter!")
-        # def on_butReset_clicked(self, widget):
-        #     print("Resetting FIlter!")
-        # def on_includeBut_clicked(self, widget):
-        #     print("Including!") 
-        # def on_excludeBut_clicked(self, widget):
-        #     print("Including!") 
-        # def on_addField_clicked(self, widget):
-        #     selected = self.expLists.getSelected()
-        #     print(selected[0])
-        #     row = FilterRow(self.listbox,selected[0],selected[1])
-        #     self.listbox.add(row.getRow())
-        #     self.listbox.show_all()    
+        def on_butCreate_clicked(self, widget):
+            print("Applying Filter!")
+        def on_butReset_clicked(self, widget):
+            print("Resetting FIlter!")
+        def on_includeBut_clicked(self, widget):
+            print("Including!") 
+        def on_excludeBut_clicked(self, widget):
+            print("Including!") 
+        def on_addField_clicked(self, widget):
+            selected = self.expLists.getSelected()
+            print(selected[0])
+            row = FilterRow(self.listbox,selected[0],selected[1])
+            self.listbox.add(row.getRow())
+            self.listbox.show_all()    
 
