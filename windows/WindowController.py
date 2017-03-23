@@ -25,9 +25,9 @@ class WindowController:
     """
     def __init__(self):
         self.create_default_window()
-        self.create_script_window()
-        self.create_filter_window()
-        self.create_editor_window()
+#         self.create_script_window()
+#         self.create_filter_window()
+#         self.create_editor_window()
 
     
     """
@@ -41,51 +41,155 @@ class WindowController:
         self.window_main.set_size_request( -1, -1)
         self.window_main.connect("destroy", self.destroy)
         self.mainbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+        
+        self.menu_bar = Gtk.MenuBar()
+      
+        
+    
+        file_menu = Gtk.Menu()
+            
+        open_item = Gtk.MenuItem("Open")
+        open_item.connect_object("activate",self.on_Open_clicked, "open")
+        save_item = Gtk.MenuItem("Save")
+        close_item = Gtk.MenuItem("Close")
+       
+        
+        file_menu.append(open_item)
+        file_menu.append(save_item)
+        file_menu.append(close_item)
+        
+        open_item.show()
+        save_item.show()
+        close_item.show()
+        
+        edit_menu = Gtk.Menu()
+            
+        undo_item = Gtk.MenuItem("Undo")
+        redo_item = Gtk.MenuItem("Redo")
+        copy_item = Gtk.MenuItem("Copy")
+        cut_item = Gtk.MenuItem("Cut")
+        paste_item = Gtk.MenuItem("Paste")
+        restore_item = Gtk.MenuItem("Restore")
+        
+        edit_menu.append(undo_item)
+        edit_menu.append(redo_item)
+        edit_menu.append(copy_item)
+        edit_menu.append(cut_item)
+        edit_menu.append(paste_item)
+        edit_menu.append(restore_item)
+        
+        undo_item.show()
+        redo_item.show()
+        copy_item.show()
+        cut_item.show()
+        paste_item.show()
+        restore_item.show()
+        
+        
+        window_menu = Gtk.Menu()
+            
+        filter_item = Gtk.MenuItem("Filter")
+        filter_item.connect("activate",self.create_filter_window)
+        editor_item = Gtk.MenuItem("Editor")
+        editor_item.connect("activate",self.create_editor_window)
+        script_item = Gtk.MenuItem("Script")
+        script_item.connect("activate",self.create_script_window)
+        hook_item = Gtk.MenuItem("Hook")
+        hook_item.connect("activate",self.create_hook_window)
+        commandline_item = Gtk.MenuItem("CommandLine")
+        historical_item = Gtk.MenuItem("Historical")
+        
+        window_menu.append(filter_item)
+        window_menu.append(editor_item)
+        window_menu.append(script_item)
+        window_menu.append(hook_item)
+        window_menu.append(commandline_item)
+        window_menu.append(historical_item)
+        
+        filter_item.show()
+        editor_item.show()
+        script_item.show()
+        hook_item.show()
+        commandline_item.show()
+        historical_item.show()
+        
+        
+        file_root = Gtk.MenuItem("File")
+        edit_root = Gtk.MenuItem("Edit")
+        window_root = Gtk.MenuItem("Window")
+        help_root = Gtk.MenuItem("Help")
+        
+        file_root.show()
+        edit_root.show()
+        window_root.show()
+        help_root.show()
+        
+        file_root.set_submenu(file_menu)
+        edit_root.set_submenu(edit_menu)
+        window_root.set_submenu(window_menu)
+        
         self.window_main.add(self.mainbox)
+        self.mainbox.show()
         
-        first_widget = menuBar().create_widget()
-        first_container = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-        self.insert_widget_to_Frame("Menu Bar", first_widget,
-                                    first_container, self.mainbox)
+        menu_bar = Gtk.MenuBar()
+        self.mainbox.pack_start(menu_bar, False, False, 2)
         
+        menu_bar.show()
+        
+        menu_bar.append(file_root)
+        menu_bar.append(edit_root)
+        menu_bar.append(window_root)
+        menu_bar.append(help_root)
+        
+ 
+#         
+#         first_widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+#         first_container = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+#         self.insert_widget_to_Frame("Menu Bar", first_widget,
+#                                     first_container, self.mainbox)
+#         
         second_widget = iconBar().create_widget()
         second_container = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         self.insert_widget_to_Frame("<Mode of Operation>", second_widget,
                                     second_container, self.mainbox)
-        
+         
         third_widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         third_container = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         self.insert_widget_to_Frame("Filter Bar",third_widget,
                                     third_container, self.mainbox)
-        
+         
         fourth_widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         fourth_container = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
         self.insert_widget_to_Frame("Packet Window", fourth_widget, 
                                     fourth_container, self.mainbox)
-        
+         
         fifth_widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         self.insert_widget_to_Frame("Formatter Window",fifth_widget,
                                     fourth_container, self.mainbox)
-        
+#         
         self.window_main.show_all()
     
     """
     create stand alone widget windows 
     by declaring a function like these 
     """
-    def create_editor_window(self):
+    def create_editor_window(self, widget):
         self.editorbox = EditorWidget().create_widget()
         self.insert_widget_to_window("Editor Window", self.editorbox)
             
-    def create_script_window(self):
+    def create_script_window(self, widget):
         self.scriptbox = ScriptWidget().create_widget()
         self.insert_widget_to_window("Script Window", self.scriptbox)
         
-    def create_filter_window(self):
+    def create_filter_window(self, widget):
         self.filterbox = FilterWidget().create_widget()
         self.insert_widget_to_window("Filter Window", self.filterbox)
+    def create_hook_window(self, widget):
+        self.hookbox = HookWidget().create_widget()
+        self.insert_widget_to_window("Hook window", self.hookbox)
 
-
+    def on_Open_clicked(self, widget):
+            print("Open was clicked")
         
     def main(self):
         Gtk.main()
