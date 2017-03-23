@@ -24,7 +24,7 @@ class FilterWidget:
             self.expLists = FilterList()
             filterContainer.pack_start(self.expLists.getList(),True,True,0)
 
-            addFilter = Gtk.Button(":)")
+            addFilter = Gtk.Button("->")
             # addFilter.set_image(image)
             addFilter.connect("clicked",self.on_addFilter_clicked)
             filterContainer.pack_start(addFilter,False,False,1)
