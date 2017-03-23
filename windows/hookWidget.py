@@ -22,7 +22,7 @@ class HookWidget:
             fieldContainer.pack_start(fieldContainer,True,True,0)
 
             # self.expLists = FilterList()
-            fieldContainer.pack_start(self.expLists.getList(),True,True,0)
+            # fieldContainer.pack_start(self.expLists.getList(),True,True,0)
 
             addField = Gtk.Button("->")
             # addFilter.set_image(image)
