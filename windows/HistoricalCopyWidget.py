@@ -20,3 +20,10 @@ class CommandLineWidget:
         self.includeWrapper.pack_start(self.includeEntry,True,True,0)
         return vbox
 
+    def Historical_copy(self):
+        read_file = open("name of file" , "rb")
+        data = read_file.read()
+        read_file.close()
+        create_file = open("Historical copy", "wb")
+        create_file.write(data)
+        create_file.close()
