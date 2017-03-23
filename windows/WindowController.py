@@ -3,6 +3,7 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from scriptWidget import ScriptWidget
 from filterWidget import FilterWidget
+from hookWidget import HookWidget
 from editorWidget import EditorWidget
 
 """
@@ -79,6 +80,10 @@ class WindowController:
     def create_filter_window(self):
         self.filterbox = FilterWidget().create_widget()
         self.insert_widget_to_window("Filter Window", self.filterbox)
+
+    def create_hook_window(self):
+        self.hookbox = HookWidget().create_widget()
+        self.isert_widget_to_window("Fileter Window", self.hookbox)
         
     def main(self):
         Gtk.main()
