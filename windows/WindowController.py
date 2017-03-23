@@ -5,7 +5,7 @@ from scriptWidget import ScriptWidget
 from filterWidget import FilterWidget
 from hookWidget import HookWidget
 from CommandLineWidget import CommandLineWidget
-from HistoricalCopyWidget import HistoricalWidget
+from HistoricalCopyWidget import HistoricalCopyWidget
 from editorWidget import EditorWidget
 from packetWidget import PacketWidget
 from menuBar import menuBar
@@ -238,7 +238,7 @@ class WindowController:
     def create_historical_window(self,widget):
 	global histOpen
 	if(not histOpen):
-	   self.historybox = HistoricalWidget().create_widget()
+	   self.historybox = HistoricalCopyWidget().create_widget()
 	   self.insert_widget_to_window("Historical Copy Window", self.historybox)
 	   histOpen = True
 
