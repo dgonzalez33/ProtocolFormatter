@@ -1,5 +1,5 @@
 #Command line widget
-#python 3.6
+#python 3.5
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
