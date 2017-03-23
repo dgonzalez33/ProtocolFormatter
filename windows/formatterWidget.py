@@ -12,7 +12,7 @@ class FormatterWidget:
             vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
             
             appliedFormattersContainer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-            vbox.pack_start(bpfContainer,True,True,0)
+            vbox.pack_start(appliedFormattersContainer,True,True,0)
             filterContainer = Gtk.Box(spacing=6)
 
             appliedFormattersLabel = Gtk.Label()
@@ -42,7 +42,7 @@ class FormatterWidget:
             contextLabel.set_alignment(xalign=0, yalign=1) 
             self.context.pack_start(contextLabel,False,False,0)
 
-            self.rulebox = Gtk.list
+            # self.rulebox = Gtk.listBox()
             # self.includeWrapper = Gtk.Box(spacing=6)
             # self.context.pack_start(self.includeWrapper,False,False,0)
             # self.includeBut = Gtk.Button(label="Include")
