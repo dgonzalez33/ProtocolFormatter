@@ -52,9 +52,12 @@ class HistoricalCopyWidget:
 
     def create_historical_copy(self):
         infile = open("name of file" , "wb")
-        data= infile.read(self)
-        outfile =  open("historical copy" + ".pdml")
-        outfile.write(data)
+        if ("name of file").endswith('.pdml'):
+            data = infile.read(self)
+            outfile = open("historical copy" + ".pdml")
+            outfile.write(data)
+        else: print ("error")
+
 
     #def compare(self):
 
