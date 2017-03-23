@@ -5,6 +5,9 @@ from scriptWidget import ScriptWidget
 from filterWidget import FilterWidget
 from hookWidget import HookWidget
 from editorWidget import EditorWidget
+from packetWidget import PacketWidget
+from menuBar import menuBar
+from iconBar import iconBar
 
 """
 Because our windows need to be customizable 
@@ -25,7 +28,7 @@ class WindowController:
         self.create_script_window()
         self.create_filter_window()
         self.create_editor_window()
-        self.create_hook_window()
+
     
     """
     This function creates the default window
@@ -40,14 +43,14 @@ class WindowController:
         self.mainbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         self.window_main.add(self.mainbox)
         
-        first_widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+        first_widget = menuBar().create_widget()
         first_container = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         self.insert_widget_to_Frame("Menu Bar", first_widget,
                                     first_container, self.mainbox)
         
-        second_widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+        second_widget = iconBar().create_widget()
         second_container = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-        self.insert_widget_to_Frame("Icon Bar", second_widget,
+        self.insert_widget_to_Frame("<Mode of Operation>", second_widget,
                                     second_container, self.mainbox)
         
         third_widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
@@ -82,9 +85,7 @@ class WindowController:
         self.filterbox = FilterWidget().create_widget()
         self.insert_widget_to_window("Filter Window", self.filterbox)
 
-    def create_hook_window(self):
-        self.hookbox = HookWidget().create_widget()
-        self.insert_widget_to_window("Hook Window", self.hookbox)
+
         
     def main(self):
         Gtk.main()
