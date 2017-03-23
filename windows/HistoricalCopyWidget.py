@@ -24,7 +24,7 @@ class HistoricalCopyWidget:
         
         #create a container for the packet 
         packetContainer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=20)
-        
+
         packetBuffer = Gtk.TextBuffer()
         filetext = "\n\n\n\n            <Historical Packet Contents>\n\n\n\n"
 
@@ -37,8 +37,8 @@ class HistoricalCopyWidget:
         #packetviewer is now a child of packet container 
         packetContainer.pack_start(packetView, False, False, 0)
 
-        restorebutton = Gtk.Button.new_with_label("Restore")
-        packetContainer.pack_start(restorebutton, False, False, 0)
+        comparebutton = Gtk.Button.new_with_label("compare")
+        packetContainer.pack_start(comparebutton, False, False, 0)
 
 
         
