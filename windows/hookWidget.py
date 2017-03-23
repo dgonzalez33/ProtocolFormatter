@@ -21,19 +21,19 @@ class HookWidget:
             fieldContainer.pack_start(fieldLabel,True,True,0)
             fieldContainer.pack_start(fieldContainer,True,True,0)
 
-            # self.expLists = FilterList()
-            # fieldContainer.pack_start(self.expLists.getList(),True,True,0)
+            self.expLists = FilterList()
+            fieldContainer.pack_start(self.expLists.getList(),True,True,0)
 
             addField = Gtk.Button("->")
-            # addFilter.set_image(image)
-            # addField.connect("clicked",self.on_addField_clicked)
+            addFilter.set_image(image)
+            addField.connect("clicked",self.on_addField_clicked)
             fieldContainer.pack_start(addField,False,False,1)
 
-            # self.listbox = Gtk.ListBox()
-            # self.listbox.set_selection_mode(Gtk.SelectionMode.NONE)
-            # fieldContainer.pack_start(self.listbox,True,True,0)
-            # row = FilterRow(self.listbox,"proto","tcp")
-            # self.listbox.add(row.getRow())  
+            self.listbox = Gtk.ListBox()
+            self.listbox.set_selection_mode(Gtk.SelectionMode.NONE)
+            fieldContainer.pack_start(self.listbox,True,True,0)
+            row = FilterRow(self.listbox,"proto","tcp")
+            self.listbox.add(row.getRow())  
 
             self.context = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
             vbox.pack_start(self.context,False,False,0)
