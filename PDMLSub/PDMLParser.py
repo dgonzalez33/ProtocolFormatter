@@ -1,7 +1,7 @@
-from PDML import pdml
-from Packet import packet
-from ProtoElement import protoelement
-from FieldElement import fieldelement
+from PDMLSub.PDML import pdml
+from PDMLSub.Packet import packet
+from PDMLSub.ProtoElement import protoelement
+from PDMLSub.FieldElement import fieldelement
 
 class pdmlparser:
     

@@ -1,4 +1,4 @@
-from PDMLParser import pdmlparser
+from PDMLSub.PDMLParser import pdmlparser
 
 class pdmlmanager:
     
@@ -17,7 +17,7 @@ class pdmlmanager:
         print("packet with id 1", self.get_packet_of_id(1))
         print("all packets:",self.get_all_packets())
         print("all proto names", self.get_all_protocol_names())
-        print("field'udp.length'of udp in packet1 :",self.get_field_element(1,"sll","sll.pkttype"))
+        print("field'sll.pkttype'of sll in packet1 :",self.get_field_element(1,"sll","sll.pkttype"))
         return 0
         
         

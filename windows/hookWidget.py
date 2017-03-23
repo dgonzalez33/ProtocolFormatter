@@ -1,8 +1,8 @@
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-from filterList import FilterList
-from filterRow import FilterRow
+from windows.filterList import FilterList
+from windows.filterRow import FilterRow
 
 class HookWidget:
 

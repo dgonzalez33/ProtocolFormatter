@@ -1,17 +1,18 @@
 import gi
+from numpy import empty
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-from scriptWidget import ScriptWidget
-from filterWidget import FilterWidget
-from hookWidget import HookWidget
-from CommandLineWidget import CommandLineWidget
-from HistoricalCopyWidget import HistoricalCopyWidget
-from editorWidget import EditorWidget
-from packetWidget import PacketWidget
-from formatterWidget import FormatterWidget
-from menuBar import menuBar
-from iconBar import iconBar
-from FilterBarWidget import FilterBarWidget
+from windows.scriptWidget import ScriptWidget
+from windows.filterWidget import FilterWidget
+from windows.hookWidget import HookWidget
+from windows.CommandLineWidget import CommandLineWidget
+from windows.HistoricalCopyWidget import HistoricalCopyWidget
+from windows.editorWidget import EditorWidget
+from windows.packetWidget import PacketWidget
+from windows.formatterWidget import FormatterWidget
+from windows.menuBar import menuBar
+from windows.iconBar import iconBar
+from windows.FilterBarWidget import FilterBarWidget
 
 """
 Because our windows need to be customizable 
@@ -29,12 +30,49 @@ histOpen = False
 
 class WindowController:
     
+    
+    #Widgets
+    icon_box = iconBar().create_widget()
+    filter_box = FilterBarWidget().create_widget()
+    packet_box = PacketWidget().create_widget()
+    formatter_box = FormatterWidget().create_widget()
+    editorbox = EditorWidget().create_widget()
+    scriptbox = ScriptWidget().create_widget()
+    filterbox = FilterWidget().create_widget()
+    hookbox = HookWidget().create_widget()
+    commandbox = CommandLineWidget().create_widget()
+    historybox = HistoricalCopyWidget().create_widget()
+    
+    
+    #Dialog Window
+    opendialog = Gtk.FileChooserDialog("Please choose a file", None,
+            Gtk.FileChooserAction.OPEN,
+            (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+             Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
+    chosenfile = ""
+    
+    
+    
+    #Windows
+    window_main = Gtk.Window()
+    editor_window = Gtk.Window()
+    script_window = Gtk.Window()
+    filter_window = Gtk.Window()
+    hook_window = Gtk.Window()
+    command_window = Gtk.Window()
+    history_window = Gtk.Window()
+    
+    
+    
+    
+    
     """
     The __init__ constructor is currently being used 
     as a way to start our windows but we should only 
     construct the default window here in the future 
     Other windows will be created via button press 
     """
+
 
     def __init__(self):
         self.create_default_window()
@@ -51,10 +89,9 @@ class WindowController:
 
 
         #create main window
-        self.window_main = Gtk.Window()
         self.title = "Protocol Formatter System"
         self.window_main.set_title(self.title)
-        self.window_main.set_size_request( 1000, 600)
+        self.window_main.set_size_request( 600, 400)
         self.window_main.connect("destroy", self.destroy)
         self.mainbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         
@@ -177,26 +214,34 @@ class WindowController:
         menu_bar.append(help_root)
 
         #Create icon bar  
-        second_widget = iconBar().create_widget()
         second_container = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
-        self.insert_widget_to_Frame("<Mode of Operation>", second_widget,
+        self.insert_widget_to_Frame("<Mode of Operation>", self.icon_box,
                                     second_container, self.mainbox)
          
-        third_widget = FilterBarWidget().create_widget()
+        
         third_container = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
-        self.insert_widget_to_Frame("Filter Bar",third_widget,
+        self.insert_widget_to_Frame("Filter Bar",self.filter_box,
                                     third_container, self.mainbox)
          
-        fourth_widget = PacketWidget().create_widget()
+        
         fourth_container = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
-        self.insert_widget_to_Frame("Packet Window", fourth_widget, 
+        self.insert_widget_to_Frame("Packet Window", self.packet_box, 
                                     fourth_container, self.mainbox)
          
-        fifth_widget = FormatterWidget().create_widget()
-        self.insert_widget_to_Frame("Formatter Window",fifth_widget,
+        
+        self.insert_widget_to_Frame("Formatter Window",self.formatter_box,
                                     fourth_container, self.mainbox)
 #         
         self.window_main.show_all()
+        
+    def refresh_all_windows(self):
+        self.window_main.show_all()
+        self.editor_window.show_all()
+        self.script_window.show_all()
+        self.filter_window.show_all()
+        self.hook_window.show_all()
+        self.command_window.show_all()
+        self.history_window.show_all()
     
     """
     create stand alone widget windows 
@@ -205,49 +250,56 @@ class WindowController:
     def create_editor_window(self, widget):
         global editorOpen
         if(not editorOpen):
-            self.editorbox = EditorWidget().create_widget()
-            self.insert_widget_to_window("Editor Window", self.editorbox)
+            self.insert_widget_to_window("Editor Window", self.editorbox, self.editor_window)
             editorOpen = True
             
     def create_script_window(self, widget):
         global scriptOpen
         if(not scriptOpen):
-            self.scriptbox = ScriptWidget().create_widget()
-            self.insert_widget_to_window("Script Window", self.scriptbox)
+            self.insert_widget_to_window("Script Window", self.scriptbox, self.script_window)
             scriptOpen = True
         
     def create_filter_window(self, widget):
         global filterOpen
         if(not filterOpen):
-            self.filterbox = FilterWidget().create_widget()
-            self.insert_widget_to_window("Filter Window", self.filterbox)
+            self.insert_widget_to_window("Filter Window", self.filterbox, self.filter_window)
             filterOpen = True
 
     def create_hook_window(self, widget):
         global hookOpen
         if(not hookOpen):
-            self.hookbox = HookWidget().create_widget()
-            self.insert_widget_to_window("Hook Window", self.hookbox)
+            self.insert_widget_to_window("Hook Window", self.hookbox, self.hook_window)
             hookOpen = True
 
     def create_commandline_window(self,widget):
         global commOpen
         if(not commOpen):
-            self.commandbox = CommandLineWidget().create_widget()
-            self.insert_widget_to_window("Command Line Window", self.commandbox)
+            self.insert_widget_to_window("Command Line Window", self.commandbox, self.command_window)
             commOpen = True
 
     def create_historical_window(self,widget):
         global histOpen
         if(not histOpen):
-            self.historybox = HistoricalCopyWidget().create_widget()
-            self.insert_widget_to_window("Historical Copy Window", self.historybox)
+            self.insert_widget_to_window("Historical Copy Window", self.historybox, self.history_window)
             histOpen = True
 
 
 
     def on_Open_clicked(self, widget):
-            print("Open was clicked")
+        w = Gtk.Window()
+        w.set_size_request(200,200)
+        w.add(self.opendialog)
+        
+        response = self.opendialog.run()
+        if response == Gtk.ResponseType.OK:
+            print("Open clicked")
+            print("File selected: " + self.opendialog.get_filename())
+            self.chosenfile = self.opendialog.get_filename()
+        elif response == Gtk.ResponseType.CANCEL:
+            print("Cancel clicked")
+
+        self.opendialog.destroy()
+        
         
     def main(self):
         Gtk.main()
@@ -290,9 +342,8 @@ class WindowController:
     Given a widget, we can place 
     it on a window on a default frame
     """
-    def insert_widget_to_window(self, windowtitle, widget):
+    def insert_widget_to_window(self, windowtitle, widget, window):
         vbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
-        window= Gtk.Window()
         title = windowtitle
         window.set_title(title)
         window.set_size_request( -1, -1)
