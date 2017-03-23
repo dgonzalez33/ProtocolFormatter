@@ -5,6 +5,7 @@ from scriptWidget import ScriptWidget
 from filterWidget import FilterWidget
 from editorWidget import EditorWidget
 from packetWidget import PacketWidget
+from iconBar import iconBar
 
 """
 Because our windows need to be customizable 
@@ -45,9 +46,9 @@ class WindowController:
         self.insert_widget_to_Frame("Menu Bar", first_widget,
                                     first_container, self.mainbox)
         
-        second_widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+        second_widget = iconBar().create_widget()
         second_container = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-        self.insert_widget_to_Frame("Icon Bar", second_widget,
+        self.insert_widget_to_Frame("<Mode of Operation>", second_widget,
                                     second_container, self.mainbox)
         
         third_widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
