@@ -59,49 +59,29 @@ class FormatterWidget:
             Rulerow = FilterRow(self.listbox,"Rule","action")
             self.rulesListbox.add(Rulerow.getRow())
 
+            conRule = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+            vbox.pack_start(conRule,False,False,0)
+            conLabel = Gtk.Label()
+            conLabel.set_markup("<b>Construction of new Rule with Filter A</b>")
+            conLabel.set_alignment(xalign=0, yalign=1) 
+            conRule.pack_start(conLabel,False,False,0)
+            actionEx = Gtk.Label()
+            actionEx.set_markup("Action 3.1")
+            actionEx.set_alignment(xalign=0, yalign=1) 
+            conRule.pack_start(actionEx,False,False,0)
+            actionEx2 = Gtk.Label()
+            actionEx2.set_markup("Action 3.2")
+            actionEx2.set_alignment(xalign=0, yalign=1) 
+            conRule.pack_start(actionEx2,False,False,0)
+            buttonCont = Gtk.Box(spacing=6)
+            vbox.pack_start(buttonCont,False,False,0)
+            createRule = Gtk.Button(label="Create Rule")
+            buttonCont.pack_start(createRule,False,False,0)
+            deleteRule = Gtk.Button(label="Delete Rule")
+            buttonCont.pack_start(deleteRule,False,False,0)
 
-            # self.newRuleListbox = Gtk.ListBox()
-            # self.istbox.set_selection_mode(Gtk.SelectionMode.NONE)
-            # newRulesContainer = Gtk.Box(spacing=6)
-            # newRuleLabel = Gtk.Label()
-            # newRuleLabel.set_markup("Construction of New Rule")
-            # newRuleLabel.set_alignment(xalign=0, yalign=1)
-            # appliedFormattersContainer.pack_start(newRuleLabel,True, True, 0)
-            # appliedFormattersContainer.pack_start(newRulesContainer, True, True, 0)
-
-
-            # self.newRulesListBox = Gtk.ListBox()
-            # self.newRulesListBox.set_selection_mode(Gtk.SelectionMode.NONE)
-            # newRulesContainer.pack_start(self.newRulesListBox, True, True, 0)
-            # newRulerow = FilterRow(self.listbox, "Action")
-            # self.newRulesListBox.add(newRulerow.getRow())
-
-            
             return vbox
 
-
-
-            # self.includeWrapper = Gtk.Box(spacing=6)
-            # self.context.pack_start(self.includeWrapper,False,False,0)
-            # self.includeBut = Gtk.Button(label="Include")
-            # self.includeBut.connect("clicked", self.on_includeBut_clicked)
-            # self.includeWrapper.pack_start(self.includeBut,False,False,0)
-            # self.includeEntry = Gtk.Entry()
-            # self.includeEntry.set_text("<Enter String>")
-            # self.includeWrapper.pack_start(self.includeEntry,True,True,0)
-
-
-            # self.excludeWrapper = Gtk.Box(spacing=6)
-            # self.context.pack_start(self.excludeWrapper,False,False,0)
-            # self.excludeBut = Gtk.Button(label="Exclude")
-            # self.excludeBut.connect("clicked", self.on_excludeBut_clicked)
-            # self.excludeWrapper.pack_start(self.excludeBut,False,False,0)
-            # self.excludeEntry = Gtk.Entry()
-            # self.excludeEntry.set_text("<Enter String>")
-            # self.excludeWrapper.pack_start(self.excludeEntry,True,True,0)
-
-            # self.box = Gtk.Box(spacing=6)
-            # vbox.pack_start(self.box,False,False,0)
             
         def on_butCreate_clicked(self, widget):
             print("Applying Filter!")
