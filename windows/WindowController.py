@@ -6,12 +6,11 @@ from FilterBarWidget import FilterBarWidget
 from filterWidget import FilterWidget
 from hookWidget import HookWidget
 from CommandLineWidget import CommandLineWidget
-from HistoricalCopyWidget import HistoricalWidget
+from HistoricalCopyWidget import HistoricalCopyWidget
 from editorWidget import EditorWidget
 from packetWidget import PacketWidget
 from formatterWidget import FormatterWidget
 from CommandLineWidget import CommandLineWidget
-from HistoricalCopyWidget import HistoricalCopyWidget
 from menuBar import menuBar
 from iconBar import iconBar
 
@@ -42,7 +41,7 @@ class WindowController:
     """
     def create_default_window(self):
 
-	# create main window
+    # create main window
         self.window_main = Gtk.Window()
         self.title = "Protocol Formatter System"
         self.window_main.set_title(self.title)
@@ -52,10 +51,10 @@ class WindowController:
         
         self.menu_bar = Gtk.MenuBar()
 
-	# create file drop down menu
+    # create file drop down menu
         file_menu = Gtk.Menu()
            
-	# begin creating items for the drop down menu 
+    # begin creating items for the drop down menu 
         open_item = Gtk.MenuItem("Open")
         open_item.connect_object("activate",self.on_Open_clicked, "open")
 
@@ -63,7 +62,7 @@ class WindowController:
 
         close_item = Gtk.MenuItem("Close")
         
-	# insert items into the drop down menu
+    # insert items into the drop down menu
         file_menu.append(open_item)
         file_menu.append(save_item)
         file_menu.append(close_item)
@@ -72,10 +71,10 @@ class WindowController:
         save_item.show()
         close_item.show()
         
-	# create edit drop down menu
+    # create edit drop down menu
         edit_menu = Gtk.Menu()
             
-	# begin creating items for the drop down menu
+    # begin creating items for the drop down menu
         undo_item = Gtk.MenuItem("Undo")
 
         redo_item = Gtk.MenuItem("Redo")
@@ -88,7 +87,7 @@ class WindowController:
 
         restore_item = Gtk.MenuItem("Restore")
         
-	# insert items into the drop down menu
+    # insert items into the drop down menu
         edit_menu.append(undo_item)
         edit_menu.append(redo_item)
         edit_menu.append(copy_item)
@@ -106,7 +105,7 @@ class WindowController:
         # create window drop down menu
         window_menu = Gtk.Menu()
 
-	# begin creating items for the drop down menu            
+    # begin creating items for the drop down menu            
         filter_item = Gtk.MenuItem("Filter")
         filter_item.connect("activate",self.create_filter_window)
 
@@ -120,12 +119,12 @@ class WindowController:
         hook_item.connect("activate",self.create_hook_window)
 
         commandline_item = Gtk.MenuItem("CommandLine")
-	commandline_item.connect("activate",self.create_commandline_window)
+        commandline_item.connect("activate",self.create_commandline_window)
 
         historical_item = Gtk.MenuItem("Historical")
-	historical_item.connect("activate", self.create_historical_window)
+        historical_item.connect("activate", self.create_historical_window)
 
-	# insert items into the drop down menu        
+    # insert items into the drop down menu        
         window_menu.append(filter_item)
         window_menu.append(editor_item)
         window_menu.append(script_item)
@@ -168,23 +167,23 @@ class WindowController:
         menu_bar.append(window_root)
         menu_bar.append(help_root)
 
-	# Create icon bar  
+    # Create icon bar  
         second_widget = iconBar().create_widget()
         second_container = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         self.insert_widget_to_Frame("<Mode of Operation>", second_widget,
                                     second_container, self.mainbox)
          
-        third_widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+        third_widget = FilterBarWidget().create_widget()
         third_container = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         self.insert_widget_to_Frame("Filter Bar",third_widget,
                                     third_container, self.mainbox)
          
-        fourth_widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
-        fourth_container = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        fourth_widget = PacketWidget().create_widget()
+        fourth_container = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
         self.insert_widget_to_Frame("Packet Window", fourth_widget, 
                                     fourth_container, self.mainbox)
          
-        fifth_widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+        fifth_widget = FormatterWidget().create_widget()
         self.insert_widget_to_Frame("Formatter Window",fifth_widget,
                                     fourth_container, self.mainbox)
 #         
@@ -211,12 +210,12 @@ class WindowController:
         self.insert_widget_to_window("Hook Window", self.hookbox)
 
     def create_commandline_window(self,widget):
-	self.commandbox = CommandLineWidget().create_widget()
-	self.insert_widget_to_window("Command Line Window", self.commandbox)
+        self.commandbox = CommandLineWidget().create_widget()
+        self.insert_widget_to_window("Command Line Window", self.commandbox)
 
     def create_historical_window(self,widget):
-	self.historybox = HistoricalWidget().create_widget()
-	self.insert_widget_to_window("Historical Copy Window", self.historybox)
+        self.historybox = HistoricalCopyWidget().create_widget()
+        self.insert_widget_to_window("Historical Copy Window", self.historybox)
 
 
 
