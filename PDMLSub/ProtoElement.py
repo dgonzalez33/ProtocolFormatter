@@ -24,6 +24,9 @@ class protoelement:
     def get_proto_attrib(self):
         return self.proto_attributes
     
+    def get_proto_attrib_value(self, key):
+        return self.proto_attributes[key]
+    
     def get_field_element(self):
         return self.field_elements
     

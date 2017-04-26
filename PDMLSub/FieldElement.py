@@ -18,6 +18,9 @@ class fieldelement:
         
     def get_field_attributes(self):
         return self.field_attributes
+    
+    def get_field_attributes_value(self, key):
+        return self.field_attributes[key]
 
 
 if(__name__ == "__main__"):
