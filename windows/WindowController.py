@@ -2,12 +2,16 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from scriptWidget import ScriptWidget
+from FilterBarWidget import FilterBarWidget
 from filterWidget import FilterWidget
 from hookWidget import HookWidget
 from CommandLineWidget import CommandLineWidget
 from HistoricalCopyWidget import HistoricalWidget
 from editorWidget import EditorWidget
 from packetWidget import PacketWidget
+from formatterWidget import FormatterWidget
+from CommandLineWidget import CommandLineWidget
+from HistoricalCopyWidget import HistoricalCopyWidget
 from menuBar import menuBar
 from iconBar import iconBar
 
@@ -42,7 +46,7 @@ class WindowController:
         self.window_main = Gtk.Window()
         self.title = "Protocol Formatter System"
         self.window_main.set_title(self.title)
-        self.window_main.set_size_request( -1, -1)
+        self.window_main.set_size_request( 1000, 500)
         self.window_main.connect("destroy", self.destroy)
         self.mainbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         
@@ -155,7 +159,7 @@ class WindowController:
         self.mainbox.show()
         
         menu_bar = Gtk.MenuBar()
-        self.mainbox.pack_start(menu_bar, False, False, 2)
+        self.mainbox.pack_start(menu_bar, False, False, 0)
         
         menu_bar.show()
         
@@ -235,7 +239,7 @@ class WindowController:
         window= Gtk.Window()
         title = windowtitle
         window.set_title(title)
-        window.set_size_request( -1, -1)
+        window.set_size_request( 500, 350)
         window.connect("destroy", self.destroy)
         window.add(vbox)
         first_container = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
@@ -256,7 +260,7 @@ class WindowController:
         frame.show()
         v_widget = vbox
         frame.add(v_widget)
-        frameContainer.pack_start(frame, True, True, 6)
+        frameContainer.pack_start(frame, True, True, 0)
         v_widget.show()
     
 if(__name__ == "__main__"):
