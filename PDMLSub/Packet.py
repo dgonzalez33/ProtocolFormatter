@@ -7,21 +7,27 @@ class packet:
     
     def __init__(self):
         self.create_self()
+        self.proto_elements = []
+        self.packet_attributes = {}
      
     def create_self(self):
-        print("packet class")
+        #print("packet class")
+        return 0
         
-    def set_packet_id(self, id):
-        self.packetid = id
+    def set_packet_id(self, ident):
+        self.packetid = ident
         
-    def set_proto_element(self, index, proto):
-        self.proto_elements[index] = proto
-    
+    def set_protoelement(self, proto):
+        self.proto_elements.append(proto)
+        
     def set_packet_attrib(self, key, val):
         self.packet_attributes[key] = val
                 
-    def get_proto_element(self, id, protoname, fieldname):
+    def get_proto_element(self):
         return self.proto_elements
+    
+    def get_proto_element_at_index(self, index):
+        return self.proto_elements[index]
     
     def get_field_attributes(self):
         return self.packet_attributes
@@ -33,5 +39,5 @@ class packet:
 
 
 if(__name__ == "__main__"):
-    d = packet()
+    b = packet()
     

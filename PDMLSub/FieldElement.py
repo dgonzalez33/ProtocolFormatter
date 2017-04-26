@@ -5,9 +5,11 @@ class fieldelement:
     
     def __init__(self):
         self.create_self()
+        self.field_attributes = {}
      
     def create_self(self):
-        print("fieldelement class")
+        #print("fieldelement class")
+        return 0
         
         
     
@@ -19,5 +21,5 @@ class fieldelement:
 
 
 if(__name__ == "__main__"):
-    d = fieldelement()
+    r = fieldelement()
     

@@ -7,19 +7,23 @@ class pdml:
     
     def __init__(self):
         self.create_self()
+        self.packets = []
+        self.protos = []
+        self.pdml_attributes = {}
      
     def create_self(self):
-        print("pdml class")
+        #print("pdml class instantiated")
+        return 0
         
         
     def set_pdml_attrib(self, key, val):
         self.pdml_attributes[key] = val        
     
-    def set_packet(self, index, pac):
-        self.packets[index] = pac
+    def set_packet(self, pac):
+        self.packets.append(pac)
     
-    def set_protos(self, index, pro):
-        self.protos[index] = pro
+    def set_protos(self, pro):
+        self.protos.append(pro)
     
     def get_all_protocols(self):
         return self.protos
@@ -34,6 +38,9 @@ class pdml:
             if(self.packets[x].packetid == id):
                 return self.packets[x]
         return 0
+    
+    def get_all_packets(self):
+        return self.packets
     
     
 
