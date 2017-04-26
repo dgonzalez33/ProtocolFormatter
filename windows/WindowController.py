@@ -8,8 +8,10 @@ from CommandLineWidget import CommandLineWidget
 from HistoricalCopyWidget import HistoricalCopyWidget
 from editorWidget import EditorWidget
 from packetWidget import PacketWidget
+from formatterWidget import FormatterWidget
 from menuBar import menuBar
 from iconBar import iconBar
+from FilterBarWidget import FilterBarWidget
 
 """
 Because our windows need to be customizable 
@@ -52,7 +54,7 @@ class WindowController:
         self.window_main = Gtk.Window()
         self.title = "Protocol Formatter System"
         self.window_main.set_title(self.title)
-        self.window_main.set_size_request( -1, -1)
+        self.window_main.set_size_request( 1200, 600)
         self.window_main.connect("destroy", self.destroy)
         self.mainbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         
@@ -180,17 +182,17 @@ class WindowController:
         self.insert_widget_to_Frame("<Mode of Operation>", second_widget,
                                     second_container, self.mainbox)
          
-        third_widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+        third_widget = FilterBarWidget().create_widget()
         third_container = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         self.insert_widget_to_Frame("Filter Bar",third_widget,
                                     third_container, self.mainbox)
          
-        fourth_widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+        fourth_widget = PacketWidget().create_widget()
         fourth_container = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
         self.insert_widget_to_Frame("Packet Window", fourth_widget, 
                                     fourth_container, self.mainbox)
          
-        fifth_widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+        fifth_widget = FormatterWidget().create_widget()
         self.insert_widget_to_Frame("Formatter Window",fifth_widget,
                                     fourth_container, self.mainbox)
 #         
