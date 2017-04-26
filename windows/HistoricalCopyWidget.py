@@ -49,15 +49,3 @@ class HistoricalCopyWidget:
         fullContainer.pack_start(scrollContainer,True,True,0)
         
         return vbox
-
-    def create_historical_copy(self):
-        infile = open("name of file" , "wb")
-        if ("name of file").endswith('.pdml'):
-            data = infile.read(self)
-            outfile = open("historical copy" + ".pdml")
-            outfile.write(data)
-        else: print ("error")
-
-
-    #def compare(self):
-
