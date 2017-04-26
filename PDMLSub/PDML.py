@@ -31,13 +31,12 @@ class pdml:
     def get_pdml_attributes(self):
         return self.pdml_attributes
     
-    def get_packet_with_id(self, id):
-        len_of_packets = len(self.packets)
-        x = 0
-        while(x < len_of_packets):
-            if(self.packets[x].packetid == id):
-                return self.packets[x]
-        return 0
+    def get_packet_with_id(self, num):
+        if(num < 0 or num > len(self.packets)):
+            return "invalid id"
+        else:
+            return self.packets[num]
+        return "Packet not found"
     
     def get_all_packets(self):
         return self.packets
