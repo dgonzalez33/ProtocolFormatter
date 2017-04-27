@@ -385,7 +385,7 @@ class WindowController:
             self.historybox = self.history_widget.create_widget()
             self.insert_widget_to_window("Historical Copy Window", self.historybox, self.history_window)
             histOpen = True
-            self.history_widget.create_historical_copy()
+            self.history_widget.create_historical_copy()#compare
     
     
     def on_Help_clicked(self, widget):

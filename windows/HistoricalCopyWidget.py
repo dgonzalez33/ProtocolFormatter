@@ -80,6 +80,7 @@ class HistoricalCopyWidget:
       #  print (hi)
         diff =difflib.ndiff(infile.readlines(),file2.readlines())
         print( ''.join(diff),)
+        #
 
 
     #def compare(self):
