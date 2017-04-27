@@ -1,17 +1,18 @@
 import gi
+from numpy import empty
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-from scriptWidget import ScriptWidget
-from filterWidget import FilterWidget
-from hookWidget import HookWidget
-from CommandLineWidget import CommandLineWidget
-from HistoricalCopyWidget import HistoricalCopyWidget
-from editorWidget import EditorWidget
-from packetWidget import PacketWidget
-from formatterWidget import FormatterWidget
-from menuBar import menuBar
-from iconBar import iconBar
-from FilterBarWidget import FilterBarWidget
+from windows.scriptWidget import ScriptWidget
+from windows.filterWidget import FilterWidget
+from windows.hookWidget import HookWidget
+from windows.CommandLineWidget import CommandLineWidget
+from windows.HistoricalCopyWidget import HistoricalCopyWidget
+from windows.editorWidget import EditorWidget
+from windows.packetWidget import PacketWidget
+from windows.formatterWidget import FormatterWidget
+from windows.menuBar import menuBar
+from windows.iconBar import iconBar
+from windows.FilterBarWidget import FilterBarWidget
 
 """
 Because our windows need to be customizable 
@@ -29,12 +30,24 @@ histOpen = False
 
 class WindowController:
     
+    icon_box = iconBar().create_widget()
+    filter_box = FilterBarWidget().create_widget()
+    packet_box = PacketWidget().create_widget()
+    formatter_box = FormatterWidget().create_widget()
+    editorbox = EditorWidget().create_widget()
+    scriptbox = ScriptWidget().create_widget()
+    filterbox = FilterWidget().create_widget()
+    hookbox = HookWidget().create_widget()
+    commandbox = CommandLineWidget().create_widget()
+    historybox = HistoricalCopyWidget().create_widget()
+    
     """
     The __init__ constructor is currently being used 
     as a way to start our windows but we should only 
     construct the default window here in the future 
     Other windows will be created via button press 
     """
+
 
     def __init__(self):
         self.create_default_window()
@@ -177,23 +190,22 @@ class WindowController:
         menu_bar.append(help_root)
 
         #Create icon bar  
-        second_widget = iconBar().create_widget()
         second_container = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
-        self.insert_widget_to_Frame("<Mode of Operation>", second_widget,
+        self.insert_widget_to_Frame("<Mode of Operation>", self.icon_box,
                                     second_container, self.mainbox)
          
-        third_widget = FilterBarWidget().create_widget()
+        
         third_container = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
-        self.insert_widget_to_Frame("Filter Bar",third_widget,
+        self.insert_widget_to_Frame("Filter Bar",self.filter_box,
                                     third_container, self.mainbox)
          
-        fourth_widget = PacketWidget().create_widget()
+        
         fourth_container = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
-        self.insert_widget_to_Frame("Packet Window", fourth_widget, 
+        self.insert_widget_to_Frame("Packet Window", self.packet_box, 
                                     fourth_container, self.mainbox)
          
-        fifth_widget = FormatterWidget().create_widget()
-        self.insert_widget_to_Frame("Formatter Window",fifth_widget,
+        
+        self.insert_widget_to_Frame("Formatter Window",self.formatter_box,
                                     fourth_container, self.mainbox)
 #         
         self.window_main.show_all()
@@ -205,42 +217,36 @@ class WindowController:
     def create_editor_window(self, widget):
         global editorOpen
         if(not editorOpen):
-            self.editorbox = EditorWidget().create_widget()
             self.insert_widget_to_window("Editor Window", self.editorbox)
             editorOpen = True
             
     def create_script_window(self, widget):
         global scriptOpen
         if(not scriptOpen):
-            self.scriptbox = ScriptWidget().create_widget()
             self.insert_widget_to_window("Script Window", self.scriptbox)
             scriptOpen = True
         
     def create_filter_window(self, widget):
         global filterOpen
         if(not filterOpen):
-            self.filterbox = FilterWidget().create_widget()
             self.insert_widget_to_window("Filter Window", self.filterbox)
             filterOpen = True
 
     def create_hook_window(self, widget):
         global hookOpen
         if(not hookOpen):
-            self.hookbox = HookWidget().create_widget()
             self.insert_widget_to_window("Hook Window", self.hookbox)
             hookOpen = True
 
     def create_commandline_window(self,widget):
         global commOpen
         if(not commOpen):
-            self.commandbox = CommandLineWidget().create_widget()
             self.insert_widget_to_window("Command Line Window", self.commandbox)
             commOpen = True
 
     def create_historical_window(self,widget):
         global histOpen
         if(not histOpen):
-            self.historybox = HistoricalCopyWidget().create_widget()
             self.insert_widget_to_window("Historical Copy Window", self.historybox)
             histOpen = True
 
