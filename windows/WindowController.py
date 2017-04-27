@@ -1,6 +1,4 @@
 import gi
-import sys
-sys.path.insert(0,'../')
 from numpy import empty
 from threading import Thread
 gi.require_version('Gtk', '3.0')
@@ -35,6 +33,11 @@ histOpen = False
 class WindowController:
     
     maincontroller = controller()
+    
+    opendialog = Gtk.FileChooserDialog("Please choose a file", None,
+            Gtk.FileChooserAction.OPEN,
+            (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+             Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
     
     #containers
     second_container = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
@@ -118,7 +121,7 @@ class WindowController:
         #create main window
         self.title = "Protocol Formatter System"
         self.window_main.set_title(self.title)
-        self.window_main.set_size_request( 800, 400)
+        self.window_main.set_size_request( 400, 400)
         self.window_main.connect("destroy", self.destroy)
         self.mainbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         
@@ -327,20 +330,20 @@ class WindowController:
 
 
     def on_Open_clicked(self, widget):
-        opendialog = Gtk.FileChooserDialog("Please choose a file", None,
+        self.opendialog = Gtk.FileChooserDialog("Please choose a file", None,
             Gtk.FileChooserAction.OPEN,
             (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
              Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
-        opendialog.set_size_request(300, 200)
+        self.opendialog.set_size_request(300, 200)
         w = Gtk.Window()
-        w.add(opendialog)
+        w.add(self.opendialog)
         #self.packet_widget.set_packet_window_text("yaaaass")
         
-        response = opendialog.run()
+        response = self.opendialog.run()
         if response == Gtk.ResponseType.OK:
             print("Open clicked")
-            print("File selected: " + opendialog.get_filename())
-            self.chosenfile = opendialog.get_filename()
+            print("File selected: " + self.opendialog.get_filename())
+            self.chosenfile = self.opendialog.get_filename()
             self.maincontroller.set_pdml_file(self.chosenfile)
             
             protosforfilterwindow = self.maincontroller.get_pdml_protocols()
@@ -351,11 +354,10 @@ class WindowController:
         elif response == Gtk.ResponseType.CANCEL:
             print("Cancel clicked")
 
-        opendialog.destroy()
+        self.opendialog.destroy()
         
         
     def main(self):
-        GObject.threads_init()
         Gtk.main()
         
     def destroy(self, w):
