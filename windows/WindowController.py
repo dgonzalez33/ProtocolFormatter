@@ -1,9 +1,8 @@
 import gi
-import sys
-sys.path.insert(0, '../')
 from numpy import empty
+from threading import Thread
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk
+from gi.repository import Gtk, GObject
 from windows.scriptWidget import ScriptWidget
 from windows.filterWidget import FilterWidget
 from windows.hookWidget import HookWidget
@@ -15,6 +14,7 @@ from windows.formatterWidget import FormatterWidget
 from windows.menuBar import menuBar
 from windows.iconBar import iconBar
 from windows.FilterBarWidget import FilterBarWidget
+from RestofSystem.Controller import controller
 
 """
 Because our windows need to be customizable 
@@ -32,25 +32,47 @@ histOpen = False
 
 class WindowController:
     
+    maincontroller = controller()
+    
+    #containers
+    second_container = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+    third_container = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+    fourth_container = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+
+    
     
     #Widgets
-    icon_box = iconBar().create_widget()
-    filter_box = FilterBarWidget().create_widget()
-    packet_box = PacketWidget().create_widget()
-    formatter_box = FormatterWidget().create_widget()
-    editorbox = EditorWidget().create_widget()
-    scriptbox = ScriptWidget().create_widget()
-    filterbox = FilterWidget().create_widget()
-    hookbox = HookWidget().create_widget()
-    commandbox = CommandLineWidget().create_widget()
-    historybox = HistoricalCopyWidget().create_widget()
+    icon_widget = iconBar()
+    filter_widget = FilterBarWidget()
+    packet_widget = PacketWidget()
+    formatter_widget = FormatterWidget()
+    editor_widget = EditorWidget()
+    script_widget = ScriptWidget()
+    filter_widget = FilterWidget()
+    filterbar_widget = FilterBarWidget()
+    hook_widget = HookWidget()
+    command_widget = CommandLineWidget()
+    history_widget = HistoricalCopyWidget()
+    
+    
+    
+    #boxes
+    icon_box = icon_widget.create_widget()
+    filter_box = filter_widget.create_widget()
+    packet_box = packet_widget.create_widget()
+    packet_box.set_size_request(200,50)
+    formatter_box = formatter_widget.create_widget()
+    editorbox = editor_widget.create_widget()
+    scriptbox = script_widget.create_widget()
+    filterbox = filter_widget.create_widget()
+    filterbarbox = filterbar_widget.create_widget()
+    hookbox = hook_widget.create_widget()
+    commandbox = command_widget.create_widget()
+    historybox = history_widget.create_widget()
     
     
     #Dialog Window
-    opendialog = Gtk.FileChooserDialog("Please choose a file", None,
-            Gtk.FileChooserAction.OPEN,
-            (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
-             Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
+    
     chosenfile = ""
     
     
@@ -78,6 +100,7 @@ class WindowController:
 
     def __init__(self):
         self.create_default_window()
+       # GObject.timeout_add(100, self.refresh_all_windows)
 #         self.create_script_window()
 #         self.create_filter_window()
 #         self.create_editor_window()
@@ -93,7 +116,7 @@ class WindowController:
         #create main window
         self.title = "Protocol Formatter System"
         self.window_main.set_title(self.title)
-        self.window_main.set_size_request( 600, 400)
+        self.window_main.set_size_request( 400, 400)
         self.window_main.connect("destroy", self.destroy)
         self.mainbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         
@@ -214,29 +237,43 @@ class WindowController:
         menu_bar.append(edit_root)
         menu_bar.append(window_root)
         menu_bar.append(help_root)
+        
+        
 
         #Create icon bar  
-        second_container = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         self.insert_widget_to_Frame("<Mode of Operation>", self.icon_box,
-                                    second_container, self.mainbox)
+                                    self.second_container, self.mainbox)
          
         
-        third_container = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
-        self.insert_widget_to_Frame("Filter Bar",self.filter_box,
-                                    third_container, self.mainbox)
+        self.insert_widget_to_Frame("Filter Bar",self.filterbarbox,
+                                    self.third_container, self.mainbox)
          
         
-        fourth_container = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
         self.insert_widget_to_Frame("Packet Window", self.packet_box, 
-                                    fourth_container, self.mainbox)
+                                    self.fourth_container, self.mainbox)
          
         
         self.insert_widget_to_Frame("Formatter Window",self.formatter_box,
-                                    fourth_container, self.mainbox)
+                                    self.fourth_container, self.mainbox)
 #         
-        self.window_main.show_all()
+#         dRecieved = ""
+#         self.update = Thread(target=self.update_packet_widget, args=(dRecieved,))
+#         self.update.setDaemon(True)
+#         self.update.start()
         
+        self.window_main.show_all()
+    
+    
+    def update_packet_widget(self, value):
+        fourth_container = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        self.packet_widget.set_packet_window_text(value)
+        self.insert_widget_to_Frame("Packet Window", self.packet_box, 
+                                    fourth_container, self.mainbox)
+        print("totally worked!")
+        return 0
+    
     def refresh_all_windows(self):
+        print("refreshed")
         self.window_main.show_all()
         self.editor_window.show_all()
         self.script_window.show_all()
@@ -288,22 +325,35 @@ class WindowController:
 
 
     def on_Open_clicked(self, widget):
+        opendialog = Gtk.FileChooserDialog("Please choose a file", None,
+            Gtk.FileChooserAction.OPEN,
+            (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+             Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
+        opendialog.set_size_request(300, 200)
         w = Gtk.Window()
-        w.set_size_request(200,200)
-        w.add(self.opendialog)
+        w.add(opendialog)
+        #self.packet_widget.set_packet_window_text("yaaaass")
         
-        response = self.opendialog.run()
+        response = opendialog.run()
         if response == Gtk.ResponseType.OK:
             print("Open clicked")
-            print("File selected: " + self.opendialog.get_filename())
-            self.chosenfile = self.opendialog.get_filename()
+            print("File selected: " + opendialog.get_filename())
+            self.chosenfile = opendialog.get_filename()
+            self.maincontroller.set_pdml_file(self.chosenfile)
+            
+            protosforfilterwindow = self.maincontroller.get_pdml_protocols()
+            packetwindowcontent = self.maincontroller.get_pdml_text()
+            
+            self.packet_widget.set_packet_window_text(packetwindowcontent)
+            #self.remove_packet_widget_from_Frame()
         elif response == Gtk.ResponseType.CANCEL:
             print("Cancel clicked")
 
-        self.opendialog.destroy()
+        opendialog.destroy()
         
         
     def main(self):
+        GObject.threads_init()
         Gtk.main()
         
     def destroy(self, w):
@@ -384,8 +434,18 @@ class WindowController:
         frame.add(v_widget)
         frameContainer.pack_start(frame, True, True, 6)
         v_widget.show()
+        
+    def remove_packet_widget_from_Frame(self):
+        self.fourth_container.remove(self.packet_box)
+        self.mainbox.remove(self.fourth_container)
+        self.insert_widget_to_Frame("Packet Window", self.packet_box, 
+                                    self.fourth_container, self.mainbox)
+        
     
+
+
 if(__name__ == "__main__"):
+    settings = Gtk.Settings.get_default()
+    settings.set_property("gtk-application-prefer-dark-theme", True)
     d = WindowController()
     d.main()
-
