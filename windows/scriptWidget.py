@@ -11,8 +11,6 @@ return a top_level Gtk.Box with all the
 contents of the widget as children 
 """
 class ScriptWidget:
-    
-    #add ability to update widget
              
         def create_widget(self):
             

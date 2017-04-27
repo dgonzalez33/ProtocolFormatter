@@ -3,8 +3,6 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
 class PacketWidget:
-        packetBuffer = Gtk.TextBuffer()
-        packetView = Gtk.TextView()
              
         def create_widget(self):
             
@@ -22,22 +20,21 @@ class PacketWidget:
             
             #create a scrollable container (ScrolledWindow is not really a 'window')
             scrollContainer = Gtk.ScrolledWindow()
-            adj = Gtk.Adjustment()
-            adj.set_page_size(500)
-            scrollContainer.set_hadjustment(adj)
-            #create a container for the packet 
             
-            self.listbox = Gtk.ListBox()
-            self.row = Gtk.ListBoxRow()
+            #create a container for the packet 
             packetContainer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=20)
             
-            
+            packetBuffer = Gtk.TextBuffer()
             filetext = "\n\n\n\n			<Packet Contents Shown Here>\n\n\n\n"
 
-            self.set_packet_window_text(filetext)
+            packetBuffer.set_text(filetext)
+            
+            #create a Textviewer
+            packetView = Gtk.TextView()
+            packetView.set_buffer(packetBuffer)
             
             #packetviewer is now a child of packet container 
-            packetContainer.pack_start(self.packetView, False, False, 0)
+            packetContainer.pack_start(packetView, False, False, 0)
             
             #add the packetview to the scroll window 
             scrollContainer.add(packetContainer)
@@ -46,18 +43,10 @@ class PacketWidget:
             fullContainer.pack_start(scrollContainer,True,True,0)
             
             return vbox
-        
-        def set_packet_window_text(self, filetext):
-            self.packetBuffer = Gtk.TextBuffer()
-            self.packetBuffer.set_text(filetext)
-            self.packetView.set_buffer(self.packetBuffer)
-            return 0
       
-        def read_file(self, filename):
-            with open(filename, 'r') as myfile:
-                data = myfile.read()
-            self.packetBuffer.set_text(data)
-            self.packetView.set_buffer(self.packetBuffer)
-            return data
+def read_file(self, filename):
+    with open(filename, 'r') as myfile:
+        data = myfile.read()
+    return data
 
 
