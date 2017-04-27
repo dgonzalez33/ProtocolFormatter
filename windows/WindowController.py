@@ -385,9 +385,7 @@ class WindowController:
             self.historybox = self.history_widget.create_widget()
             self.insert_widget_to_window("Historical Copy Window", self.historybox, self.history_window)
             histOpen = True
-<<<<<<< HEAD
-
-=======
+            self.history_widget.create_historical_copy()
     
     
     def on_Help_clicked(self, widget):
@@ -416,7 +414,7 @@ class WindowController:
         
     def on_Close_clicked(self, widget):
         print("close was clicked")
->>>>>>> origin/master
+
 
     def on_Open_clicked(self, widget):
         w = Gtk.Window(Gtk.WindowType.POPUP)

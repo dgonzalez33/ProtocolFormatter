@@ -1,4 +1,4 @@
-<?xml version="2.1"?>
+<?xml version="2.3"?>
 <?xml-stylesheet type="text/xsl" href="pdml2html.xsl"?>
 <!-- You can find pdml2html.xsl in /usr/share/wireshark or at https://code.wireshark.org/review/gitweb?p=wireshark.git;a=blob_plain;f=pdml2html.xsl. -->
 <pdml version="0" creator="wireshark/2.0.5" time="Sat Sep 17 01:03:30 2016" capture_file="/tmp/wireshark_pcapng_enp0s7_20160917010155_Pejnei">
