@@ -123,7 +123,7 @@ class WindowController:
         #create main window
         self.title = "Protocol Formatter System"
         self.window_main.set_title(self.title)
-        self.window_main.set_size_request( 400, 400)
+        self.window_main.set_size_request( 700, 400)
         self.window_main.connect("destroy", self.destroy)
         self.mainbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         
