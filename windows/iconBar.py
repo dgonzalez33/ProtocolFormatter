@@ -19,12 +19,10 @@ class iconBar:
 		vbox.pack_start(fullContainer,True,True,0)
 
 		box1 = Gtk.HBox(False, 0)
-		box1.set_border_width(2)
 		#create an Open button
 
 		o_image = Gtk.Image()
 		o_image.set_from_file("../images/open.png")
-		o_image.set_pixel_size(64)
 		box1.pack_start(o_image, False, False, 3)
 		
 		o_image.show()
@@ -38,12 +36,10 @@ class iconBar:
 		#openButton.getChild().set_from_file("../images/open.png")
 		buttonContainer.pack_start(openButton,False,False,5)
 
-		box2 = Gtk.HBox(False, 0)
-		box2.set_border_width(2)		
+		box2 = Gtk.HBox(False, 0)		
 
 		s_image = Gtk.Image()
 		s_image.set_from_file("../images/save.png")
-		s_image.set_pixel_size(64)
 		box2.pack_start(s_image, False, False, 3)
 
 		s_image.show()
@@ -59,12 +55,10 @@ class iconBar:
 		#save button is now a child of the buttoncontainer
 		buttonContainer.pack_start(saveButton,False,False,5)
 
-		box3 = Gtk.HBox(False, 0)
-		box3.set_border_width(2)		
+		box3 = Gtk.HBox(False, 0)		
 
 		f_image = Gtk.Image()
 		f_image.set_from_file("../images/filter.png")
-		f_image.set_pixel_size(64)
 		box3.pack_start(f_image, False, False, 3)
 
 		f_image.show()
@@ -81,11 +75,9 @@ class iconBar:
 		buttonContainer.pack_start(filterButton,False,False,5)
 
 		box4 = Gtk.HBox(False, 0)
-		box4.set_border_width(2)		
 
 		u_image = Gtk.Image()
 		u_image.set_from_file("../images/undo.png")
-		u_image.set_pixel_size(64)
 		box4.pack_start(u_image, False, False, 3)
 
 		u_image.show()
@@ -101,12 +93,10 @@ class iconBar:
 		#undo button is now a child of the buttoncontainer 
 		buttonContainer.pack_start(undoButton,False,False,5)
 
-		box5 = Gtk.HBox(False, 0)
-		box5.set_border_width(2)		
+		box5 = Gtk.HBox(False, 0)		
 
 		r_image = Gtk.Image()
 		r_image.set_from_file("../images/redo.png")
-		r_image.set_pixel_size(64)
 		box5.pack_start(r_image, False, False, 3)
 
 		r_image.show()
