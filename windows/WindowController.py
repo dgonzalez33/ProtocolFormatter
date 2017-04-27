@@ -41,6 +41,13 @@ class WindowController:
     commandbox = CommandLineWidget().create_widget()
     historybox = HistoricalCopyWidget().create_widget()
     
+    opendialog = Gtk.FileChooserDialog("Please choose a file", None,
+            Gtk.FileChooserAction.OPEN,
+            (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+             Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
+    
+    chosenfile = ""
+    
     """
     The __init__ constructor is currently being used 
     as a way to start our windows but we should only 
@@ -67,7 +74,7 @@ class WindowController:
         self.window_main = Gtk.Window()
         self.title = "Protocol Formatter System"
         self.window_main.set_title(self.title)
-        self.window_main.set_size_request( 1000, 600)
+        self.window_main.set_size_request( 600, 400)
         self.window_main.connect("destroy", self.destroy)
         self.mainbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         
@@ -253,7 +260,20 @@ class WindowController:
 
 
     def on_Open_clicked(self, widget):
-            print("Open was clicked")
+        w = Gtk.Window()
+        w.set_size_request(200,200)
+        w.add(self.opendialog)
+        
+        response = self.opendialog.run()
+        if response == Gtk.ResponseType.OK:
+            print("Open clicked")
+            print("File selected: " + self.opendialog.get_filename())
+            self.chosenfile = self.opendialog.get_filename()
+        elif response == Gtk.ResponseType.CANCEL:
+            print("Cancel clicked")
+
+        self.opendialog.destroy()
+        
         
     def main(self):
         Gtk.main()
