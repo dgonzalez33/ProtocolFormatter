@@ -38,7 +38,7 @@ class iconBar:
             #save button is now a child of the buttoncontainer
             buttonContainer.pack_start(saveButton,False,False,5)
 
-	    #create an Filter button 
+            #create an Filter button 
             filterButton = Gtk.Button("Filter")
             
             #connect the button to a function 'on_Filter_clicked'
@@ -48,7 +48,7 @@ class iconBar:
             #filter button is now a child of the buttoncontainer 
             buttonContainer.pack_start(filterButton,False,False,5)
 
-	    #create an Undo button 
+            #create an Undo button 
             undoButton = Gtk.Button("Undo")
             
             #connect the button to a function 'on_Undo_clicked'
@@ -58,7 +58,7 @@ class iconBar:
             #undo button is now a child of the buttoncontainer 
             buttonContainer.pack_start(undoButton,False,False,5)
 
-	    #create an Redo button 
+            #create an Redo button 
             redoButton = Gtk.Button("Redo")
             
             #connect the button to a function 'on_Redo_clicked'
@@ -79,12 +79,12 @@ class iconBar:
         def on_Save_clicked(self, widget):
             print("save was clicked")
 
-	def on_Filter_clicked(self, widget):
+        def on_Filter_clicked(self, widget):
             print("filter was clicked")
 
-	def on_Undo_clicked(self, widget):
+        def on_Undo_clicked(self, widget):
             print("undo was clicked")
 
-	def on_Redo_clicked(self, widget):
+        def on_Redo_clicked(self, widget):
             print("redo was clicked")
 

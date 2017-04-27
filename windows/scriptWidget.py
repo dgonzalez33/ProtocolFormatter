@@ -56,7 +56,7 @@ class ScriptWidget:
             scriptContainer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=20)
             
             scriptBuffer = Gtk.TextBuffer()
-            filetext = read_file(self, 'scriptWidget.py')
+            filetext = read_file(self, "../Scripts/testScript.py")
             scriptBuffer.set_text(filetext)
             
             #create a Textviewer

@@ -38,7 +38,7 @@ class menuBar:
             #edit button is now a child of the buttoncontainer
             buttonContainer.pack_start(editButton,False,False,0)
 
-	    #create an Window button 
+            #create an Window button 
             windowButton = Gtk.Button("Window")
             
             #connect the button to a function 'on_Window_clicked'
@@ -48,7 +48,7 @@ class menuBar:
             #window button is now a child of the buttoncontainer 
             buttonContainer.pack_start(windowButton,False,False,0)
 
-	    #create an Help button 
+            #create an Help button 
             helpButton = Gtk.Button("Help")
             
             #connect the button to a function 'on_Help_clicked'
@@ -69,9 +69,9 @@ class menuBar:
         def on_Edit_clicked(self, widget):
             print("edit was clicked")
 
-	def on_Window_clicked(self, widget):
+        def on_Window_clicked(self, widget):
             print("window was clicked")
 
-	def on_Help_clicked(self, widget):
+        def on_Help_clicked(self, widget):
             print("help was clicked")
 
