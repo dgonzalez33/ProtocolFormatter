@@ -14,7 +14,7 @@ from windows.formatterWidget import FormatterWidget
 from windows.menuBar import menuBar
 from windows.iconBar import iconBar
 from windows.FilterBarWidget import FilterBarWidget
-from PDMLSub.PDMLManager import pdmlmanager
+from RestofSystem.Controller import controller
 
 """
 Because our windows need to be customizable 
@@ -32,6 +32,7 @@ histOpen = False
 
 class WindowController:
     
+    maincontroller = controller()
     
     #containers
     second_container = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
@@ -48,6 +49,7 @@ class WindowController:
     editor_widget = EditorWidget()
     script_widget = ScriptWidget()
     filter_widget = FilterWidget()
+    filterbar_widget = FilterBarWidget()
     hook_widget = HookWidget()
     command_widget = CommandLineWidget()
     history_widget = HistoricalCopyWidget()
@@ -58,10 +60,12 @@ class WindowController:
     icon_box = icon_widget.create_widget()
     filter_box = filter_widget.create_widget()
     packet_box = packet_widget.create_widget()
+    packet_box.set_size_request(200,50)
     formatter_box = formatter_widget.create_widget()
     editorbox = editor_widget.create_widget()
     scriptbox = script_widget.create_widget()
     filterbox = filter_widget.create_widget()
+    filterbarbox = filterbar_widget.create_widget()
     hookbox = hook_widget.create_widget()
     commandbox = command_widget.create_widget()
     historybox = history_widget.create_widget()
@@ -233,13 +237,15 @@ class WindowController:
         menu_bar.append(edit_root)
         menu_bar.append(window_root)
         menu_bar.append(help_root)
+        
+        
 
         #Create icon bar  
         self.insert_widget_to_Frame("<Mode of Operation>", self.icon_box,
                                     self.second_container, self.mainbox)
          
         
-        self.insert_widget_to_Frame("Filter Bar",self.filter_box,
+        self.insert_widget_to_Frame("Filter Bar",self.filterbarbox,
                                     self.third_container, self.mainbox)
          
         
@@ -323,8 +329,8 @@ class WindowController:
             Gtk.FileChooserAction.OPEN,
             (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
              Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
+        opendialog.set_size_request(300, 200)
         w = Gtk.Window()
-        w.set_size_request(200,200)
         w.add(opendialog)
         #self.packet_widget.set_packet_window_text("yaaaass")
         
@@ -333,11 +339,12 @@ class WindowController:
             print("Open clicked")
             print("File selected: " + opendialog.get_filename())
             self.chosenfile = opendialog.get_filename()
+            self.maincontroller.set_pdml_file(self.chosenfile)
             
-            p_man = pdmlmanager(self.chosenfile)
-            #print(p_man.get_pdml_as_text())
-            #x = "\n".join(p_man.get_all_protocol_names())
-            self.packet_widget.set_packet_window_text(p_man.get_pdml_as_text())
+            protosforfilterwindow = self.maincontroller.get_pdml_protocols()
+            packetwindowcontent = self.maincontroller.get_pdml_text()
+            
+            self.packet_widget.set_packet_window_text(packetwindowcontent)
             #self.remove_packet_widget_from_Frame()
         elif response == Gtk.ResponseType.CANCEL:
             print("Cancel clicked")
@@ -437,4 +444,8 @@ class WindowController:
     
 
 
-
+if(__name__ == "__main__"):
+    settings = Gtk.Settings.get_default()
+    settings.set_property("gtk-application-prefer-dark-theme", True)
+    d = WindowController()
+    d.main()

@@ -26,6 +26,9 @@ class PacketWidget:
             adj.set_page_size(500)
             scrollContainer.set_hadjustment(adj)
             #create a container for the packet 
+            
+            self.listbox = Gtk.ListBox()
+            self.row = Gtk.ListBoxRow()
             packetContainer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=20)
             
             
@@ -45,13 +48,16 @@ class PacketWidget:
             return vbox
         
         def set_packet_window_text(self, filetext):
+            self.packetBuffer = Gtk.TextBuffer()
             self.packetBuffer.set_text(filetext)
             self.packetView.set_buffer(self.packetBuffer)
             return 0
       
-def read_file(self, filename):
-    with open(filename, 'r') as myfile:
-        data = myfile.read()
-    return data
+        def read_file(self, filename):
+            with open(filename, 'r') as myfile:
+                data = myfile.read()
+            self.packetBuffer.set_text(data)
+            self.packetView.set_buffer(self.packetBuffer)
+            return data
 
 

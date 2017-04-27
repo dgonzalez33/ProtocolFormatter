@@ -1,6 +1,7 @@
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
+from PDMLSub.PDMLManager import pdmlmanager
 
 class iconBar:
              
@@ -74,6 +75,7 @@ class iconBar:
             return vbox
                 
         def on_Open_clicked(self, widget):
+            
             print("open was clicked")
             
         def on_Save_clicked(self, widget):
