@@ -2,6 +2,7 @@
 #python 3.5
 import gi
 import difflib
+import sys
 #from difflib_data import *
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
@@ -31,18 +32,21 @@ class HistoricalCopyWidget:
         packetBuffer = Gtk.TextBuffer()
         infile = open("../Scripts/cubic.pdml", "r")
         file2 = open("../Scripts/cubic2.pdml", "r")
+        file3 = open("../Scripts/testcubic.txt", "w")
         # differ = difflib.HtmlDiff()
         # hi=differ.make_table(infile,file2)
         #  print("table created")
         #  print (hi)
         diff = difflib.ndiff(infile.readlines(), file2.readlines())
-        print(''.join(diff), )
+        sys.stdout=file3
+        print ("\n".join(diff),)
+
+        print ("hey" )
         filetext1 = (''.join(diff),)
+        file3 = open("../Scripts/testcubic.txt", "r")
+       # print (file3.readlines())
 
-
-
-
-        filetext = "\n\n\n\n            <Historical Packet Contents>\n\n\n\n"
+        filetext = "\n\n\n\n            <Historical Packet Contents>\n\n\n\n" + ''.join(file3.readline()) + "\n"
 
         packetBuffer.set_text(filetext)
         
@@ -76,8 +80,8 @@ class HistoricalCopyWidget:
       #  print("table created")
       #  print (hi)
         diff =difflib.ndiff(infile.readlines(),file2.readlines())
-        diff.guitool
-        print( ''.join(diff),)
+
+        #print( ''.join(diff),)
         #
 
 
