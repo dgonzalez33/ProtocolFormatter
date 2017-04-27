@@ -1,4 +1,6 @@
 import gi
+import sys
+sys.path.insert(0, '../')
 from numpy import empty
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
