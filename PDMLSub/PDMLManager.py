@@ -17,8 +17,8 @@ class pdmlmanager:
         print("packets with proto'udp'",self.get_packets_with_protocol("udp"))
         print("packet with id 1", self.get_packet_of_id(1))
         print("all packets:",self.get_all_packets())
-        print("all proto names", self.get_all_protocol_names())
-        print("field'sll.halen'of sll in packet1 :",self.get_field_element(1,"sll","sll.halen"))
+       # print("all proto names", self.get_all_protocol_names())
+        print("field'tcp.port'of tcp in packet1 :",self.get_field_element(1,"frame","frame.encap_type"))
         return 0
         
         
@@ -39,10 +39,10 @@ class pdmlmanager:
         self.packets = self.parser.get_all_packets_of_pdml()
         return self.packets
     
-    def get_all_protocol_names(self):
-        self.protonames = []
-        self.protonames = self.parser.get_all_protocol_names()
-        return self.protonames
+#     def get_all_protocol_names(self):
+#         self.protonames = []
+#         self.protonames = self.parser.get_all_protocol_names()
+#         return self.protonames
         
     def get_field_element(self, packetid, protocol, key): 
         return self.parser.get_field_of_proto_from_packet(packetid, protocol, key)
@@ -53,5 +53,5 @@ class pdmlmanager:
 
 
 if(__name__ == "__main__"):
-    d = pdmlmanager()
+    d = pdmlmanager("../Scripts/dns_query_response2.pdml")
     
