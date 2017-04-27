@@ -3,22 +3,21 @@ from PDMLSub.PDMLParser import pdmlparser
 class pdmlmanager:
     
 
-    
-    
+
     def __init__(self, f):
         self.parser = pdmlparser(f)
-        self.create_self()
         self.packets = []
         self.result = ""
         self.protonames = []
+        self.create_self()
      
     def create_self(self):
         
-        print("packets with proto'udp'",self.get_packets_with_protocol("udp"))
-        print("packet with id 1", self.get_packet_of_id(1))
-        print("all packets:",self.get_all_packets())
-        print("all proto names", self.get_all_protocol_names())
-        print("field'sll.halen'of sll in packet1 :",self.get_field_element(1,"sll","sll.halen"))
+#         print("packets with proto'udp'",self.get_packets_with_protocol("udp"))
+#         print("packet with id 1", self.get_packet_of_id(1))
+#         print("all packets:",self.get_all_packets())
+#         print("all proto names", self.get_all_protocol_names())
+#         print("field: udp.port in proto: udp or packet 1",self.get_field_element(1,"udp","udp.port"))
         return 0
         
         
@@ -31,16 +30,13 @@ class pdmlmanager:
         return self.packets   
     
     def get_packet_of_id(self, num):
-        
         return self.parser.get_packet_of_id_from_pdml(num)
     
     def get_all_packets(self):
-        self.packets = []
         self.packets = self.parser.get_all_packets_of_pdml()
         return self.packets
     
     def get_all_protocol_names(self):
-        self.protonames = []
         self.protonames = self.parser.get_all_protocol_names()
         return self.protonames
         
@@ -53,5 +49,5 @@ class pdmlmanager:
 
 
 if(__name__ == "__main__"):
-    d = pdmlmanager()
+    d = pdmlmanager("../Scripts/cubic.pdml")
     

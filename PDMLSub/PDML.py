@@ -1,20 +1,12 @@
 
 class pdml:
     
-    packets = []
-    pdml_attributes = {}
-    protos = []
     
     def __init__(self):
-        self.create_self()
         self.packets = []
         self.protos = []
-        self.pdml_attributes = {}
-     
-    def create_self(self):
-        #print("pdml class instantiated")
-        return 0
-        
+
+
         
     def set_pdml_attrib(self, key, val):
         self.pdml_attributes[key] = val        
@@ -40,6 +32,8 @@ class pdml:
     
     def get_all_packets(self):
         return self.packets
+    
+    
     
     
 
