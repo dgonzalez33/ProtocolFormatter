@@ -1,3 +1,5 @@
+import sys
+sys.path.insert(0, '../')
 import gi
 from numpy import empty
 from threading import Thread
