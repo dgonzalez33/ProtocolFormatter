@@ -5,12 +5,14 @@ from PDMLSub.FieldElement import fieldelement
 
 class pdmlparser:
     
-    pdml = pdml()
+
     lastfileread = ""
     
     debug_print = 0
     
     len_of_pdml = 0
+    
+    
     
     num_of_pdml = 0
     num_of_packet = 0
@@ -25,8 +27,8 @@ class pdmlparser:
     
     def __init__(self, pdmlfilepath):
         self.pdml = pdml()
-        self.lastfileread = pdmlfilepath
         self.parse_pdml(pdmlfilepath)
+        self.read_file_as_text(pdmlfilepath)
      
     def parse_pdml(self, pdmlfilepath):
         self.num_of_lines(pdmlfilepath)
@@ -150,16 +152,21 @@ class pdmlparser:
     def get_root_pdml(self):
         return self.pdml
     
+    def clean_pdml(self):
+        self.pdml = pdml()
+        return 0
+    
     
     def num_of_lines(self, filename):
         with open(filename, 'r') as myfile:
             data = myfile.readlines()
             self.len_of_pdml = len(data)
 
-    def read_file_as_text(self):
-        with open(self.lastfileread, 'r') as myfile:
+    def read_file_as_text(self, filename):
+        with open(filename, 'r') as myfile:
             data = myfile.read()
-        return data      
+            self.lastfileread = data
+        return 0      
     
     def read_file(self, filename):
         with open(filename, 'r') as myfile:
@@ -256,6 +263,6 @@ class pdmlparser:
                 
     
 
-if(__name__ == "__main__"):
-    d = pdmlparser('dns_query_response2.pdml')
+# if(__name__ == "__main__"):
+#     d = pdmlparser('dns_query_response2.pdml')
     
