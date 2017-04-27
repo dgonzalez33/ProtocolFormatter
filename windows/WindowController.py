@@ -53,7 +53,7 @@ class WindowController:
     hook_widget = HookWidget()
     command_widget = CommandLineWidget()
     history_widget = HistoricalCopyWidget()
-    
+
     
     
     #boxes
@@ -195,6 +195,7 @@ class WindowController:
         historical_item = Gtk.MenuItem("Historical")
         historical_item.connect("activate", self.create_historical_window)
 
+
         #insert items into the drop down menu        
         window_menu.append(filter_item)
         window_menu.append(editor_item)
@@ -321,8 +322,7 @@ class WindowController:
         if(not histOpen):
             self.insert_widget_to_window("Historical Copy Window", self.historybox, self.history_window)
             histOpen = True
-
-
+            self.history_widget.create_historical_copy()
 
     def on_Open_clicked(self, widget):
         opendialog = Gtk.FileChooserDialog("Please choose a file", None,

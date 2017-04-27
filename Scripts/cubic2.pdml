@@ -1,11 +1,11 @@
-<?xml version="1.0"?>
+<?xml version="2.1"?>
 <?xml-stylesheet type="text/xsl" href="pdml2html.xsl"?>
 <!-- You can find pdml2html.xsl in /usr/share/wireshark or at https://code.wireshark.org/review/gitweb?p=wireshark.git;a=blob_plain;f=pdml2html.xsl. -->
 <pdml version="0" creator="wireshark/2.0.5" time="Sat Sep 17 01:03:30 2016" capture_file="/tmp/wireshark_pcapng_enp0s7_20160917010155_Pejnei">
 <packet>
   <proto name="geninfo" pos="0" showname="General information" size="74">
-    <field name="num" pos="5" show="718" showname="Number" value="2ce" size="74"/>
-    <field name="len" pos="0" show="74" showname="Frame Length" value="4a" size="74"/>
+    <field name="num" pos="4" show="718" showname="Number" value="2ce" size="74"/>
+    <field name="len" pos="2" show="74" showname="Frame Length" value="4a" size="74"/>
     <field name="caplen" pos="0" show="74" showname="Captured Length" value="4a" size="74"/>
     <field name="timestamp" pos="0" show="Sep 17, 2016 01:01:58.228537153 PDT" showname="Captured Time" value="1474099318.228537153" size="74"/>
   </proto>

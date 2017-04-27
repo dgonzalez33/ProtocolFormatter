@@ -1,10 +1,13 @@
 #Command line widget
 #python 3.5
 import gi
+import difflib
+#from difflib_data import *
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
 class HistoricalCopyWidget:
+
 
     def create_widget(self):
         #vbox is the top_level parent
@@ -26,7 +29,23 @@ class HistoricalCopyWidget:
         packetContainer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=20)
         
         packetBuffer = Gtk.TextBuffer()
-        filetext = "\n\n\n\n            <Historical Packet Contents>\n\n\n\n"
+        infile = open("../Scripts/cubic.pdml", "r")
+        file2 = open("../Scripts/cubic2.pdml", "r")
+        # differ = difflib.HtmlDiff()
+        # hi=differ.make_table(infile,file2)
+        #  print("table created")
+        #  print (hi)
+        diff = difflib.ndiff(infile.readlines(), file2.readlines())
+        print(''.join(diff), )
+        filetext1 = (''.join(diff),)
+        filetext2 = open("../Scripts/cubic3.pdml" , "w")
+        filetext2.write(filetext1)
+        filetext2.close()
+        filetext4 = open("../Scripts/cubic.pdml" , "r")
+
+
+
+        filetext = "\n\n\n\n            <Historical Packet Contents>\n\n\n\n" + filetext4.readlines()
 
         packetBuffer.set_text(filetext)
         
@@ -51,12 +70,17 @@ class HistoricalCopyWidget:
         return vbox
     
     def create_historical_copy(self):
-        infile = open("name of file" , "wb")
-        if ("name of file").endswith('.pdml'):
-            data = infile.read(self)
-            outfile = open("historical copy" + ".pdml")
-            outfile.write(data)
-        else: print ("error")
+
+
+        infile = open("../Scripts/cubic.pdml" , "r")
+        file2 = open("../Scripts/cubic2.pdml" , "r")
+       # differ = difflib.HtmlDiff()
+       # hi=differ.make_table(infile,file2)
+      #  print("table created")
+      #  print (hi)
+        diff =difflib.ndiff(infile.readlines(),file2.readlines())
+        print( ''.join(diff),)
+        filetext=''.join(diff),
 
     #def compare(self):
 
