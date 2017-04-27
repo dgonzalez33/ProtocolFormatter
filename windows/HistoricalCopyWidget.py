@@ -57,3 +57,6 @@ class HistoricalCopyWidget:
             outfile = open("historical copy" + ".pdml")
             outfile.write(data)
         else: print ("error")
+
+    #def compare(self):
+
