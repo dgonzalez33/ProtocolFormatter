@@ -6,6 +6,7 @@ from PDMLSub.FieldElement import fieldelement
 class pdmlparser:
     
     pdml = pdml()
+    lastfileread = ""
     
     debug_print = 0
     
@@ -24,6 +25,7 @@ class pdmlparser:
     
     def __init__(self, pdmlfilepath):
         self.pdml = pdml()
+        self.lastfileread = pdmlfilepath
         self.parse_pdml(pdmlfilepath)
      
     def parse_pdml(self, pdmlfilepath):
@@ -154,7 +156,11 @@ class pdmlparser:
             data = myfile.readlines()
             self.len_of_pdml = len(data)
 
-          
+    def read_file_as_text(self):
+        with open(self.lastfileread, 'r') as myfile:
+            data = myfile.read()
+        return data      
+    
     def read_file(self, filename):
         with open(filename, 'r') as myfile:
             x = 0

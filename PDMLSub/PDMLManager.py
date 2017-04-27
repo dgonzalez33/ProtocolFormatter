@@ -3,13 +3,14 @@ from PDMLSub.PDMLParser import pdmlparser
 class pdmlmanager:
     
 
-    parser = pdmlparser('../FileSub/rand.pdml')
+    parser = pdmlparser("../Scripts/dns_query_response2.pdml")
     
-    def __init__(self):
+    def __init__(self, f):
         self.create_self()
         self.packets = []
         self.protos = []
         self.pdml_attributes = {}
+        self.parser = pdmlparser(f)
      
     def create_self(self):
 
@@ -21,6 +22,10 @@ class pdmlmanager:
         return 0
         
         
+    def get_pdml_as_text(self):
+        result = self.parser.read_file_as_text()
+        return result 
+    
     def get_packets_with_protocol(self, protocol):
         packets = self.parser.get_packets_of_protocols(protocol)
         return packets   
