@@ -38,14 +38,11 @@ class HistoricalCopyWidget:
         diff = difflib.ndiff(infile.readlines(), file2.readlines())
         print(''.join(diff), )
         filetext1 = (''.join(diff),)
-        filetext2 = open("../Scripts/cubic3.pdml" , "w")
-        filetext2.write(filetext1)
-        filetext2.close()
-        filetext4 = open("../Scripts/cubic.pdml" , "r")
 
 
 
-        filetext = "\n\n\n\n            <Historical Packet Contents>\n\n\n\n" + filetext4.readlines()
+
+        filetext = "\n\n\n\n            <Historical Packet Contents>\n\n\n\n"
 
         packetBuffer.set_text(filetext)
         
@@ -79,6 +76,7 @@ class HistoricalCopyWidget:
       #  print("table created")
       #  print (hi)
         diff =difflib.ndiff(infile.readlines(),file2.readlines())
+        diff.guitool
         print( ''.join(diff),)
         #
 

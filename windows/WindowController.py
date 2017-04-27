@@ -35,7 +35,7 @@ histOpen = False
 
 class WindowController:
     
-<<<<<<< HEAD
+
     maincontroller = controller()
     
     #containers
@@ -93,8 +93,8 @@ class WindowController:
     
     
     
-=======
->>>>>>> origin/master
+
+
     
     """
     The __init__ constructor is currently being used 
