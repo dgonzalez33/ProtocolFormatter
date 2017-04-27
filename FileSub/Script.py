@@ -6,12 +6,13 @@ class Script:
         scriptCall.append("python")
         scriptCall.append("Scripts/"+self.scriptPath)
         scriptCall.extend(self.arguments)
-        field = subprocess.check_output(scriptCall).decode("utf-8").rstrip()
-        print(repr(field))
+        fieldValue = subprocess.check_output(scriptCall).decode("utf-8").rstrip()
+        # print(field)
+        return fieldValue
 
     def __init__(self, scriptPath, arguments):
         self.scriptPath = scriptPath
         self.arguments = arguments
 
-script = Script('test.py',[])
-script.applyScript()
+# script = Script('test.py',[])
+# script.applyScript()
