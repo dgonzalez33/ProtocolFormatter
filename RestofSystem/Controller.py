@@ -1,18 +1,19 @@
 
 from PDMLSub.PDMLManager import pdmlmanager
-from windows.WindowController import WindowController
+
 from gi.repository import GObject
 
 class controller:
 
-    p_manager = pdmlmanager("../Scripts/dns_query_response2.pdml")
-    w = WindowController()
+    #p_manager = pdmlmanager("../Scripts/dns_query_response2.pdml")
+   # w = WindowController()
 
     
     def __init__(self):
+        GObject.threads_init()
         self.create_self()
         GObject.idle_add(self.update_after)
-        self.w.main()
+       # self.w.main()
 
      
     def create_self(self):
@@ -24,13 +25,18 @@ class controller:
         print("after")
         #self.w.packet_widget.set_packet_window_text(self.p_manager.get_pdml_as_text())
         return 0;
+    
+    def set_pdml_file(self, filename):
+        self.pdmlman = pdmlmanager(filename)
+        return 0
+    
+    def get_pdml_text(self):
+        return self.pdmlman.get_pdml_as_text()
+    
+    def get_pdml_protocols(self):
+        return self.pdmlman.get_all_protocol_names()
         
     
 
-
-if(__name__ == "__main__"):
-    GObject.threads_init()
-    d = controller()
-    
 
     
