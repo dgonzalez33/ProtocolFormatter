@@ -5,34 +5,34 @@ from PDMLSub.FieldElement import fieldelement
 
 class pdmlparser:
     
+    
 
-    lastfileread = ""
-    
-    debug_print = 0
-    
-    len_of_pdml = 0
-    
-    
-    
-    num_of_pdml = 0
-    num_of_packet = 0
-    num_of_proto = 0
-    num_of_field = 0
-    
-    total_num_of_pdml = 0
-    total_num_of_packet = 0
-    total_num_of_proto = 0
-    total_num_of_field = 0
     
     
     def __init__(self, pdmlfilepath):
         self.pdml = pdml()
+        self.debug_print = 0
+    
+        self.len_of_pdml = 0
+        
+        self.lastfileread = ""
+            
+        self.num_of_pdml = 0
+        self.num_of_packet = 0
+        self.num_of_proto = 0
+        self.num_of_field = 0
+        
+        self.total_num_of_pdml = 0
+        self.total_num_of_packet = 0
+        self.total_num_of_proto = 0
+        self.total_num_of_field = 0
         self.parse_pdml(pdmlfilepath)
         self.read_file_as_text(pdmlfilepath)
      
     def parse_pdml(self, pdmlfilepath):
+        #self.clean_pdml()
         self.num_of_lines(pdmlfilepath)
-        self.read_file(pdmlfilepath)
+        self.pdml = self.read_file(pdmlfilepath)
         print("total num of pdmls: ",self.total_num_of_pdml)
         print("total num of packets: ",self.total_num_of_packet)
         print("total num of protos: ",self.total_num_of_proto)
@@ -54,32 +54,29 @@ class pdmlparser:
         return self.total_num_of_field
     
     def get_packet_of_id_from_pdml(self, num):
-        return pdml.get_packet_with_id(pdml,num)
+        return self.pdml.get_packet_with_id(num)
     
     def get_packets_of_protocols(self, name):
         result = []
-        pdmlpackets = pdml.get_all_packets(pdml)
-        len_of_packets = len(pdmlpackets)
+        pdmlpackets = self.pdml.get_all_packets()
         count = 0
         
-        while(count < len_of_packets):
-            #print("packet: ",pdmlpackets[count].packetid)
+        while(count < len(pdmlpackets)):
             protocols = pdmlpackets[count].get_proto_element()
-            len_of_protocols = len(protocols)
+            #print(protocols)
             count2 = 0
             
-            while(count2 < len_of_protocols):
-                #print("protocol: ", count2, protocols[count2].get_proto_attrib_value("proto name"))
+            while(count2 < len(protocols)):
                 p_names = protocols[count2].get_all_proto_attrib_names()
+                #print("n",p_names)
+                
+                p_values = protocols[count2].get_all_proto_attrib_values()
+                #print("v",p_values)
                 count3 = 0
                 while(count3 < len(p_names)):
-                    if(p_names[count3] == name):
-                        result.append(pdmlpackets[count])
-                        
-                    
-#                 if(protocols[count2].get_proto_attrib_value("proto name") == name):
-#                     #print("found a match")
-#                     result.append(pdmlpackets[count])
+                    if(p_names[count3] == "proto name"):
+                        if(p_values[count3] == name):
+                            result.append(pdmlpackets[count].get_packet_id())
                 
                     count3+=1
                 count2 += 1
@@ -87,7 +84,7 @@ class pdmlparser:
         return result
     
     def get_field_of_proto_from_packet(self,packetid, protocol, key):
-        packets = pdml.get_all_packets(pdml)
+        packets = self.pdml.get_all_packets()
         if(packetid< 0 or packetid > self.total_num_of_packet):
             return "error, packetid out of index"
         protos = packets[packetid].get_proto_element()
@@ -112,35 +109,21 @@ class pdmlparser:
                                 count4 +=1
                             count3 +=1
                 count2 += 1
-            count+=1
-#                     fields = p_names[count2].get_field_attributes()
-#                     count3 = 0
-#                     while(count3 < len(fields)):
-#                         f_names = fields[count3].get_all_field_attributes_name()
-#                         count4 = 0
-#                         while(count4 < len(f_names)):
-#                             if(f_names[count4] == ):
-#                                 return fields[count3].get_field_attributes_value(count4)
-#                             count4+=1
-#                         count3+=1
-#                 count2+=1
-#             count+=1
-            
+            count+=1   
         return "error (not found)"
         
     def get_all_packets_of_pdml(self):
-        return pdml.get_all_packets(pdml)
+        return self.pdml.get_all_packets()
     
     
     def get_all_protocol_names(self):
         protonames = {}
         Dup = {}
-        pdmlpackets = pdml.get_all_packets(pdml)
+        pdmlpackets = self.pdml.get_all_packets()
         len_of_packets = len(pdmlpackets)
         count = 0
          
         while(count < len_of_packets):
-            #print("packet: ",pdmlpackets[count].packetid)
             protocols = pdmlpackets[count].get_proto_element()
             len_of_protocols = len(protocols)
             count2 = 0
@@ -153,15 +136,13 @@ class pdmlparser:
                     if(p_names[count3] == "proto name"):
                         protonames[protocols[count2].get_proto_attrib_value(count3)] = "found"
                     count3+=1
-                #print("protocol: ", count2)
-#                 protonames[protocols[count2].get_proto_attrib_value("proto name")] = "found"
                 count2 += 1
             count+=1
         protonames = list(protonames.keys())
         return protonames
-#     
+    
     def test_structure_depth(self):
-        pdmlpackets = pdml.get_all_packets(pdml)
+        pdmlpackets = self.pdml.get_all_packets()
         len_of_packets = len(pdmlpackets)
         count = 0
         
@@ -188,7 +169,37 @@ class pdmlparser:
         return self.pdml
     
     def clean_pdml(self):
-        self.pdml = pdml()
+        pdmlpackets = self.pdml.get_all_packets()
+        len_of_packets = len(pdmlpackets)
+        count = 0
+        
+        while(count < len_of_packets):
+            protocols = pdmlpackets[count].get_proto_element()
+            len_of_protocols = len(protocols)
+            count2 = 0
+            
+            while(count2 < len_of_protocols):
+                fieldlist = protocols[count2].get_field_element()
+                len_of_fields = len(fieldlist)
+                count3 = 0
+                
+                while(count3< len_of_fields):
+                    
+                    fieldlist[count3].field_attributes_names = []
+                    fieldlist[count3].field_attributes_values = []
+                    #print("cleaned field: ", count3)
+                    count3+=1
+                    
+                protocols[count2].proto_attributes_names = []
+                protocols[count2].proto_attributes_values = []
+                protocols[count2].field_elements = []
+              #  print("cleaned protocol: ", count2)
+                count2 += 1
+                
+            pdmlpackets[count].proto_elements = []
+            pdmlpackets[count].packetid = 0
+           # print("cleaned packet: ",count)
+            count+=1
         return 0
     
     
@@ -206,6 +217,7 @@ class pdmlparser:
     def read_file(self, filename):
         with open(filename, 'r') as myfile:
             x = 0
+            pdmlt = pdml()
             while(x < self.len_of_pdml):
                 data = myfile.readline()
                 
@@ -222,7 +234,7 @@ class pdmlparser:
                         print(data)
                     p = packet()
                     p.set_packet_id(self.num_of_packet)
-                    pdml.set_packet(pdml, p)
+                    pdmlt.set_packet(p)
                     self.num_of_packet+=1
                     self.total_num_of_packet+=1
                     
@@ -231,6 +243,7 @@ class pdmlparser:
                         print("    proto found", self.num_of_proto)
                         print(data)
                     pro = protoelement()
+                    #print("new proto created")
                     w = data.strip().split("\"")
                     xx = 0
                     while(xx < len(w)-1):
@@ -247,10 +260,12 @@ class pdmlparser:
                             w[xx+1] = w[xx+1].strip('>.-')
                         if(w[xx+1].find('=') != -1):
                             w[xx+1] = w[xx+1].strip('=.-')
-
+                        #print("====",w[xx].strip(),"and",w[xx+1].strip(),"====")
                         pro.set_proto_attrib(w[xx].strip(), w[xx+1].strip())
+                        #print("inserted into",pro)
+                        #print("current names", pro.get_all_proto_attrib_names())
                         xx+=2 
-                        
+                    
                     p.set_protoelement(pro)
                     self.num_of_field = 0
                     self.num_of_proto+=1
@@ -289,15 +304,14 @@ class pdmlparser:
                 
                 if(data.find("</proto>") != -1):
                     self.num_of_field = 0
+                    
                 
                 if(data.find("</packet>") != -1):
                     self.num_of_proto = 0
                     self.num_of_field = 0
                     
                 x+=1
+        return pdmlt
                 
     
-
-# if(__name__ == "__main__"):
-#     d = pdmlparser('dns_query_response2.pdml')
     

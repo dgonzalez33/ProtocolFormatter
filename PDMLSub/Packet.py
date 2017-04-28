@@ -1,18 +1,14 @@
 
 class packet:
     
-    packetid = 0;
-    proto_elements = []
+    
     packet_attributes = {}
     
     def __init__(self):
-        self.create_self()
+        self.packetid = 0;
         self.proto_elements = []
         self.packet_attributes = {}
      
-    def create_self(self):
-        #print("packet class")
-        return 0
         
     def set_packet_id(self, ident):
         self.packetid = ident
