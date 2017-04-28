@@ -1,14 +1,12 @@
 
 class fieldelement:
     
-    #field_attributes = {}
-    index = 0
-    field_attributes_names = []
-    field_attributes_values = []
+    
     
     def __init__(self):
         self.create_self()
-        self.field_attributes = {}
+        self.field_attributes_names = []
+        self.field_attributes_values = []
      
     def create_self(self):
         #print("fieldelement class")
@@ -19,7 +17,6 @@ class fieldelement:
     def set_field_attrib(self, key, val):
         self.field_attributes_names.append(key)
         self.field_attributes_values.append(val)
-        self.index=+1
         
 
     

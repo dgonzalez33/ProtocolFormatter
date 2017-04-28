@@ -2,17 +2,13 @@
 class protoelement:
     
 #     proto_attributes = {}
-    index = 0
-    proto_attributes_names = []
-    proto_attributes_values = []
-    field_elements = []
-    
+
     
     
     def __init__(self):
-        self.create_self()
         self.field_elements = []
-        self.proto_attributes = {}
+        self.proto_attributes_names = []
+        self.proto_attributes_values = []
      
     def create_self(self):
         #print("protoelement class")
@@ -21,7 +17,6 @@ class protoelement:
     def set_proto_attrib(self, key, value):
         self.proto_attributes_names.append(key)
         self.proto_attributes_values.append(value)
-        self.index+=1
         return 0
 
             
