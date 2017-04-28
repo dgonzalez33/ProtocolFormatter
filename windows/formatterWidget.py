@@ -43,7 +43,9 @@ class FormatterWidget:
             # self.context.pack_start(contextLabel,False,False,0)
 
             # appliedRulesContainer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-            vbox.pack_start(appliedFormattersContainer,True,True,0)
+            
+            
+            #vbox.pack_start(appliedFormattersContainer,True,True,0)
             RulesContainer = Gtk.Box(spacing=6)
 
             appliedRulesLabel = Gtk.Label()

@@ -61,7 +61,7 @@ class WindowController:
         self.second_container = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         self.third_container = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         self.fourth_container = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
-        
+
         #Widgets
         self.icon_widget = iconBar()
         self.filter_widget = FilterBarWidget()
@@ -238,23 +238,19 @@ class WindowController:
         #Create icon bar  
         self.insert_widget_to_Frame("<Mode of Operation>", self.icon_box,
                                     self.second_container, self.mainbox)
+          
          
-        
         self.insert_widget_to_Frame("Filter Bar",self.filterbarbox,
                                     self.third_container, self.mainbox)
-         
-        
+           
+#          
         self.insert_widget_to_Frame("Packet Window", self.packet_box, 
                                     self.fourth_container, self.mainbox)
-         
-        
-        self.insert_widget_to_Frame("Formatter Window",self.formatter_box,
+           
+          
+        self.insert_widget_to_same_Frame("Formatter Window",self.formatter_box,
                                     self.fourth_container, self.mainbox)
-#         
-#         dRecieved = ""
-#         self.update = Thread(target=self.update_packet_widget, args=(dRecieved,))
-#         self.update.setDaemon(True)
-#         self.update.start()
+
         
         self.window_main.show_all()
     
@@ -348,6 +344,7 @@ class WindowController:
             print("Cancel clicked")
 
         self.opendialog.destroy()
+        w.destroy()
         
         
     def main(self):
@@ -422,6 +419,17 @@ class WindowController:
     def insert_widget_to_Frame(self,label, vbox,frameContainer, wbox):
         
         wbox.pack_start(frameContainer, True, True, 6)
+        frame = Gtk.Frame()
+        frame.set_label(label)
+        frame.set_label_align( 0.5, 0)
+        frame.set_shadow_type(Gtk.ShadowType.ETCHED_OUT)
+        frame.show()
+        v_widget = vbox
+        frame.add(v_widget)
+        frameContainer.pack_start(frame, True, True, 6)
+        v_widget.show()
+        
+    def insert_widget_to_same_Frame(self,label, vbox,frameContainer, wbox):
         frame = Gtk.Frame()
         frame.set_label(label)
         frame.set_label_align( 0.5, 0)
