@@ -6,6 +6,4 @@ from PDMLSub.RenamingAction import RenamingAction
 class AnnotatingAction(Action):
 
     def getActionResult(self, target, attribute, value):
-        renameObject = RenamingAction();
-
-        return renamingObject.getActionResult(target, attribute, value)
+        return super().getActionResult(target)
