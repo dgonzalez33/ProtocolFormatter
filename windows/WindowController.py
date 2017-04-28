@@ -35,9 +35,6 @@ histOpen = False
 class WindowController:
     
     
-    
-
-    
     """
     The __init__ constructor is currently being used 
     as a way to start our windows but we should only 
@@ -334,11 +331,18 @@ class WindowController:
             
             self.maincontroller.set_pdml_file(self.chosenfile)
             #print("swag",self.maincontroller.get_packets_of_protocol("udp"))
-            
+            self.packet_widget.clear_list()
+            packets = self.maincontroller.get_all_packets()
+            x = 0
+            while(x < len(packets)):
+                
+                self.packet_widget.add_to_list("packet:"+str(packets[x].get_packet_id()), packets[x].get_packet_proto())
+                x+=1
+                
            # protosforfilterwindow = self.maincontroller.get_pdml_protocols()
             packetwindowcontent = self.maincontroller.get_pdml_text()
             
-            self.packet_widget.set_packet_window_text(packetwindowcontent)
+            #self.packet_widget.set_packet_window_text(packetwindowcontent)
             #self.remove_packet_widget_from_Frame()
         elif response == Gtk.ResponseType.CANCEL:
             print("Cancel clicked")

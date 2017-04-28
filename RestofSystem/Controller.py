@@ -38,6 +38,9 @@ class controller:
     
     def get_packets_of_protocol(self, val):
         return self.pdmlman.get_packets_with_protocol(val)
+    
+    def get_all_packets(self):
+        return self.pdmlman.get_all_packets()
         
     
 
