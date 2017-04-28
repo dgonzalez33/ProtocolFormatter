@@ -17,8 +17,8 @@ class FormatterWidget:
 
             appliedFormattersLabel = Gtk.Label()
             appliedFormattersLabel.set_markup("<b>Applied Formatters</b>")
-            appliedFormattersLabel.set_alignment(xalign=0, yalign=1) 
-            appliedFormattersContainer.pack_start(appliedFormattersLabel,True,True,0)
+            appliedFormattersLabel.set_alignment(xalign=0.5, yalign=0) 
+            appliedFormattersContainer.pack_start(appliedFormattersLabel,False,False,0)
             appliedFormattersContainer.pack_start(filterContainer,True,True,0)
 
             # self.expLists = FilterList()
@@ -50,8 +50,8 @@ class FormatterWidget:
 
             appliedRulesLabel = Gtk.Label()
             appliedRulesLabel.set_markup("<b>Applied Rules</b>")
-            appliedRulesLabel.set_alignment(xalign=0, yalign=1)
-            appliedFormattersContainer.pack_start(appliedRulesLabel, True, True,0)
+            appliedRulesLabel.set_alignment(xalign=0.5, yalign=0)
+            appliedFormattersContainer.pack_start(appliedRulesLabel, False, False,0)
             # appliedFormattersContainer.pack_start(appliedRulesContainer, True, True, 0)
             appliedFormattersContainer.pack_start(RulesContainer, True, True, 0)
 
@@ -66,21 +66,21 @@ class FormatterWidget:
             conLabel = Gtk.Label()
             conLabel.set_markup("<b>Construction of new Rule with Filter A</b>")
             conLabel.set_alignment(xalign=0, yalign=1) 
-            conRule.pack_start(conLabel,False,False,0)
+            conRule.pack_start(conLabel,False,True,0)
             actionEx = Gtk.Label()
             actionEx.set_markup("Action 3.1")
             actionEx.set_alignment(xalign=0, yalign=1) 
-            conRule.pack_start(actionEx,False,False,0)
+            conRule.pack_start(actionEx,False,True,0)
             actionEx2 = Gtk.Label()
             actionEx2.set_markup("Action 3.2")
             actionEx2.set_alignment(xalign=0, yalign=1) 
-            conRule.pack_start(actionEx2,False,False,0)
+            conRule.pack_start(actionEx2,False,True,0)
             buttonCont = Gtk.Box(spacing=6)
-            vbox.pack_start(buttonCont,False,False,0)
+            vbox.pack_start(buttonCont,False,True,0)
             createRule = Gtk.Button(label="Create Rule")
-            buttonCont.pack_start(createRule,False,False,0)
+            buttonCont.pack_start(createRule,False,True,0)
             deleteRule = Gtk.Button(label="Delete Rule")
-            buttonCont.pack_start(deleteRule,False,False,0)
+            buttonCont.pack_start(deleteRule,True,True,0)
 
             return vbox
 
