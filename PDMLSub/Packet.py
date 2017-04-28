@@ -35,6 +35,9 @@ class packet:
     def get_packet_id(self):
         return self.packetid
     
+    def to_String(self):
+        return "<Packet "+str(self.packetid)+">"
+    
 
 
 

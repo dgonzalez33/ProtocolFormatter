@@ -40,7 +40,7 @@ class protoelement:
     def get_all_proto_attrib_names(self):
         return self.proto_attributes_names
     
-    def get_all_proto_attrib_vales(self):
+    def get_all_proto_attrib_values(self):
         return self.proto_attributes_values
     
     def get_field_element(self):

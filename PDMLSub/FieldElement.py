@@ -17,7 +17,6 @@ class fieldelement:
         
     
     def set_field_attrib(self, key, val):
-        print(key, " and ", val)
         self.field_attributes_names.append(key)
         self.field_attributes_values.append(val)
         self.index=+1

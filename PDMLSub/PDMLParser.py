@@ -94,7 +94,7 @@ class pdmlparser:
         count = 0
         while(count < len(protos)):
             p_names = protos[count].get_all_proto_attrib_names()
-            p_values = protos[count].get_all_proto_attrib_vales()
+            p_values = protos[count].get_all_proto_attrib_values()
             count2 = 0
             while(count2 < len(p_names)):
                 if(p_names[count2] == "proto name"):
@@ -132,26 +132,33 @@ class pdmlparser:
         return pdml.get_all_packets(pdml)
     
     
-#     def get_all_protocol_names(self):
-#         protonames = {}
-#         Dup = {}
-#         pdmlpackets = pdml.get_all_packets(pdml)
-#         len_of_packets = len(pdmlpackets)
-#         count = 0
-#         
-#         while(count < len_of_packets):
-#             #print("packet: ",pdmlpackets[count].packetid)
-#             protocols = pdmlpackets[count].get_proto_element()
-#             len_of_protocols = len(protocols)
-#             count2 = 0
-#             
-#             while(count2 < len_of_protocols):
-#                 #print("protocol: ", count2)
+    def get_all_protocol_names(self):
+        protonames = {}
+        Dup = {}
+        pdmlpackets = pdml.get_all_packets(pdml)
+        len_of_packets = len(pdmlpackets)
+        count = 0
+         
+        while(count < len_of_packets):
+            #print("packet: ",pdmlpackets[count].packetid)
+            protocols = pdmlpackets[count].get_proto_element()
+            len_of_protocols = len(protocols)
+            count2 = 0
+             
+            while(count2 < len_of_protocols):
+                p_names = protocols[count2].get_all_proto_attrib_names()
+                p_values = protocols[count2].get_all_proto_attrib_values()
+                count3 = 0
+                while(count3< len(p_names)):
+                    if(p_names[count3] == "proto name"):
+                        protonames[protocols[count2].get_proto_attrib_value(count3)] = "found"
+                    count3+=1
+                #print("protocol: ", count2)
 #                 protonames[protocols[count2].get_proto_attrib_value("proto name")] = "found"
-#                 count2 += 1
-#             count+=1
-#         protonames = list(protonames.keys())
-#         return protonames
+                count2 += 1
+            count+=1
+        protonames = list(protonames.keys())
+        return protonames
 #     
     def test_structure_depth(self):
         pdmlpackets = pdml.get_all_packets(pdml)
