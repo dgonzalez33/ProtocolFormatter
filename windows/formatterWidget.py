@@ -58,7 +58,7 @@ class FormatterWidget:
             self.rulesListbox = Gtk.ListBox()
             self.rulesListbox.set_selection_mode(Gtk.SelectionMode.NONE)
             RulesContainer.pack_start(self.rulesListbox, True, True, 0)
-            Rulerow = FilterRow(self.listbox,"Rule","action")
+            Rulerow = FilterRow(self.rulesListbox,"Rule","action")
             self.rulesListbox.add(Rulerow.getRow())
 
             conRule = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
