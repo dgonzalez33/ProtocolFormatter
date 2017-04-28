@@ -7,6 +7,7 @@ class packet:
     def __init__(self):
         self.packetid = 0;
         self.proto_elements = []
+        self.packet_proto = ""
         self.packet_attributes = {}
      
         
@@ -21,6 +22,11 @@ class packet:
                 
     def get_proto_element(self):
         return self.proto_elements
+    
+    def get_packet_proto(self):
+        proto = self.proto_elements[len(self.proto_elements)-1]
+        result = proto.get_proto_attrib_value(0)
+        return result
     
     def get_proto_element_at_index(self, index):
         return self.proto_elements[index]

@@ -13,11 +13,11 @@ class pdmlmanager:
      
     def create_self(self):
         
-        print("packets with proto'udp'",self.get_packets_with_protocol("udp"))
-        print("packet with id 1", self.get_packet_of_id(1))
-        print("all packets:",self.get_all_packets())
-        print("all proto names", self.get_all_protocol_names())
-        print("field: udp.port in proto: udp or packet 1",self.get_field_element(1,"udp","udp.port"))
+#         print("packets with proto'udp'",self.get_packets_with_protocol("udp"))
+#         print("packet with id 1", self.get_packet_of_id(1))
+#         print("all packets:",self.get_all_packets())
+#         print("all proto names", self.get_all_protocol_names())
+#         print("field: udp.port in proto: udp or packet 1",self.get_field_element(1,"udp","udp.port"))
         return 0
         
         
