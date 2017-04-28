@@ -2,60 +2,56 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
+
 class PacketWidget:
-        packetBuffer = Gtk.TextBuffer()
-        packetView = Gtk.TextView()
+
+        def __init__(self):
+            self.liststore = Gtk.ListStore(str, str)
              
         def create_widget(self):
-            
-            #vbox is the top_level parent
-            vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-        
-            #fullContainer is a container for the whole  widget
-            fullContainer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-            
-            #buttonContainer contains the buttons
-            buttonContainer = Gtk.Box(spacing=6)
-            
-            #pack_start says fullContainer is now a child of vbox
-            vbox.pack_start(fullContainer,True,True,0)
-            
-            #create a scrollable container (ScrolledWindow is not really a 'window')
-            scrollContainer = Gtk.ScrolledWindow()
-            adj = Gtk.Adjustment()
-            adj.set_page_size(500)
-            scrollContainer.set_hadjustment(adj)
-            #create a container for the packet 
-            
-            self.listbox = Gtk.ListBox()
-            self.row = Gtk.ListBoxRow()
-            packetContainer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=20)
-            
-            
-            filetext = "\n\n\n\n            <Packet Contents Shown Here>\n\n\n\n"
 
-            self.set_packet_window_text(filetext)
+            vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
             
-            #packetviewer is now a child of packet container 
-            packetContainer.pack_start(self.packetView, False, False, 0)
+            appliedFormattersContainer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+            vbox.pack_start(appliedFormattersContainer,True,True,0)
+            filterContainer = Gtk.Box(spacing=0)
+            scrollContainer = Gtk.ScrolledWindow()
             
-            #add the packetview to the scroll window 
-            scrollContainer.add(packetContainer)
+            appliedFormattersContainer.pack_start(scrollContainer,True,True,0)
             
-            #scroll window is now a child of the full container
-            fullContainer.pack_start(scrollContainer,True,True,0)
+            
+            self.liststore = Gtk.ListStore(str, str)
+            self.add_to_list("packet 1", "tcp")
+    
+            treeview = Gtk.TreeView(model=self.liststore)
+    
+            renderer_text = Gtk.CellRendererText()
+            column_text = Gtk.TreeViewColumn("Packetid", renderer_text, text=0)
+            treeview.append_column(column_text)
+    
+            renderer_editabletext = Gtk.CellRendererText()
+            #renderer_editabletext.set_property("editable", True)
+    
+            column_editabletext = Gtk.TreeViewColumn("Protocol",renderer_editabletext, text=1)
+            treeview.append_column(column_editabletext)
+    
+            #renderer_editabletext.connect("edited", self.text_edited)
+            
+            filterContainer.pack_start(treeview,True,True,0)
+            
+            scrollContainer.add(filterContainer)
+
             
             return vbox
         
-        def set_packet_window_text(self, filetext):
-            self.packetBuffer = Gtk.TextBuffer()
-            self.packetBuffer.set_text(filetext)
-            self.packetView.set_buffer(self.packetBuffer)
-            return 0
-      
-        def read_file(self, filename):
-            with open(filename, 'r') as myfile:
-                data = myfile.read()
-            self.packetBuffer.set_text(data)
-            self.packetView.set_buffer(self.packetBuffer)
-            return data
+        def text_edited(self, widget, path, text):
+            self.liststore[path][1] = text
+            
+        def clear_list(self):
+            self.liststore.clear()
+            
+        def add_to_list(self, p_name, proto):
+            self.liststore.append([p_name, proto])
+
+            
+        
