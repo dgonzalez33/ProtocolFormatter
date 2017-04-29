@@ -356,49 +356,35 @@ class WindowController:
 
     def on_Open_clicked(self, widget):
         w = Gtk.Window(Gtk.WindowType.POPUP)
-        
         self.opendialog = Gtk.FileChooserDialog("Please choose a file", w,
             Gtk.FileChooserAction.OPEN,
             (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
              Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
-        #I need to set the window type but constants aren't loading (Gtk.WINDOW_POPUP) 
-        
         self.opendialog.set_transient_for(w)
         w.add(self.opendialog)
-        
         response = self.opendialog.run()
         if response == Gtk.ResponseType.OK:
             print("Open clicked")
             self.chosenfile = self.opendialog.get_filename()
             print("filename chosen",self.chosenfile)
-            
             self.maincontroller.set_pdml_file(self.chosenfile)
             self.packet_widget.clear_list()
-#             self.packet_widget.clear_columns()
-
-#             protocolumns = mainproto.proto_attributes_names
-            
-#             self.packet_widget.add_columns_to_list("Packet id", 0)
-#             x = 0
-#             while(x < len(protocolumns)):
-#                 self.packet_widget.add_columns_to_list(protocolumns[x], x+1)
-#                 x+=1
-#                 
-#             x = 0
             packets = self.maincontroller.get_all_packets()
             x = 0
             while(x < len(packets)):
                 rowvalue = []
-                rowvalue.append("packet:"+str(packets[x].get_packet_id()))
+                if(x < 10):
+                    rowvalue.append("0"+str(packets[x].get_packet_id()))
+                else:
+                    rowvalue.append(""+str(packets[x].get_packet_id()))
                 mainproto = packets[x].get_packet_main_proto()
                 protovals = mainproto.proto_attributes_values
                 rowvalue.extend(protovals)
                 while(len(rowvalue) < 5):
                     rowvalue.append("")
-                #print(len(rowvalue), rowvalue)
+                print(rowvalue)
                 self.packet_widget.add_to_list(rowvalue)
-                x+=1
-                
+                x+=1  
         elif response == Gtk.ResponseType.CANCEL:
             print("Cancel clicked")
         self.opendialog.destroy()

@@ -23,30 +23,18 @@ class PacketWidget:
             
             appliedFormattersContainer.pack_start(scrollContainer,True,True,0)
             
-            
-    
             self.treeview = Gtk.TreeView(model=self.liststore)
-            self.treeview.connect("row-activated", self.packet_tree_clicked)
             
-            self.add_columns_to_list("Packet id", 0)  
-            self.add_columns_to_list("Proto Name", 1)
-            self.add_columns_to_list("Showname", 2)
-            self.add_columns_to_list("Size", 3)
-            self.add_columns_to_list("Pos", 4)
+            tree_selection = self.treeview.get_selection()
+            tree_selection.set_mode(Gtk.SelectionMode.MULTIPLE)
+            tree_selection.connect("changed", self.packet_tree_clicked)
+            
+            self.add_columns_to_list("Packet id", 0, 0)  
+            self.add_columns_to_list("Proto Name", 1, 1)
+            self.add_columns_to_list("Showname", 2, 2)
+            self.add_columns_to_list("Size", 3, 3)
+            self.add_columns_to_list("Pos", 4, 4)
  
-  
-            
-#             renderer_text = Gtk.CellRendererText()
-#             column_text = Gtk.TreeViewColumn("Packetid", renderer_text, text=0)
-#             self.treeview.append_column(column_text)
-#     
-#             renderer_editabletext = Gtk.CellRendererText()
-#             #renderer_editabletext.set_property("editable", True)
-#     
-#             column_editabletext = Gtk.TreeViewColumn("Protocol",renderer_editabletext, text=1)
-#             self.treeview.append_column(column_editabletext)
-    
-            #renderer_editabletext.connect("edited", self.text_edited)
             
             
             filterContainer.pack_start(self.treeview,True,True,0)
@@ -56,10 +44,14 @@ class PacketWidget:
             
             return vbox
         
-        def packet_tree_clicked(self, widget, x, y):
-            self.packetclicked = "<b>Packet: "+x.to_string()+" Selected</b>"
-            print(self.packetclicked)
-            self.e_widget.packetLabel.set_markup(self.packetclicked)
+        def packet_tree_clicked(self, tree_selection):
+            (model, pathlist) = tree_selection.get_selected_rows()
+            for path in pathlist :
+                tree_iter = model.get_iter(path)
+                value = model.get_value(tree_iter,0)
+                self.packetclicked = "<b>Packet: "+value+" Selected</b>"
+                self.e_widget.packetLabel.set_markup(self.packetclicked)
+                print(value)
             
         def set_editor_widget(self, widget):
             self.e_widget = widget
@@ -67,18 +59,13 @@ class PacketWidget:
         def text_edited(self, widget, path, text):
             self.liststore[path][1] = text
             
-#         def clear_columns(self):
-#             x = 0
-#             while(x < 5):
-#                 if(self.treeview.get_column(x) != None):
-#                     self.treeview.remove_column(self.treeview.get_column(x))
-#                 print(self.treeview.get_column(x), x)
-#                 x+=1
                 
             
-        def add_columns_to_list(self, name, num):
+        def add_columns_to_list(self, name, num, s_id):
             renderer_text = Gtk.CellRendererText()
             column_text = Gtk.TreeViewColumn(name, renderer_text, text=num)
+            column_text.set_clickable(True)
+            column_text.set_sort_column_id(s_id)
             self.treeview.append_column(column_text)
             
         def clear_list(self):
