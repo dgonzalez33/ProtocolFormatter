@@ -1,12 +1,16 @@
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
+from windows.editorWidget import EditorWidget
 
 
 class PacketWidget:
 
         def __init__(self):
             self.liststore = Gtk.ListStore(str, str)
+            self.packetclicked = ""
+            self.e_widget = EditorWidget()
+        
              
         def create_widget(self):
 
@@ -24,7 +28,9 @@ class PacketWidget:
             self.add_to_list("packet 1", "tcp")
     
             treeview = Gtk.TreeView(model=self.liststore)
-    
+            treeview.connect("row-activated", self.packet_tree_clicked)
+            
+            
             renderer_text = Gtk.CellRendererText()
             column_text = Gtk.TreeViewColumn("Packetid", renderer_text, text=0)
             treeview.append_column(column_text)
@@ -43,6 +49,15 @@ class PacketWidget:
 
             
             return vbox
+        
+        def packet_tree_clicked(self, widget, x, y):
+            #packet_editor_title = "<Packet:"+str(x)+"> Selected"
+            self.packetclicked = "<b>Packet: "+x.to_string()+" Selected</b>"
+            print(self.packetclicked)
+            self.e_widget.packetLabel.set_markup(self.packetclicked)
+            
+        def set_editor_widget(self, widget):
+            self.e_widget = widget
         
         def text_edited(self, widget, path, text):
             self.liststore[path][1] = text

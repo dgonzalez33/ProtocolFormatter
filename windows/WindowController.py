@@ -35,66 +35,6 @@ histOpen = False
 
 class WindowController:
     
-
-    maincontroller = controller()
-    
-    #containers
-    second_container = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
-    third_container = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
-    fourth_container = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
-
-    
-    
-    #Widgets
-    icon_widget = iconBar()
-    filter_widget = FilterBarWidget()
-    packet_widget = PacketWidget()
-    formatter_widget = FormatterWidget()
-    editor_widget = EditorWidget()
-    script_widget = ScriptWidget()
-    filter_widget = FilterWidget()
-    filterbar_widget = FilterBarWidget()
-    hook_widget = HookWidget()
-    command_widget = CommandLineWidget()
-    history_widget = HistoricalCopyWidget()
-
-    
-    
-    #boxes
-    icon_box = icon_widget.create_widget()
-    filter_box = filter_widget.create_widget()
-    packet_box = packet_widget.create_widget()
-    packet_box.set_size_request(200,50)
-    formatter_box = formatter_widget.create_widget()
-    editorbox = editor_widget.create_widget()
-    scriptbox = script_widget.create_widget()
-    filterbox = filter_widget.create_widget()
-    filterbarbox = filterbar_widget.create_widget()
-    hookbox = hook_widget.create_widget()
-    commandbox = command_widget.create_widget()
-    historybox = history_widget.create_widget()
-    
-    
-    #Dialog Window
-    
-    chosenfile = ""
-    
-    
-    
-    #Windows
-    window_main = Gtk.Window()
-    editor_window = Gtk.Window()
-    script_window = Gtk.Window()
-    filter_window = Gtk.Window()
-    hook_window = Gtk.Window()
-    command_window = Gtk.Window()
-    history_window = Gtk.Window()
-    
-    
-    
-    
-
-
     
     """
     The __init__ constructor is currently being used 
@@ -249,7 +189,6 @@ class WindowController:
         historical_item = Gtk.MenuItem("Historical")
         historical_item.connect("activate", self.create_historical_window)
 
-
         #insert items into the drop down menu        
         window_menu.append(filter_item)
         window_menu.append(editor_item)
@@ -342,6 +281,7 @@ class WindowController:
         global editorOpen
         if(not editorOpen):
             self.editor_window = Gtk.Window()
+            self.packet_widget.set_editor_widget(self.editor_widget)
             self.editorbox = self.editor_widget.create_widget()
             self.insert_widget_to_window("Editor Window", self.editorbox, self.editor_window)
             editorOpen = True
@@ -385,7 +325,6 @@ class WindowController:
             self.historybox = self.history_widget.create_widget()
             self.insert_widget_to_window("Historical Copy Window", self.historybox, self.history_window)
             histOpen = True
-            self.history_widget.create_historical_copy()#compare
     
     
     def on_Help_clicked(self, widget):
@@ -414,7 +353,6 @@ class WindowController:
         
     def on_Close_clicked(self, widget):
         print("close was clicked")
-
 
     def on_Open_clicked(self, widget):
         w = Gtk.Window(Gtk.WindowType.POPUP)
