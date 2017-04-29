@@ -4,7 +4,9 @@ from gi.repository import Gtk
 
 
 class EditorWidget:
-
+    
+        packetLabel = Gtk.Label()
+        
         def create_widget(self):
 
             def makeFieldBox(self,fieldName):
@@ -44,6 +46,7 @@ class EditorWidget:
                 treeview.set_reorderable(True)
                 fieldBox.pack_start(treeview,False,False,0)
                 return fieldBox
+            
             def makeValueBox(self,valueName):
                 valueBox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
                 title = Gtk.Label()
@@ -83,10 +86,10 @@ class EditorWidget:
 
             
             vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-            packetLabel = Gtk.Label()
-            packetLabel.set_markup("<b>Packet #1</b>")
-            packetLabel.set_alignment(xalign=0, yalign=1) 
-            vbox.pack_start(packetLabel,True,True,0)
+            self.packetLabel = Gtk.Label()
+            self.packetLabel.set_markup("<b>NO PACKET SELECTED</b>")
+            self.packetLabel.set_alignment(xalign=0, yalign=1) 
+            vbox.pack_start(self.packetLabel,True,True,0)
             contentBox = Gtk.Box(spacing=6)
             vbox.pack_start(contentBox,True,True,0)
             fieldBox = makeFieldBox(self, "name")
@@ -110,6 +113,8 @@ class EditorWidget:
             legendBox.pack_start(annotateEntry,True,True,0)
             
             return vbox
+        
+        
         def on_hide_toggled(self, button, name):
             if button.get_active():
                 state = "on"
