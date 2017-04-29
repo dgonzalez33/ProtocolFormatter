@@ -7,7 +7,7 @@ from windows.editorWidget import EditorWidget
 class PacketWidget:
 
         def __init__(self):
-            self.liststore = Gtk.ListStore(str, str)
+            self.liststore = Gtk.ListStore(str, str, str, str, str)
             self.packetclicked = ""
             self.e_widget = EditorWidget()
         
@@ -24,26 +24,32 @@ class PacketWidget:
             appliedFormattersContainer.pack_start(scrollContainer,True,True,0)
             
             
-            self.liststore = Gtk.ListStore(str, str)
-            self.add_to_list("packet 1", "tcp")
     
-            treeview = Gtk.TreeView(model=self.liststore)
-            treeview.connect("row-activated", self.packet_tree_clicked)
+            self.treeview = Gtk.TreeView(model=self.liststore)
+            self.treeview.connect("row-activated", self.packet_tree_clicked)
             
+            self.add_columns_to_list("Packet id", 0)  
+            self.add_columns_to_list("Proto Name", 1)
+            self.add_columns_to_list("Showname", 2)
+            self.add_columns_to_list("Size", 3)
+            self.add_columns_to_list("Pos", 4)
+ 
+  
             
-            renderer_text = Gtk.CellRendererText()
-            column_text = Gtk.TreeViewColumn("Packetid", renderer_text, text=0)
-            treeview.append_column(column_text)
-    
-            renderer_editabletext = Gtk.CellRendererText()
-            #renderer_editabletext.set_property("editable", True)
-    
-            column_editabletext = Gtk.TreeViewColumn("Protocol",renderer_editabletext, text=1)
-            treeview.append_column(column_editabletext)
+#             renderer_text = Gtk.CellRendererText()
+#             column_text = Gtk.TreeViewColumn("Packetid", renderer_text, text=0)
+#             self.treeview.append_column(column_text)
+#     
+#             renderer_editabletext = Gtk.CellRendererText()
+#             #renderer_editabletext.set_property("editable", True)
+#     
+#             column_editabletext = Gtk.TreeViewColumn("Protocol",renderer_editabletext, text=1)
+#             self.treeview.append_column(column_editabletext)
     
             #renderer_editabletext.connect("edited", self.text_edited)
             
-            filterContainer.pack_start(treeview,True,True,0)
+            
+            filterContainer.pack_start(self.treeview,True,True,0)
             
             scrollContainer.add(filterContainer)
 
@@ -51,7 +57,6 @@ class PacketWidget:
             return vbox
         
         def packet_tree_clicked(self, widget, x, y):
-            #packet_editor_title = "<Packet:"+str(x)+"> Selected"
             self.packetclicked = "<b>Packet: "+x.to_string()+" Selected</b>"
             print(self.packetclicked)
             self.e_widget.packetLabel.set_markup(self.packetclicked)
@@ -62,11 +67,25 @@ class PacketWidget:
         def text_edited(self, widget, path, text):
             self.liststore[path][1] = text
             
+#         def clear_columns(self):
+#             x = 0
+#             while(x < 5):
+#                 if(self.treeview.get_column(x) != None):
+#                     self.treeview.remove_column(self.treeview.get_column(x))
+#                 print(self.treeview.get_column(x), x)
+#                 x+=1
+                
+            
+        def add_columns_to_list(self, name, num):
+            renderer_text = Gtk.CellRendererText()
+            column_text = Gtk.TreeViewColumn(name, renderer_text, text=num)
+            self.treeview.append_column(column_text)
+            
         def clear_list(self):
             self.liststore.clear()
             
-        def add_to_list(self, p_name, proto):
-            self.liststore.append([p_name, proto])
+        def add_to_list(self, value):
+            self.liststore.append(value)
 
             
         

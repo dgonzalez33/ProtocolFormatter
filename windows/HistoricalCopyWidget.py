@@ -38,10 +38,10 @@ class HistoricalCopyWidget:
         #  print("table created")
         #  print (hi)
         diff = difflib.ndiff(infile.readlines(), file2.readlines())
-        sys.stdout=file3
-        print ("\n".join(diff),)
+        #sys.stdout=file3
+        #print ("\n".join(diff),)
 
-        print ("hey" )
+        #print ("hey" )
         filetext1 = (''.join(diff),)
         file3 = open("../Scripts/testcubic.txt", "r")
        # print (file3.readlines())

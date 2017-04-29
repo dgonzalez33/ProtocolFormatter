@@ -374,10 +374,29 @@ class WindowController:
             
             self.maincontroller.set_pdml_file(self.chosenfile)
             self.packet_widget.clear_list()
+#             self.packet_widget.clear_columns()
+
+#             protocolumns = mainproto.proto_attributes_names
+            
+#             self.packet_widget.add_columns_to_list("Packet id", 0)
+#             x = 0
+#             while(x < len(protocolumns)):
+#                 self.packet_widget.add_columns_to_list(protocolumns[x], x+1)
+#                 x+=1
+#                 
+#             x = 0
             packets = self.maincontroller.get_all_packets()
             x = 0
             while(x < len(packets)):
-                self.packet_widget.add_to_list("packet:"+str(packets[x].get_packet_id()), packets[x].get_packet_proto())
+                rowvalue = []
+                rowvalue.append("packet:"+str(packets[x].get_packet_id()))
+                mainproto = packets[x].get_packet_main_proto()
+                protovals = mainproto.proto_attributes_values
+                rowvalue.extend(protovals)
+                while(len(rowvalue) < 5):
+                    rowvalue.append("")
+                #print(len(rowvalue), rowvalue)
+                self.packet_widget.add_to_list(rowvalue)
                 x+=1
                 
         elif response == Gtk.ResponseType.CANCEL:
