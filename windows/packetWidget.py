@@ -51,7 +51,7 @@ class PacketWidget:
                 value = model.get_value(tree_iter,0)
                 self.packetclicked = "<b>Packet: "+value+" Selected</b>"
                 self.e_widget.packetLabel.set_markup(self.packetclicked)
-                print(value)
+
             
         def set_editor_widget(self, widget):
             self.e_widget = widget

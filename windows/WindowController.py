@@ -5,7 +5,7 @@ import gi
 from numpy import empty
 from threading import Thread
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, GObject
+from gi.repository import Gtk, GObject, Gdk
 from windows.scriptWidget import ScriptWidget
 from windows.filterWidget import FilterWidget
 from windows.hookWidget import HookWidget
@@ -18,6 +18,7 @@ from windows.menuBar import menuBar
 from windows.iconBar import iconBar
 from windows.FilterBarWidget import FilterBarWidget
 from RestofSystem.Controller import controller
+from FileSub.Capture import Capture
 
 """
 Because our windows need to be customizable 
@@ -102,7 +103,7 @@ class WindowController:
         #create main window
         self.title = "Protocol Formatter System"
         self.window_main.set_title(self.title)
-        self.window_main.set_size_request( 1000, 800)
+        self.window_main.set_size_request( 1250, 800)
         self.window_main.connect("destroy", self.destroy)
         self.mainbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         
@@ -362,37 +363,79 @@ class WindowController:
              Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
         self.opendialog.set_transient_for(w)
         w.add(self.opendialog)
+        
+        
         response = self.opendialog.run()
         if response == Gtk.ResponseType.OK:
             print("Open clicked")
             self.chosenfile = self.opendialog.get_filename()
             print("filename chosen",self.chosenfile)
-            self.maincontroller.set_pdml_file(self.chosenfile)
-            self.packet_widget.clear_list()
-            packets = self.maincontroller.get_all_packets()
-            x = 0
-            while(x < len(packets)):
-                rowvalue = []
-                if(x < 10):
-                    rowvalue.append("0"+str(packets[x].get_packet_id()))
+            self.capture = Capture(self.chosenfile)
+            if(self.capture.isCapture(self.chosenfile)):
+                
+                if(self.capture.isPDML(self.chosenfile)):
+                    self.update_pdml_contents() 
                 else:
-                    rowvalue.append(""+str(packets[x].get_packet_id()))
-                mainproto = packets[x].get_packet_main_proto()
-                protovals = mainproto.proto_attributes_values
-                rowvalue.extend(protovals)
-                while(len(rowvalue) < 5):
-                    rowvalue.append("")
-                print(rowvalue)
-                self.packet_widget.add_to_list(rowvalue)
-                x+=1  
+                    print("need to convert")
+                    self.make_convert_window()
+            else:
+                print("launch error window")
+                self.make_error_window("this is not a capture bruh")
         elif response == Gtk.ResponseType.CANCEL:
             print("Cancel clicked")
         self.opendialog.destroy()
         w.destroy()
         
+    def update_pdml_contents(self):
+        self.maincontroller.set_pdml_file(self.chosenfile)
+        self.packet_widget.clear_list()
+        packets = self.maincontroller.get_all_packets()
+        x = 0
+        while(x < len(packets)):
+            rowvalue = []
+            if(x < 10):
+                rowvalue.append("0"+str(packets[x].get_packet_id()))
+            else:
+                rowvalue.append(""+str(packets[x].get_packet_id()))
+            mainproto = packets[x].get_packet_main_proto()
+            protovals = mainproto.proto_attributes_values
+            rowvalue.extend(protovals)
+            while(len(rowvalue) < 5):
+                rowvalue.append("")
+            self.packet_widget.add_to_list(rowvalue)
+            x+=1  
+        
+    def make_error_window(self, message):
+        ww = Gtk.Window()
+        ww.connect("destroy", self.destroy)
+        button = Gtk.Button(message)
+        button.modify_fg(Gtk.StateFlags.NORMAL, Gdk.color_parse("red") )
+        #colorb = Gtk.ColorButton(button, Gdk.Color(1,0,0))
+        #button.modify_bg(Gtk.StateType.PRELIGHT, color)
+   
+        
+        self.insert_widget_to_window("Error", button, ww)
+        
+    def make_convert_window(self):
+        self.convertwindow = Gtk.Window()
+        self.convertwindow.connect("destroy", self.destroy)
+        button = Gtk.Button("Click to convert to pdml")
+        button.modify_fg(Gtk.StateFlags.NORMAL, Gdk.color_parse("yellow") )
+        button.connect("clicked", self.convert_file)
+        self.insert_widget_to_window("Convert?", button, self.convertwindow)
+        
         
     def main(self):
         Gtk.main()
+        
+    def convert_file(self, widget):
+        self.chosenfile = self.capture.createCapture(self.chosenfile)
+        self.convertwindow.destroy()
+        if(self.capture.isPDML(self.chosenfile)):
+            self.update_pdml_contents()
+        else:
+            self.make_error_window("convert failed")
+            
         
     def destroy(self, w):
         print("main destroyed! \m/")
@@ -438,16 +481,22 @@ class WindowController:
         window.set_size_request( -1, -1)
         if(title == "Command Line Window"):
             window.connect("destroy", self.destroyComm)
+            window.set_keep_above(True)
         elif(title == "Editor Window"):
             window.connect("destroy", self.destroyEditor)
+            window.set_keep_above(True)
         elif(title == "Filter Window"):
             window.connect("destroy", self.destroyFilter)
+            window.set_keep_above(True)
         elif(title == "Hook Window"):
             window.connect("destroy", self.destroyHook)
+            window.set_keep_above(True)
         elif(title == "Historical Copy Window"):
             window.connect("destroy", self.destroyHist)
+            window.set_keep_above(True)
         elif(title == "Script Window"):
             window.connect("destroy", self.destroyScript)
+            window.set_keep_above(True)
         else:
             window.connect("destroy", self.destroy)
         window.add(vbox)
