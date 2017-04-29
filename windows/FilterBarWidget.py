@@ -9,5 +9,6 @@ class FilterBarWidget:
         hbox = Gtk.Box(spacing=6)
         filterEntry = Gtk.Entry()
         filterEntry.set_text("<Enter Filter>")
+        filterEntry.set_alignment(xalign=0.5) 
         hbox.pack_start(filterEntry,True,True,0)
         return hbox

@@ -4,15 +4,22 @@ from FileSub.Script import Script
 from FormatterSub.RenamingAction import RenamingAction
 
 class HookAction(Action):
-    scriptPath = ""
+    arguments = []
 
-    def __init__(self, scriptPath):
+    def __init__(self, scriptPath, arguments):
         self.scriptPath = scriptPath
+        self.arguments = arguments
+    def addArgument(self, attribute, value):
+        self.arguments.append(attribute)
+        self.arguments.append(value)
+    def getArguments(self):
+        return self.arguments
 
-    def getActionResult(self, target, attribute, value):
-        #waiting on script implementation to be finished
-        #but basically this is what is going to happen
-        hook = Script(scriptPath, argument = [attribute, target.get_field_attributes()[attribute]])
-        renamingObject = RenamingAction()
-
-        return renamingObject.getActionResult(target, attribute, hook.applyScript())
+    def getActionResult(self, target):
+        #Still need to parse through what script returns
+        #format is: "attribute\r\nvalue..."
+        hook = Script(self.scriptPath, arguments)
+        resultString = hook.applyScript()
+        #parse result string here, change attribute and value found and return
+        #new target
+        return

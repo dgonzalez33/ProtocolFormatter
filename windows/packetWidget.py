@@ -1,61 +1,78 @@
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
+from windows.editorWidget import EditorWidget
+
 
 class PacketWidget:
-        packetBuffer = Gtk.TextBuffer()
-        packetView = Gtk.TextView()
+
+        def __init__(self):
+            self.liststore = Gtk.ListStore(str, str, str, str, str)
+            self.packetclicked = ""
+            self.e_widget = EditorWidget()
+        
              
         def create_widget(self):
-            
-            #vbox is the top_level parent
-            vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-        
-            #fullContainer is a container for the whole  widget
-            fullContainer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-            
-            #buttonContainer contains the buttons
-            buttonContainer = Gtk.Box(spacing=6)
-            
-            #pack_start says fullContainer is now a child of vbox
-            vbox.pack_start(fullContainer,True,True,0)
-            
-            #create a scrollable container (ScrolledWindow is not really a 'window')
-            scrollContainer = Gtk.ScrolledWindow()
-            adj = Gtk.Adjustment()
-            adj.set_page_size(500)
-            scrollContainer.set_hadjustment(adj)
-            #create a container for the packet 
-            
-            self.listbox = Gtk.ListBox()
-            self.row = Gtk.ListBoxRow()
-            packetContainer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=20)
-            
-            
-            filetext = "\n\n\n\n            <Packet Contents Shown Here>\n\n\n\n"
 
-            self.set_packet_window_text(filetext)
+            vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
             
-            #packetviewer is now a child of packet container 
-            packetContainer.pack_start(self.packetView, False, False, 0)
+            appliedFormattersContainer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+            vbox.pack_start(appliedFormattersContainer,True,True,0)
+            filterContainer = Gtk.Box(spacing=0)
+            scrollContainer = Gtk.ScrolledWindow()
             
-            #add the packetview to the scroll window 
-            scrollContainer.add(packetContainer)
+            appliedFormattersContainer.pack_start(scrollContainer,True,True,0)
             
-            #scroll window is now a child of the full container
-            fullContainer.pack_start(scrollContainer,True,True,0)
+            self.treeview = Gtk.TreeView(model=self.liststore)
+            
+            tree_selection = self.treeview.get_selection()
+            tree_selection.set_mode(Gtk.SelectionMode.MULTIPLE)
+            tree_selection.connect("changed", self.packet_tree_clicked)
+            
+            self.add_columns_to_list("Packet id", 0, 0)  
+            self.add_columns_to_list("Proto Name", 1, 1)
+            self.add_columns_to_list("Showname", 2, 2)
+            self.add_columns_to_list("Size", 3, 3)
+            self.add_columns_to_list("Pos", 4, 4)
+ 
+            
+            
+            filterContainer.pack_start(self.treeview,True,True,0)
+            
+            scrollContainer.add(filterContainer)
+
             
             return vbox
         
-        def set_packet_window_text(self, filetext):
-            self.packetBuffer = Gtk.TextBuffer()
-            self.packetBuffer.set_text(filetext)
-            self.packetView.set_buffer(self.packetBuffer)
-            return 0
-      
-        def read_file(self, filename):
-            with open(filename, 'r') as myfile:
-                data = myfile.read()
-            self.packetBuffer.set_text(data)
-            self.packetView.set_buffer(self.packetBuffer)
-            return data
+        def packet_tree_clicked(self, tree_selection):
+            (model, pathlist) = tree_selection.get_selected_rows()
+            for path in pathlist :
+                tree_iter = model.get_iter(path)
+                value = model.get_value(tree_iter,0)
+                self.packetclicked = "<b>Packet: "+value+" Selected</b>"
+                self.e_widget.packetLabel.set_markup(self.packetclicked)
+
+            
+        def set_editor_widget(self, widget):
+            self.e_widget = widget
+        
+        def text_edited(self, widget, path, text):
+            self.liststore[path][1] = text
+            
+                
+            
+        def add_columns_to_list(self, name, num, s_id):
+            renderer_text = Gtk.CellRendererText()
+            column_text = Gtk.TreeViewColumn(name, renderer_text, text=num)
+            column_text.set_clickable(True)
+            column_text.set_sort_column_id(s_id)
+            self.treeview.append_column(column_text)
+            
+        def clear_list(self):
+            self.liststore.clear()
+            
+        def add_to_list(self, value):
+            self.liststore.append(value)
+
+            
+        

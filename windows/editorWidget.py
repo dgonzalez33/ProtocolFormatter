@@ -4,7 +4,9 @@ from gi.repository import Gtk
 
 
 class EditorWidget:
-
+    
+        packetLabel = Gtk.Label()
+        
         def create_widget(self):
 
             def makeFieldBox(self,fieldName):
@@ -13,14 +15,6 @@ class EditorWidget:
                 title.set_markup("<b>Field Name</b>")
                 title.set_alignment(xalign=0, yalign=1)
                 fieldBox.pack_start(title,False,False,0) 
-                # fieldLabel = Gtk.Label("Line 1")
-                # fieldLabel.set_alignment(xalign=0, yalign=1)
-                # fieldBox.pack_start(fieldLabel,False,False,0)
-                # fieldButton = Gtk.CheckButton("Field Name " + fieldName)
-                # fieldBox.pack_start(fieldButton,False,False,0)
-                # entry = Gtk.Entry()
-                # entry.set_text("Enter Text")
-                # fieldBox.pack_start(entry,False,False,0)
                 treestore = Gtk.TreeStore(str)
                 for parent in range(4):
                     piter = treestore.append(None, ['Line %i' % parent])
@@ -44,20 +38,13 @@ class EditorWidget:
                 treeview.set_reorderable(True)
                 fieldBox.pack_start(treeview,False,False,0)
                 return fieldBox
+            
             def makeValueBox(self,valueName):
                 valueBox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
                 title = Gtk.Label()
                 title.set_markup("<b>Value</b>")
                 title.set_alignment(xalign=0, yalign=1)
                 valueBox.pack_start(title,False,False,0) 
-                # valueLabel = Gtk.Label("Line 1")
-                # valueLabel.set_alignment(xalign=0, yalign=1)
-                # valueBox.pack_start(valueLabel,False,False,0)
-                # valueButton = Gtk.CheckButton("Value = " + valueName)
-                # valueBox.pack_start(valueButton,False,False,0)
-                # entry = Gtk.Entry()
-                # entry.set_text("Enter Value")
-                # valueBox.pack_start(entry,False,False,0)
                 treestore = Gtk.TreeStore(str)
                 for parent in range(4):
                     piter = treestore.append(None, ['Line %i' % parent])
@@ -83,10 +70,10 @@ class EditorWidget:
 
             
             vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-            packetLabel = Gtk.Label()
-            packetLabel.set_markup("<b>Packet #1</b>")
-            packetLabel.set_alignment(xalign=0, yalign=1) 
-            vbox.pack_start(packetLabel,True,True,0)
+            self.packetLabel = Gtk.Label()
+            self.packetLabel.set_markup("<b>NO PACKET SELECTED</b>")
+            self.packetLabel.set_alignment(xalign=0, yalign=1) 
+            vbox.pack_start(self.packetLabel,True,True,0)
             contentBox = Gtk.Box(spacing=6)
             vbox.pack_start(contentBox,True,True,0)
             fieldBox = makeFieldBox(self, "name")
@@ -110,6 +97,8 @@ class EditorWidget:
             legendBox.pack_start(annotateEntry,True,True,0)
             
             return vbox
+        
+        
         def on_hide_toggled(self, button, name):
             if button.get_active():
                 state = "on"

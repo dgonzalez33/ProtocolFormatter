@@ -1,4 +1,4 @@
-from Tshark_Handler import Tshark_Handler
+from FileSub.Tshark_Handler import Tshark_Handler
 class Capture:
     def createCapture(self, filePath):
         if(self.isCapture(filePath)):
