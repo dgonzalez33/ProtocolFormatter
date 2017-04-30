@@ -17,8 +17,8 @@ class EditorWidget:
             vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
             self.packetLabel = Gtk.Label()
             self.packetLabel.set_markup("<b>NO PACKET SELECTED</b>")
-            self.packetLabel.set_alignment(xalign=0, yalign=1) 
-            vbox.pack_start(self.packetLabel,True,True,0)
+            self.packetLabel.set_alignment(xalign=0, yalign=0) 
+            vbox.pack_start(self.packetLabel,False,False,0)
             contentBox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
             vbox.pack_start(contentBox,True,True,0)
             self.fieldscrolledview = Gtk.ScrolledWindow()
@@ -63,7 +63,7 @@ class EditorWidget:
             legendTitle = Gtk.Label()
             legendTitle.set_markup("<b>Legend</b>")
             legendTitle.set_alignment(xalign=0, yalign=1)
-            vbox.pack_start(legendTitle,True,True,0)
+            vbox.pack_start(legendTitle,False,False,0)
             hideField = Gtk.CheckButton("Hide Field ")
             legendBox.pack_start(hideField,False,False,0)
             hideField.connect("toggled", self.on_hide_toggled, "hideField")
@@ -88,21 +88,46 @@ class EditorWidget:
             print("Button", name, "was turned", state)
             
         def on_annotate_clicked(self, button):
-            print("\"Annotate\" button was clicked")
-            self.fieldtreestore.append(None, ['test'])
-            self.valuetreestore.append(None, ['test'])
-#             for parent in range(4):
-#                 piter = self.fieldtreestore.append(None, ['Line %i' % parent])
-#                 for child in range(3):
-#                     self.fieldtreestore.append(piter, ['Field Name %i' %
-#                                                   (child)])
-#                 self.fieldtreestore.append(piter, ['<Enter Text>'])            
+            print("\"Annotate\" button was clicked")     
             
         def on_cell_toggled(self, widget, path):
             print(path)
             
         def text_edited(self, widget, path, text):
             print("Added "+text+"!")
+        
+        def clear_list(self):
+            self.fieldtreestore.clear()
+            self.valuetreestore.clear()
+        
+        def update_field_info(self, packetnum, proto):
+            self.clear_list()
+            packet = self.pdmlman.get_packet_of_id(int(packetnum))
+            protos = packet.get_proto_element()
+            x = 0
+            while(x < len(protos)):
+                if(protos[x].proto_attributes_values[0] == proto):
+                    protocol = protos[x]
+                x+=1
+            fields = protocol.get_field_element()
+            x = 0
+            while(x < len(fields)):
+                fieldnames = fields[x].get_all_field_attributes_name()
+                fieldvalues = fields[x].get_all_field_attributes_value()
+                
+                
+                fielditer = self.fieldtreestore.append(None, ["("+str(x)+") "+fieldnames[0]])
+                valueiter = self.valuetreestore.append(None, ["("+str(x)+") "+fieldvalues[0]])
+                y = 1
+                while(y < len(fieldnames)):
+                    self.fieldtreestore.append(fielditer, ["["+str(y)+"] "+fieldnames[y]])
+                    self.valuetreestore.append(valueiter, ["["+str(y)+"] "+fieldvalues[y]])
+                    y+=1
+                
+                x+=1
+                
+            
+            
             
         def set_pdml_man(self, p):
             self.pdmlman = p

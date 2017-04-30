@@ -264,15 +264,6 @@ class WindowController:
         print("totally worked!")
         return 0
     
-    def refresh_all_windows(self):
-        print("refreshed")
-        self.window_main.show_all()
-        self.editor_window.show_all()
-        self.script_window.show_all()
-        self.filter_window.show_all()
-        self.hook_window.show_all()
-        self.command_window.show_all()
-        self.history_window.show_all()
     
     """
     create stand alone widget windows 
@@ -282,7 +273,9 @@ class WindowController:
         global editorOpen
         if(not editorOpen):
             self.editor_window = Gtk.Window()
+            self.editor_window.set_size_request(500, 500)
             self.packet_widget.set_editor_widget(self.editor_widget)
+            self.packet_widget.editorisopen = 1
             self.editorbox = self.editor_widget.create_widget()
             self.insert_widget_to_window("Editor Window", self.editorbox, self.editor_window)
             editorOpen = True
@@ -291,6 +284,7 @@ class WindowController:
         global scriptOpen
         if(not scriptOpen):
             self.script_window = Gtk.Window()
+            self.script_window.set_size_request(500, 500)
             self.scriptbox = self.script_widget.create_widget()
             self.insert_widget_to_window("Script Window", self.scriptbox, self.script_window)
             scriptOpen = True
@@ -299,6 +293,7 @@ class WindowController:
         global filterOpen
         if(not filterOpen):
             self.filter_window = Gtk.Window()
+            self.filter_window.set_size_request(500, 300)
             self.filterbox = self.filter_widget.create_widget()
             self.insert_widget_to_window("Filter Window", self.filterbox, self.filter_window)
             filterOpen = True
@@ -307,6 +302,7 @@ class WindowController:
         global hookOpen
         if(not hookOpen):
             self.hook_window = Gtk.Window()
+            self.hook_window.set_size_request(500, 300)
             self.hookbox = self.hook_widget.create_widget()
             self.insert_widget_to_window("Hook Window", self.hookbox, self.hook_window)
             hookOpen = True
@@ -315,6 +311,7 @@ class WindowController:
         global commOpen
         if(not commOpen):
             self.command_window = Gtk.Window()
+            self.command_window.set_size_request(500, 100)
             self.commandbox = self.command_widget.create_widget()
             self.insert_widget_to_window("Command Line Window", self.commandbox, self.command_window)
             commOpen = True
@@ -323,6 +320,7 @@ class WindowController:
         global histOpen
         if(not histOpen):
             self.history_window = Gtk.Window()
+            self.history_window.set_size_request(500, 500)
             self.historybox = self.history_widget.create_widget()
             self.insert_widget_to_window("Historical Copy Window", self.historybox, self.history_window)
             histOpen = True
@@ -363,8 +361,6 @@ class WindowController:
              Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
         self.opendialog.set_transient_for(w)
         w.add(self.opendialog)
-        
-        
         response = self.opendialog.run()
         if response == Gtk.ResponseType.OK:
             print("Open clicked")
@@ -396,9 +392,9 @@ class WindowController:
             self.rowvalue = []
             self.p_name = ""
             if(x < 10):
-                self.p_name = "Packet: 0"+str(packets[x].get_packet_id())
+                self.p_name = "0"+str(packets[x].get_packet_id())
             else:
-                self.p_name ="Packet: "+str(packets[x].get_packet_id())
+                self.p_name =""+str(packets[x].get_packet_id())
                 
             self.rowvalue.append(self.p_name)
                 
@@ -413,10 +409,7 @@ class WindowController:
                     self.rowvalue.append(proto[y].proto_attributes_values[1])
                 else:
                     self.rowvalue.append("")
-                    
-                
-                
-               
+
                 if(proto[y].proto_attributes_values[0] == "geninfo"):
                     self.field = proto[y].get_field_element_at_index(3)
                     self.date = self.field.field_attributes_values[2]
@@ -439,6 +432,8 @@ class WindowController:
         
     def make_error_window(self, message):
         ww = Gtk.Window()
+        ww.set_size_request(150, 75)
+        ww.set_keep_above(True)
         ww.connect("destroy", self.destroy)
         button = Gtk.Button(message)
         button.modify_fg(Gtk.StateFlags.NORMAL, Gdk.color_parse("red") )
@@ -450,6 +445,8 @@ class WindowController:
         
     def make_convert_window(self):
         self.convertwindow = Gtk.Window()
+        self.convertwindow.set_size_request(150, 75)
+        self.convertwindow.set_keep_above(True)
         self.convertwindow.connect("destroy", self.destroy)
         button = Gtk.Button("Click to convert to pdml")
         button.modify_fg(Gtk.StateFlags.NORMAL, Gdk.color_parse("yellow") )
@@ -479,6 +476,7 @@ class WindowController:
 
     def destroyEditor(self, w):
         print("editor destroyed! \m/")
+        self.packet_widget.editorisopen = 0
         global editorOpen
         editorOpen = False   
 
@@ -510,7 +508,7 @@ class WindowController:
         vbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
         title = windowtitle
         window.set_title(title)
-        window.set_size_request( -1, -1)
+        #window.set_size_request( -1, -1)
         if(title == "Command Line Window"):
             window.connect("destroy", self.destroyComm)
             window.set_keep_above(True)

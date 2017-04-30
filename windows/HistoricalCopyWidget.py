@@ -1,10 +1,14 @@
 #Command line widget
 #python 3.5
 import gi
+import difflib
+import sys
+#from difflib_data import *
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
 class HistoricalCopyWidget:
+
 
     def create_widget(self):
         #vbox is the top_level parent
@@ -14,7 +18,7 @@ class HistoricalCopyWidget:
         fullContainer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         
         #buttonContainer contains the buttons
-        buttonContainer = Gtk.Box(spacing=10)
+        buttonContainer = Gtk.Box(spacing=6)
         
         #pack_start says fullContainer is now a child of vbox
         vbox.pack_start(fullContainer,True,True,0)
@@ -24,9 +28,25 @@ class HistoricalCopyWidget:
         
         #create a container for the packet 
         packetContainer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=20)
-
+        
         packetBuffer = Gtk.TextBuffer()
-        filetext = "\n\n\n\n            <Historical Packet Contents>\n\n\n\n"
+        infile = open("../Scripts/cubic.pdml", "r")
+        file2 = open("../Scripts/cubic2.pdml", "r")
+        file3 = open("../Scripts/testcubic.txt", "w")
+        # differ = difflib.HtmlDiff()
+        # hi=differ.make_table(infile,file2)
+        #  print("table created")
+        #  print (hi)
+        diff = difflib.ndiff(infile.readlines(), file2.readlines())
+        #sys.stdout=file3
+        #print ("\n".join(diff),)
+
+        #print ("hey" )
+        filetext1 = (''.join(diff),)
+        file3 = open("../Scripts/testcubic.txt", "r")
+       # print (file3.readlines())
+
+        filetext = "\n\n\n\n            <Historical Packet Contents>\n\n\n\n" + ''.join(file3.readline()) + "\n"
 
         packetBuffer.set_text(filetext)
         
@@ -35,10 +55,10 @@ class HistoricalCopyWidget:
         packetView.set_buffer(packetBuffer)
         
         #packetviewer is now a child of packet container 
-        packetContainer.pack_start(packetView, False, False, 0)
+        packetContainer.pack_start(packetView, True, True, 0)
 
-        comparebutton = Gtk.Button.new_with_label("compare")
-        packetContainer.pack_start(comparebutton, False, False, 5)
+        restorebutton = Gtk.Button.new_with_label("Restore")
+        packetContainer.pack_start(restorebutton, False, False, 0)
 
 
         
@@ -51,9 +71,19 @@ class HistoricalCopyWidget:
         return vbox
     
     def create_historical_copy(self):
-        infile = open("name of file" , "wb")
-        if ("name of file").endswith('.pdml'):
-            data = infile.read(self)
-            outfile = open("historical copy" + ".pdml")
-            outfile.write(data)
-        else: print ("error")
+
+
+        infile = open("../Scripts/cubic.pdml" , "r")
+        file2 = open("../Scripts/cubic2.pdml" , "r")
+       # differ = difflib.HtmlDiff()
+       # hi=differ.make_table(infile,file2)
+      #  print("table created")
+      #  print (hi)
+        diff =difflib.ndiff(infile.readlines(),file2.readlines())
+
+        #print( ''.join(diff),)
+        #
+
+
+    #def compare(self):
+
