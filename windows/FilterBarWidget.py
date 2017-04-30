@@ -27,12 +27,9 @@ class FilterBarWidget:
         protolabel.set_text("Proto name:")
         protolabel.show()
         
-        shownamelabel = Gtk.Label()
-        shownamelabel.set_text("Showname:")
-        shownamelabel.show()
+        
         
         self.protoEntry = Gtk.Entry()
-        self.showNameEntry = Gtk.Entry()
     
        
         
@@ -43,8 +40,7 @@ class FilterBarWidget:
         
         filterbox.add(protolabel)
         filterbox.add(self.protoEntry)
-        filterbox.add(shownamelabel)
-        filterbox.add(self.showNameEntry)
+
         filterbox.add(submitbutton)
         
         filterlabelframe.add(filterbox)
