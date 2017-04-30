@@ -39,7 +39,9 @@ class Filter:
             self.bpfFilter = self.bpfFilter.replace("ip proto "+proto,proto)
         for proto in self.isoProtos:
             self.bpfFilter = self.bpfFilter.replace("iso proto "+proto,proto)
-        self.bpfFilter = self.bpfFilter.replace("ip ","ip.")
+        for proto in self.protocols:
+            self.bpfFilter = self.bpfFilter.replace(proto+" ",proto+".")
+        # self.bpfFilter = self.bpfFilter.replace("ip ","ip.")
         parseList = self.bpfFilter.split("and")
         andList = list()
         for primAnd in parseList:
@@ -133,7 +135,7 @@ class Filter:
 
     def __init__(self, bpfFilter):
         self.protocols = ['ether', 'fddi','tr','wlan','ip','ip6','arp','rarp',
-        'decnet', 'tcp', 'udp']
+        'decnet', 'tcp', 'udp','eth']
         self.ipProtos = ['icmp', 'icmp6', 'igmp', 'igrp', 'pim', 'ah', 'esp', 'vrrp', 'udp','tcp']
         self.etherProtos = ['ip', 'ip6', 'arp', 'rarp', 'atalk', 'aarp', 'decnet', 'sca', 'lat', 'mopdl', 'moprc', 'iso', 'stp', 'ipx', 'netbeui']
         self.isoProtos = ['clnp', 'esis','isis']
@@ -146,7 +148,7 @@ class Filter:
 
     
 
-# sfilter = Filter("portrange 0-1")
+# sfilter = Filter("eth")
 # result = sfilter.setFilter()
 # print(result)
 # protos = sfilter.applyFilter( pdmlmanager("ProtocolFormatter/Scripts/cubic.pdml") )
