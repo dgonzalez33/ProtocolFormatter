@@ -51,10 +51,10 @@ class WindowController:
         
         #Dialog Window
         self.chosenfile = ""
-        self.opendialog = Gtk.FileChooserDialog("Please choose a file", None,
-                Gtk.FileChooserAction.OPEN,
-                (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
-                 Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
+#         self.opendialog = Gtk.FileChooserDialog("Please choose a file", None,
+#                 Gtk.FileChooserAction.OPEN,
+#                 (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+#                  Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
         
         #containers
         self.second_container = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
@@ -240,7 +240,7 @@ class WindowController:
         self.insert_widget_to_Frame_Contracted("<Mode of Operation>", self.icon_box,
                                     self.second_container, self.mainbox)
           
-         
+        self.filterbar_widget.p_widget = self.packet_widget
         self.insert_widget_to_Frame_Contracted("Filter Bar",self.filterbarbox,
                                     self.third_container, self.mainbox)
            
@@ -392,17 +392,48 @@ class WindowController:
         packets = self.maincontroller.get_all_packets()
         x = 0
         while(x < len(packets)):
-            rowvalue = []
+            self.rowvalue = []
+            self.p_name = ""
             if(x < 10):
-                rowvalue.append("0"+str(packets[x].get_packet_id()))
+                self.p_name = "Packet: 0"+str(packets[x].get_packet_id())
             else:
-                rowvalue.append(""+str(packets[x].get_packet_id()))
-            mainproto = packets[x].get_packet_main_proto()
-            protovals = mainproto.proto_attributes_values
-            rowvalue.extend(protovals)
-            while(len(rowvalue) < 5):
-                rowvalue.append("")
-            self.packet_widget.add_to_list(rowvalue)
+                self.p_name ="Packet: "+str(packets[x].get_packet_id())
+                
+            self.rowvalue.append(self.p_name)
+                
+            proto = packets[x].get_proto_element()
+            y = 0
+            while(y < len(proto)):
+                self.rowvalue.append(proto[y].proto_attributes_values[0])
+                
+                if(proto[y].proto_attributes_values[0] == "geninfo"):
+                    self.rowvalue.append(proto[y].proto_attributes_values[2])
+                elif(len(proto[y].proto_attributes_values) > 1):
+                    self.rowvalue.append(proto[y].proto_attributes_values[1])
+                else:
+                    self.rowvalue.append("")
+                    
+                
+                
+               
+                if(proto[y].proto_attributes_values[0] == "geninfo"):
+                    self.field = proto[y].get_field_element_at_index(3)
+                    self.date = self.field.field_attributes_values[2]
+                    self.rowvalue.append(self.date)
+                else:
+                    self.rowvalue.append(self.date)
+                    
+                if(len(self.rowvalue) != 4):
+                    print(self.owvalue)
+                    self.rowvalue.clear()
+                    self.rowvalue.append(self.p_name)
+                else:  
+                    self.packet_widget.add_to_list(self.rowvalue)
+                    self.rowvalue.clear()
+                    self.rowvalue.append(self.p_name)
+                y+=1
+            self.rowvalue.clear()
+                
             x+=1  
         
     def make_error_window(self, message):
