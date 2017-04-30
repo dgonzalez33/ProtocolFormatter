@@ -390,6 +390,7 @@ class WindowController:
         self.maincontroller.set_pdml_file(self.chosenfile)
         self.packet_widget.clear_list()
         packets = self.maincontroller.get_all_packets()
+        self.editor_widget.set_pdml_man(self.maincontroller.get_pdml_man())
         x = 0
         while(x < len(packets)):
             self.rowvalue = []

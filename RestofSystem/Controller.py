@@ -41,6 +41,9 @@ class controller:
     
     def get_all_packets(self):
         return self.pdmlman.get_all_packets()
+    
+    def get_pdml_man(self):
+        return self.pdmlman
         
     
 

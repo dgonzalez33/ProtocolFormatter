@@ -71,7 +71,8 @@ class PacketWidget:
             for path in pathlist :
                 tree_iter = model.get_iter(path)
                 value = model.get_value(tree_iter,0)
-                self.packetclicked = value
+                value2 = model.get_value(tree_iter, 1)
+                self.packetclicked = "<b>"+value+" Protocol: "+value2+"</b>"
                 self.e_widget.packetLabel.set_markup(self.packetclicked)
 #             adj = self.scrollContainer.get_vadjustment()
 #             print(adj.get_value())
