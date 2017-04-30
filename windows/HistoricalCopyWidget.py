@@ -55,7 +55,7 @@ class HistoricalCopyWidget:
         packetView.set_buffer(packetBuffer)
         
         #packetviewer is now a child of packet container 
-        packetContainer.pack_start(packetView, False, False, 0)
+        packetContainer.pack_start(packetView, True, True, 0)
 
         restorebutton = Gtk.Button.new_with_label("Restore")
         packetContainer.pack_start(restorebutton, False, False, 0)

@@ -11,6 +11,7 @@ class PacketWidget:
             self.packetclicked = ""
             self.e_widget = EditorWidget()
             self.listofiterators = []
+            self.editorisopen = 0
             
         
              
@@ -72,8 +73,10 @@ class PacketWidget:
                 tree_iter = model.get_iter(path)
                 value = model.get_value(tree_iter,0)
                 value2 = model.get_value(tree_iter, 1)
-                self.packetclicked = "<b>"+value+" Protocol: "+value2+"</b>"
-                self.e_widget.packetLabel.set_markup(self.packetclicked)
+                self.packetclicked = "<b>Packet: "+value+" Protocol: "+value2+"</b>"
+                if(self.editorisopen == 1):
+                    self.e_widget.packetLabel.set_markup(self.packetclicked)
+                    self.e_widget.update_field_info(value, value2)
 #             adj = self.scrollContainer.get_vadjustment()
 #             print(adj.get_value())
 #             self.scrollContainer.set_vadjustment(adj)
