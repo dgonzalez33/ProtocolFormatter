@@ -33,20 +33,20 @@ class HistoricalCopyWidget:
         infile = open("../Scripts/cubic.pdml", "r")
         file2 = open("../Scripts/cubic2.pdml", "r")
         file3 = open("../Scripts/testcubic.txt", "w")
-        # differ = difflib.HtmlDiff()
-        # hi=differ.make_table(infile,file2)
-        #  print("table created")
-        #  print (hi)
         diff = difflib.ndiff(infile.readlines(), file2.readlines())
         sys.stdout=file3
-        print ("\n".join(diff),)
+        print ("\n".join(diff),"\n")
 
+       # diff = difflib.ndiff(infile.readlines(), file2.readlines())
+        #print ("\n".join(diff),)
+
+#read line in for loop
         print ("hey" )
-        filetext1 = (''.join(diff),)
-        file3 = open("../Scripts/testcubic.txt", "r")
+        file3 = open("../Scripts/testcubic (copy).txt", "r")
        # print (file3.readlines())
 
-        filetext = "\n\n\n\n            <Historical Packet Contents>\n\n\n\n" + ''.join(file3.readline()) + "\n"
+        filetext = "\n\n\n\n            <Historical Packet Contents compare>\n\n\n\n" + '\n'.join(file3.readlines()) + "\n"
+
 
         packetBuffer.set_text(filetext)
         
