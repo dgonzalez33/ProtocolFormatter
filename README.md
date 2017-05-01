@@ -50,11 +50,11 @@ For software 2!
 
 -These are all the components to create the Gtk GUI
 
--Widgets are dynamically created and loaded by the windowcontroller 
+-Widgets are dynamically created and loaded by the WindowController 
 
--windowcontroller talks to the controller when it needs access to information for the other subsystems 
+-WindowController talks to the controller when it needs access to information for the other subsystems 
  
 # Launching
 
--To launch the system, ProtocolFormatter/windows/python windowcontroller.py
+-To launch the system, ProtocolFormatter/windows/python WindowController.py
  
