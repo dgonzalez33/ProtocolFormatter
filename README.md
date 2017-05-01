@@ -1,6 +1,6 @@
 # ProtocolFormatter
 
--Computer Science Senior Capstone Project
+-UTEP Spring 2017 Computer Science Senior Capstone Project
 
 -Created by Team5
 
