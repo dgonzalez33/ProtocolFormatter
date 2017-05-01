@@ -40,7 +40,7 @@
 
 # PDMLSub
 
--This system parses the pdml file into a data structure 
+-This subsystem parses the pdml file into a data structure 
 
 -In here you'll also find the HistoricalCopy class that compares your current edit with the original pdml
 
