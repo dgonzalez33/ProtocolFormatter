@@ -62,7 +62,7 @@
 
 -Widgets are dynamically created and loaded by the WindowController 
 
--WindowController talks to the controller when it needs access to information for the other subsystems 
+-WindowController talks to the controller when it needs access to information from the other subsystems 
  
 # Launching
 
