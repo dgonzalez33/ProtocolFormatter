@@ -14,70 +14,70 @@
 
 # Development Environment:
 
--Kali 2016.v2
++ Kali 2016.v2
 
--Gtk 3.0
++ Gtk 3.0
 
--Python 3+
++ Python 3+
  
 # System Breakdown
 
 ## FileSub
 
--These classes help load capture files, create/edit scripts and communicate with tshark 
++ These classes help load capture files, create/edit scripts and communicate with tshark 
 
--tshark converts other captures into pdml before loading them into the system
++ tshark converts other captures into pdml before loading them into the system
 
 ## FormatterSub
 
--In here you'll find all the classes that create and edit Formatters 
++ In here you'll find all the classes that create and edit Formatters 
 
--Formatters are made of Rules 
++ Formatters are made of Rules 
 
--Rules apply actions (renaming, annotating, hiding, and hooking(an external script to a field)
++ Rules apply actions (renaming, annotating, hiding, and hooking(an external script to a field)
 
--Rules apply these actions according to the Berkeley Packet Filter created
++ Rules apply these actions according to the Berkeley Packet Filter created
 
 ## PDMLSub
 
--This subsystem parses the pdml file into a data structure 
++ This subsystem parses the pdml file into a data structure 
 
--In here you'll also find the HistoricalCopy class that compares your current edit with the original pdml
++ In here you'll also find the HistoricalCopy class that compares your current edit with the original pdml
 
 ## RestofSystem
 
--This folder contains the controller class that acts as the ~~jelly~~ between the subsystems 
++ This folder contains the controller class that acts as the ~~jelly~~ between the subsystems 
 
--The controller class creates it's own thread in case you need to run any background operations after launching the Gtk GUI
++ The controller class creates it's own thread in case you need to run any background operations after launching the Gtk GUI
 
--The tracker class will keep track of changes as they happen an offer an undo or redo function 
++ The tracker class will keep track of changes as they happen an offer an undo or redo function 
 
 ## images
 
--filter icon
++ filter icon
 ![filter](https://github.com/dgonzalez33/ProtocolFormatter/blob/master/images/filter.png)
 
--open icon
++ open icon
 ![open](https://github.com/dgonzalez33/ProtocolFormatter/blob/master/images/open.png)
 
--save icon
++ save icon
 ![save](https://github.com/dgonzalez33/ProtocolFormatter/blob/master/images/save.png)
 
--redo icon
++ redo icon
 ![redo](https://github.com/dgonzalez33/ProtocolFormatter/blob/master/images/redo.png)
 
--undo icon
++ undo icon
 ![undo](https://github.com/dgonzalez33/ProtocolFormatter/blob/master/images/undo.png)
 
 ## windows
 
--These are all the components to create the Gtk GUI
++ These are all the components to create the Gtk GUI
 
--Widgets are dynamically created and loaded by the WindowController 
++ Widgets are dynamically created and loaded by the WindowController 
 
--WindowController talks to the controller when it needs access to information from the other subsystems 
++ WindowController talks to the controller when it needs access to information from the other subsystems 
  
 # Launching
 
--To launch the system, ProtocolFormatter/windows/python WindowController.py
++ To launch the system, ProtocolFormatter/windows/python WindowController.py
  
