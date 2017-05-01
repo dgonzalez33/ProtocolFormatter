@@ -18,10 +18,15 @@ class Action:
     def getValue(self):
         return self.value
 
+    def copyfieldelement(self, target):
+        newtarget = fieldelement()
+
+        for i in list(range(target.get_field_attributes_length())):
+            newtarget.set_field_attrib(target.get_field_attributes_name(i), target.get_field_attributes_value(i))
+        return newtarget
+
     def getActionResult(self, target):
-        newFieldElem = fieldelement()
-        oldAttrib = target.get_field_attributes()
-        for key in oldAttrib:
-            newFieldElem.set_field_attrib(key, oldAttrib[key])
-        newFieldElem.set_field_attrib(self.attribute, self.value)
-        return newFieldElem
+        newtarget = self.copyfieldelement(target)
+        if newtarget.reset_field_attrib(self.attribute, self.value) == -1:
+            newtarget.set_field_attrib(self.attribute, self.value)
+        return newtarget

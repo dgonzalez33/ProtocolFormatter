@@ -1,35 +1,83 @@
 # ProtocolFormatter
-For software 2!
 
-# Getting Started
-Installation Details
++ UTEP Spring 2017 Computer Science Senior Capstone Project
 
--Development Environment:
++ Created by Team5
 
--Kali 2016.v2
++ The ProtocolFormatter is a system that enables a user to open/edit PDML capture files
 
--LiClipse
++ PDML (Packet Description Markup Language) "conforms to the XML standard and contains details about the packet dissection" [Wiki Wireshark](https://en.wikipedia.org/wiki/Berkeley_Packet_Filter)
+
++ Aside from just open/editing PDML, The ProtocolFormatter system filters/sorts/converts and applies formatters to PDML's
+
++ Formatters are defined actions that are applied to PDML's
+
+# Development Environment:
+
++ Kali 2016.v2
+
++ Gtk 3.0
+
++ Python 3+
  
-Workspace setup
+# System Breakdown
 
--Create a new branch on gitHub based off the Master branch
+## FileSub
 
--Start a new python project on LiClipse and call it "ProtocolFormatter"
-copy the contents of the clone into your python project 
++ These classes help load capture files, create/edit scripts and communicate with tshark 
+
++ tshark converts other captures into pdml before loading them into the system
+
+## FormatterSub
+
++ In here you'll find all the classes that create and edit Formatters 
+
++ Formatters are made of Rules 
+
++ Rules apply actions (renaming, annotating, hiding, and hooking(an external script to a field)
+
++ Rules apply these actions according to the Berkeley Packet Filter created
+
+## PDMLSub
+
++ This subsystem parses the pdml file into a data structure 
+
++ In here you'll also find the HistoricalCopy class that compares your current edit with the original pdml
+
+## RestofSystem
+
++ This folder contains the controller class that acts as the ~~jelly~~ between the subsystems 
+
++ The controller class creates it's own thread in case you need to run any background operations after launching the Gtk GUI
+
++ The tracker class will keep track of changes as they happen an offer an undo or redo function 
+
+## images
+
++ filter icon
+![filter](https://github.com/dgonzalez33/ProtocolFormatter/blob/master/images/filter.png)
+
++ open icon
+![open](https://github.com/dgonzalez33/ProtocolFormatter/blob/master/images/open.png)
+
++ save icon
+![save](https://github.com/dgonzalez33/ProtocolFormatter/blob/master/images/save.png)
+
++ redo icon
+![redo](https://github.com/dgonzalez33/ProtocolFormatter/blob/master/images/redo.png)
+
++ undo icon
+![undo](https://github.com/dgonzalez33/ProtocolFormatter/blob/master/images/undo.png)
+
+## windows
+
++ These are all the components to create the Gtk GUI
+
++ Widgets are dynamically created and loaded by the WindowController 
+
++ WindowController talks to the controller when it needs access to information from the other subsystems 
  
-# Creating a widget
--Create a new python file in the windows folder called [widgetname]Widget.py
+# Launching
 
--A widget should have a function called create_widget(self)
-
--create_widget(self) will return a Gtk.Box object, for consistency we'll call this
-object vbox. 
-
--vbox should be the top-parent object of your widget
-
--your widget should be visual and functionally complete inside your widget class 
-before passing to the WindowController
++ To launch the system, ProtocolFormatter/windows/python WindowController.py
  
-# Displaying your widget
--The WindowController class can add single or multiple widgets to a window 
-by adding your widget to a frame first 
