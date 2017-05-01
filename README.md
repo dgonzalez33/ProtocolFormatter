@@ -1,16 +1,16 @@
 # ProtocolFormatter
 
--UTEP Spring 2017 Computer Science Senior Capstone Project
++ UTEP Spring 2017 Computer Science Senior Capstone Project
 
--Created by Team5
++ Created by Team5
 
--The ProtocolFormatter is a system that enables a user to open/edit PDML capture files
++ The ProtocolFormatter is a system that enables a user to open/edit PDML capture files
 
--PDML (Packet Description Markup Language) "conforms to the XML standard and contains details about the packet dissection" [Wiki Wireshark](https://en.wikipedia.org/wiki/Berkeley_Packet_Filter)
++ PDML (Packet Description Markup Language) "conforms to the XML standard and contains details about the packet dissection" [Wiki Wireshark](https://en.wikipedia.org/wiki/Berkeley_Packet_Filter)
 
--Aside from just open/editing PDML, The ProtocolFormatter system filters/sorts/converts and applies formatters to PDML's
++ Aside from just open/editing PDML, The ProtocolFormatter system filters/sorts/converts and applies formatters to PDML's
 
--Formatters are defined actions that are applied to PDML's
++ Formatters are defined actions that are applied to PDML's
 
 # Development Environment:
 
