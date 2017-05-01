@@ -1,6 +1,16 @@
 # ProtocolFormatter
-For software 2!
 
+-Computer Science Senior Capstone Project
+
+-Created by Team5
+
+-The ProtocolFormatter is a system that enables a user to open/edit PDML capture files
+
+-PDML (Packet Description Markup Language) "conforms to the XML standard and contains details about the packet dissection" -wikiwireshark
+
+-Aside from just open/editing PDML, The ProtocolFormatter system filters/sorts/converts and applies formatters to PDML's
+
+-Formatters are defined actions that are applied to PDML's
 
 # Development Environment:
 
