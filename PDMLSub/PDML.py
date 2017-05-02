@@ -5,6 +5,8 @@ class pdml:
     def __init__(self):
         self.packets = []
         self.protos = []
+        self.misc_string = []
+        self.misc_linenum = []
 
 
         
@@ -16,6 +18,10 @@ class pdml:
     
     def set_protos(self, pro):
         self.protos.append(pro)
+        
+    def set_misc_info(self, value, line):
+        self.misc_string.append(value)
+        self.misc_linenum.append(value)
     
     def get_all_protocols(self):
         return self.protos
