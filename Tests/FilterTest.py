@@ -1,7 +1,7 @@
 import unittest
-import sys
+#import sys
 
-sys.path.insert(0, '../')
+#sys.path.insert(0, '../')
 from FormatterSub.Filter import Filter
 
 class FilterTest(unittest.TestCase):
@@ -12,7 +12,7 @@ class FilterTest(unittest.TestCase):
 		self.newfilter3 = Filter()
 		
 		
-	def test_saveFilter(self):
+	def testsaveFilter(self):
 		self.newfilter1.saveFilter("testFilter")
 		self.newfilter2.saveFilter("")
 		self.newfilter3.saveFilter("3")
