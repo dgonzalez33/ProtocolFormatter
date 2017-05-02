@@ -7,6 +7,10 @@ class FilterRow():
         self.row = Gtk.ListBoxRow()
         self.listBox = listBox
         self.rowList = rowList
+        if(valueVal == "Proto" or valueVal == "Dir" or valueVal == "Conjuction" or valueVal == "Negation"):
+            self.rowList.append((fieldVal, ""))
+        else:
+            self.rowList.append((fieldVal, valueVal))
         expression = Gtk.Box(spacing=6)
         self.field = Gtk.Label()
         self.field.set_text(fieldVal)

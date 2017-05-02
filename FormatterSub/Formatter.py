@@ -3,6 +3,8 @@ from PDMLSub.PDMLManager import pdmlmanager
 from FormatterSub.Action import Action
 from FormatterSub.RenamingAction import RenamingAction
 from FormatterSub.HidingAction import HidingAction
+import json
+import pickle
 class Formatter:
     def __init__(self, pdml, formatterName):
         self.pdml = pdml
@@ -18,15 +20,31 @@ class Formatter:
         return
     def removeRule(self):
         self.ruleList.pop()
+    def getChangeForm():
+        return changeForm
+    def saveFormatter(self):
+        with open("FormatterSub/Formatters/"+self.formatterName+'.obj', 'wb') as fp:
+            pickle.dump(self.ruleList, fp)
+    def loadFormatter(self):
+        with open("FormatterSub/Formatters/"+self.formatterName+'.obj', 'rb') as fp:
+            self.ruleList = pickle.load(fp)
 
 pdml = pdmlmanager("Scripts/cubic.pdml")
 form = Formatter(pdml,"ip")
-rule = Rule()
-act = HidingAction("80085","ip.len")
-rule.setFilter("ip src net 192","","")
-rule.addAction(act)
-form.addRule(rule)
+form.loadFormatter()
 form.applyFormatter()
-print(form.changeForm)
+# rule = Rule()
+# act = HidingAction("True","ip.len")
+# rule.setFilter("ip src net 192","","")
+# rule.addAction(act)
+# nxtRule = Rule()
+# nxtact = HidingAction("True", "ip.id")
+# nxtRule.setFilter("ip src net 192","","")
+# nxtRule.addAction(nxtact)
+# form.addRule(rule)
+# form.addRule(nxtRule)
+# form.applyFormatter()
+# form.saveFormatter()
+# print(form.changeForm)
 # print(pdml.get_pdml_as_text())
 

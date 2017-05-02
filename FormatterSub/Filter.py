@@ -90,7 +90,6 @@ class Filter:
     def applyFilter(self):
         self.setFilter()
         self.protosKept = list()
-        self.viewProtos = list()
         packets = self.pdmlman.get_all_packets()
         for pack in packets:
             protos = pack.get_proto_element()
@@ -144,19 +143,17 @@ class Filter:
     def getViewProtos(self):
         return self.viewProtos
 
-    def setContentFilter(self, iContentFilter, eContentFilter):
-        self.iContentFilter = iContentFilter
-        self.eContentFilter = eContentFilter
-
     def saveFilter(self,name):
+        filterJson = filterToJson()
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        with open(dir_path+"/Filters/"+name+".json", "w") as f:
+            json.dump(filterJson,f)
+    def filterToJson(self):
         filterJson = {}
         filterJson["bpf"] = self.bpfFilter
         filterJson["include"] = self.iContentFilter
         filterJson["exclude"] = self.eContentFilter
-        dir_path = os.path.dirname(os.path.realpath(__file__))
-        with open(dir_path+"/Filters/"+name+".json", "w") as f:
-            json.dump(filterJson,f)
-
+        return filterJson
     def __init__(self):
         self.protocols = ['ether', 'fddi','tr','wlan','ip','ip6','arp','rarp',
         'decnet', 'tcp', 'udp','eth']
@@ -169,6 +166,7 @@ class Filter:
         self.dirs = ['src','dst']
         self.bpfFilter = ""
         self.iContentFilter = ""
+        self.viewProtos = list()
         self.eContentFilter = ""
         self.parseList = list()
         

@@ -17,11 +17,10 @@ class FilterWidget:
 
         def create_widget(self):
             vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-            
+            self.model_filter = None
             bpfContainer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
             vbox.pack_start(bpfContainer,True,True,0)
             filterContainer = Gtk.Box(spacing=6)
-
             bpfLabel = Gtk.Label()
             bpfLabel.set_markup("<b>BPF Filter</b>")
             bpfLabel.set_alignment(xalign=0, yalign=0) 
@@ -31,7 +30,6 @@ class FilterWidget:
             filterContainer.pack_start(self.expLists.getList(),True,True,0)
             self.filters = list()
             addFilter = Gtk.Button("->")
-            # addFilter.set_image(image)
             addFilter.connect("clicked",self.on_addFilter_clicked)
             filterContainer.pack_start(addFilter,False,False,1)
 
@@ -97,53 +95,43 @@ class FilterWidget:
                 row = FilterRow(self.listbox,self.expLists.getSelected()[0],self.primValue,self.filters)
                 self.listbox.add(row.getRow())
                 self.listbox.show_all()   
-                
+        def set_Filter_Inst(self, modelf):
+            self.model_filter = modelf
+        def get_filter_list(self):
+            return self.filterlist
         def on_butCreate_clicked(self, widget):
             bpf = ""
             first = True
             for row in self.filters:
-                if(row[1]=="Type"):
-                    line = row[0] + " " + row[1]
-                else:
-                    line = row[0]
-                if(first):
-                    bpf += line
-                    first = False
-                else:
-                        bpf += "and "+line
+                  line = row[0] + " " + row[1]
+                  if(first):
+                        bpf += line
+                        first = False
+                  else:
+                        bpf += " "+line
             print(bpf)
-            self.model_filter.set_bpf_filter(bpf, self.includeEntry.get_text(), self.excludeEntry.get_text())
-            self.model_filter.applyFilter()
+            self.model_filter = Filter()
+            self.model_filter.set_bpf_filter(bpf, "","")
             self.model_filter.saveFilter(self.customName.get_text())
             self.filterlist = self.model_filter.getViewProtos()
+            print(self.filterlist)
             self.packetwidget.set_filter_list(self.filterlist)
             print("Applying Filter!")
-            
-        def set_Filter_Inst(self, modelf):
-            self.model_filter = modelf
-            
-        def get_filter_list(self):
-            return self.filterlist
-            
         def on_butReset_clicked(self, widget):
             self.includeEntry.set_text("")
-            self.excludeEntry.set_text("")
             self.packetwidget.clear_filter_list()
+            self.excludeEntry.set_text("")
             for row in self.listbox:
-                self.listbox.remove(row)
-                
+                  self.listbox.remove(row)
         def on_includeBut_clicked(self, widget):
             print("Including!") 
-            
         def on_excludeBut_clicked(self, widget):
             print("Including!") 
-            
         def on_addFilter_clicked(self, widget):
             selected = self.expLists.getSelected()
-            self.filters.append(selected)
             if(selected[1] == "Type"):
-                self.askForValue()
+                  self.askForValue()
             else:
-                row = FilterRow(self.listbox,selected[0],selected[1],self.filters)
-                self.listbox.add(row.getRow())
-                self.listbox.show_all()    
+                  row = FilterRow(self.listbox,selected[0],selected[1],self.filters)
+                  self.listbox.add(row.getRow())
+                  self.listbox.show_all()    
