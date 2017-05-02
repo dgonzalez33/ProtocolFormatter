@@ -20,7 +20,7 @@ class ScriptTest(unittest.TestCase):
         #w 1.3
       #  self.assertEqual(self.newelement3.get_field_attributes_value(0), "host3", "wrong value after newelement3 set")
 
-
+#
 
 if __name__ == '__main__':
     unittest.main()
