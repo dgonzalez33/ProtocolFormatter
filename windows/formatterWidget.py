@@ -32,8 +32,6 @@ class FormatterWidget:
             self.listbox = Gtk.ListBox()
             self.listbox.set_selection_mode(Gtk.SelectionMode.NONE)
             filterContainer.pack_start(self.listbox,True,True,0)
-            row = FilterRow(self.listbox,"proto","tcp")
-            self.listbox.add(row.getRow())  
 
             # self.context = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
             # vbox.pack_start(self.context,False,False,0)
@@ -58,7 +56,7 @@ class FormatterWidget:
             self.rulesListbox = Gtk.ListBox()
             self.rulesListbox.set_selection_mode(Gtk.SelectionMode.NONE)
             RulesContainer.pack_start(self.rulesListbox, True, True, 0)
-            Rulerow = FilterRow(self.rulesListbox,"Rule","action")
+            Rulerow = FilterRow(self.rulesListbox,"Rule","action",list())
             self.rulesListbox.add(Rulerow.getRow())
 
             conRule = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
@@ -96,7 +94,7 @@ class FormatterWidget:
         def on_addFilter_clicked(self, widget):
             selected = self.expLists.getSelected()
             print(selected[0])
-            row = FilterRow(self.listbox,selected[0],selected[1])
+            row = FilterRow(self.listbox,selected[0],selected[1],list())
             self.listbox.add(row.getRow())
             self.listbox.show_all()    
 

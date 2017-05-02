@@ -1,8 +1,9 @@
 #!/usr/bin/python3
 import re
-from ..PDMLSub.PDMLManager import pdmlmanager
+import os 
+import json
+from PDMLSub.PDMLManager import pdmlmanager
 class Filter:
-
     def setFilter(self):
         self.bpfFilter = self.bpfFilter.replace("&&", "and")
         self.bpfFilter = self.bpfFilter.replace("||", "or")
@@ -106,17 +107,8 @@ class Filter:
                                 continue
                             if(len(ors)==1):
                                 isOrKeptBool = isOrKeptBool or bool(re.match(ors[0],protoVals[protoNameInd]))
-                                # if(isOrKeptBool):
                             else:
-                                # print(fieldValues[nameInd]+"------"+ors[0])
-                                # print(bool(re.match(ors[0],fieldValues[nameInd])))
-                                # print(fieldValues[showInd]+"------"+ors[1])
-                                # print(bool(re.match(ors[1],fieldValues[showInd])))
-                                # print(isOrKeptBool or bool(re.match(ors[0],fieldValues[nameInd])) and bool(re.match(ors[1],fieldValues[showInd])))
                                 isOrKeptBool = isOrKeptBool or bool(re.match(ors[0],fieldValues[nameInd])) and bool(re.match(ors[1],fieldValues[showInd]))
-                                # if(isOrKeptBool):
-                                    # print(fieldValues[showInd]+","+ ors[1])
-                                    # print(bool(re.match(ors[1],fieldValues[showInd])))
                             if(isOrKeptBool):
                                 break
                         if(isOrKeptBool):
@@ -124,16 +116,38 @@ class Filter:
                     isKeptBool = isOrKeptBool and isKeptBool                            
                 if(isKeptBool is True):
                     protosKept.append(proto)
-                    break
-                
-                    
+                    break                
         return protosKept
 
+    # def applyContent(self, pdmlMan):
+    #     protosKept = list()
+    #     packets = pdmlMan.get_all_packets()
+    #     for pack in packets:
+    #         protos = pack.get_proto_element()
+    #         for proto in protos:
+    #             protoNames = proto.get_all_proto_attrib_names()
+    #             protoVals = proto.get_all_proto_attrib_values()
+                
+    #             for names,vals in zip(protoNames,protoVals):
+
+    #             fields = proto.get_field_element()
+                
 
 
+    def setContentFilter(self, iContentFilter, eContentFilter):
+        self.iContentFilter = icontentFilter
+        self.eContentFilter = eContentFilter
 
+    def saveFilter(self,name):
+        filterJson = {}
+        filterJson["bpf"] = self.bpfFilter
+        filterJson["include"] = self.iContentFilter
+        filterJson["exclude"] = self.eContentFilter
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        with open(dir_path+"/Filters/"+name+".json", "w") as f:
+            json.dump(filterJson,f)
 
-    def __init__(self, bpfFilter):
+    def __init__(self, bpfFilter, iContentFilter, eContentFilter):
         self.protocols = ['ether', 'fddi','tr','wlan','ip','ip6','arp','rarp',
         'decnet', 'tcp', 'udp','eth']
         self.ipProtos = ['icmp', 'icmp6', 'igmp', 'igrp', 'pim', 'ah', 'esp', 'vrrp', 'udp','tcp']
@@ -144,6 +158,8 @@ class Filter:
         self.conjuctions = ['and', 'or','&&', '||']
         self.dirs = ['src','dst']
         self.bpfFilter = bpfFilter+" "
+        self.iContentFilter = iContentFilter
+        self.eContentFilter = eContentFilter
         self.parseList = list()
 
     

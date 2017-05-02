@@ -19,6 +19,7 @@ from windows.iconBar import iconBar
 from windows.FilterBarWidget import FilterBarWidget
 from RestofSystem.Controller import controller
 from FileSub.Capture import Capture
+from FormatterSub.Filter import Filter
 
 """
 Because our windows need to be customizable 

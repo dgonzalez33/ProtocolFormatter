@@ -2,17 +2,25 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
-software_list = [("eth.addr", 'Ethernet'),
-                                 ('eth.dst', 'Ethernet'),
-                                 ('eth.len', 'Ethernet'),
-                                 ('arp.dst.hw_mac', 'ARP'),
-                                 ('arp.hw.size', 'ARP'),
-                                 ('ip.addr', 'IPv4'),
-                                 ('ip.checksum', 'IPv4'),
-                                 ('ipv6.addr', 'IPv6'),
-                                 ('ipv6.class', 'IPv6'),
-                                 ('tcp.ack', 'TCP'),
-                                 ('tcp.len', 'TCP')]
+software_list = [("host","Type"),
+                                ("net","Type"),
+                                ("port","Type"),
+                                ("portrange","Type"),
+                                 ('src',"Dir"),
+                                 ('dst',"Dir"),
+                                 ('src and dst','Dir'),
+                                 ('src or dst','Dir'),
+                                 ('ether','Proto'),
+                                ('fddi','Proto'),
+                                ('tr','Proto'),
+                                ('wlan','Proto'),
+                                ('ip','Proto'),
+                                ('ip6','Proto'),
+                                ('arp','Proto'),
+                                ('rarp','Proto'),
+                                ('decnet','Proto'),
+                                ('tcp','Proto'),
+                                ('udp','Proto')]
 class FilterList():
     def __init__(self):
         #Setting up the self.grid in which the elements are to be positionned
@@ -33,7 +41,7 @@ class FilterList():
 
             #creating the treeview, making it use the filter as a model, and adding the columns
             treeview = Gtk.TreeView.new_with_model(language_filter)
-            for i, column_title in enumerate(["Filter/Expression","Protocol"]):
+            for i, column_title in enumerate(["Primitive","Qualifier"]):
                     renderer = Gtk.CellRendererText()
                     column = Gtk.TreeViewColumn(column_title, renderer, text=i)
                     treeview.append_column(column)

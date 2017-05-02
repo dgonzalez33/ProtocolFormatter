@@ -1,0 +1,1 @@
+{"exclude": "ip.host=192", "include": "", "bpf": "fddihost Typenet Type "}

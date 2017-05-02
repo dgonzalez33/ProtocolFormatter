@@ -3,11 +3,10 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from windows.filterList import FilterList
 from windows.filterRow import FilterRow
+from FormatterSub.Filter import Filter
 
 class FilterWidget:
 
-        
-            
         def create_widget(self):
             vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
             
@@ -20,10 +19,9 @@ class FilterWidget:
             bpfLabel.set_alignment(xalign=0, yalign=1) 
             bpfContainer.pack_start(bpfLabel,True,True,0)
             bpfContainer.pack_start(filterContainer,True,True,0)
-
             self.expLists = FilterList()
             filterContainer.pack_start(self.expLists.getList(),True,True,0)
-
+            self.filters = list()
             addFilter = Gtk.Button("->")
             # addFilter.set_image(image)
             addFilter.connect("clicked",self.on_addFilter_clicked)
@@ -32,9 +30,6 @@ class FilterWidget:
             self.listbox = Gtk.ListBox()
             self.listbox.set_selection_mode(Gtk.SelectionMode.NONE)
             filterContainer.pack_start(self.listbox,True,True,0)
-            row = FilterRow(self.listbox,"proto","tcp")
-            self.listbox.add(row.getRow())  
-
             self.context = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
             vbox.pack_start(self.context,False,False,0)
             contextLabel = Gtk.Label()
@@ -49,8 +44,6 @@ class FilterWidget:
             self.includeEntry = Gtk.Entry()
             self.includeEntry.set_text("<Enter String>")
             self.includeWrapper.pack_start(self.includeEntry,True,True,0)
-
-
             self.excludeWrapper = Gtk.Box(spacing=6)
             self.context.pack_start(self.excludeWrapper,False,False,0)
             self.excludeBut = Gtk.Button(label="Exclude")
@@ -75,19 +68,58 @@ class FilterWidget:
             self.box.pack_start(self.butReset,False,False,0)
             
             return vbox
-            
+        def askForValue(self):
+            askWindow = Gtk.Window()
+            askWindow.set_size_request(150, 75)
+            askWindow.set_keep_above(True)
+            valueWrapper = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+            askWindow.connect("delete-event", Gtk.main_quit)
+            self.valueEntry = Gtk.Entry()
+            self.valueEntry.set_text("Value")
+            button = Gtk.Button(label="Value")
+            button.connect("clicked", self.finish)
+            valueWrapper.pack_start(self.valueEntry,False,False,0)
+            valueWrapper.pack_start(button,False,False,0)
+            askWindow.add(valueWrapper)
+            askWindow.show_all()
+            Gtk.main()
+
+        def finish(self,widget):
+                self.primValue = self.valueEntry.get_text()
+                row = FilterRow(self.listbox,self.expLists.getSelected()[0],self.primValue,self.filters)
+                self.listbox.add(row.getRow())
+                self.listbox.show_all()   
         def on_butCreate_clicked(self, widget):
+            bpf = ""
+            first = True
+            for row in self.filters:
+                  if(row[1]=="Type"):
+                        line = row[0] + " " + row[1]
+                  else:
+                        line = row[0]
+                  if(first):
+                        bpf += line
+                  else:
+                        bpf += "and "+line
+            model_filter = Filter(bpf,self.includeEntry.get_text(),self.excludeEntry.get_text())
+            model_filter.saveFilter(self.customName.get_text())
+
             print("Applying Filter!")
         def on_butReset_clicked(self, widget):
-            print("Resetting FIlter!")
+            self.includeEntry.set_text("")
+            self.excludeEntry.set_text("")
+            for row in self.listbox:
+                  self.listbox.remove(row)
         def on_includeBut_clicked(self, widget):
             print("Including!") 
         def on_excludeBut_clicked(self, widget):
             print("Including!") 
         def on_addFilter_clicked(self, widget):
             selected = self.expLists.getSelected()
-            print(selected[0])
-            row = FilterRow(self.listbox,selected[0],selected[1])
-            self.listbox.add(row.getRow())
-            self.listbox.show_all()    
-
+            self.filters.append(selected)
+            if(selected[1] == "Type"):
+                  self.askForValue()
+            else:
+                  row = FilterRow(self.listbox,selected[0],selected[1],self.filters)
+                  self.listbox.add(row.getRow())
+                  self.listbox.show_all()    
