@@ -17,7 +17,7 @@ class fieldelement:
         
     def set_field_to_field(self,field):
         i = 0
-        for attrs,vals in zip(field.get_all_field_attributes_name(),field.get_all_field_attributes_value()):
+        for attrs,vals in zip(field.get_all_field_attributes_name(),field.get_all_field_attributes_value()):    
             if(i >= len(self.field_attributes_names)):
                 self.field_attributes_names.append(attrs)
                 self.field_attributes_values.append(vals)
@@ -25,6 +25,10 @@ class fieldelement:
                 self.field_attributes_names[i] = attrs
                 self.field_attributes_values[i] = vals
             i += 1      
+        while(i < len(self.field_attributes_names)):
+            self.field_attributes_names.pop()
+            self.field_attributes_values.pop()
+            i += 1
     def set_field_attrib(self, key, val):
         if key not in self.field_attributes_names:
             self.field_attributes_names.append(key)
