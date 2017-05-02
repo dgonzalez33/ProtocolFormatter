@@ -7,6 +7,8 @@ class fieldelement:
         self.create_self()
         self.field_attributes_names = []
         self.field_attributes_values = []
+        self.depth_of_indent = 1
+        self.endcap = ""
      
     def create_self(self):
         #print("fieldelement class")
@@ -18,6 +20,11 @@ class fieldelement:
         self.field_attributes_names.append(key)
         self.field_attributes_values.append(val)
         
+    def set_depth_of_indent(self, val):
+        self.depth_of_indent = val
+        
+    def get_depth_of_indent(self):
+        return self.depth_of_indent
 
     
     def get_field_attributes_value(self, i):
@@ -34,6 +41,8 @@ class fieldelement:
     
     def get_field_attributes_length(self):
         return len(self.field_attributes_values)
+    
+    
 
 
 if(__name__ == "__main__"):

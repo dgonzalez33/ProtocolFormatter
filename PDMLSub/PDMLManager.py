@@ -42,6 +42,9 @@ class pdmlmanager:
         
     def get_field_element(self, packetid, protocol, key): 
         return self.parser.get_field_of_proto_from_packet(packetid, protocol, key)
+    
+    def get_pdml(self):
+        return self.parser.get_root_pdml();
         
     
     
@@ -49,5 +52,5 @@ class pdmlmanager:
 
 
 if(__name__ == "__main__"):
-    d = pdmlmanager("../Scripts/cubic.pdml")
+    d = pdmlmanager("../Scripts/dns_query_response2.pdml")
     

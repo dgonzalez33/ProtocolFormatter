@@ -63,15 +63,11 @@ class pdmlparser:
         
         while(count < len(pdmlpackets)):
             protocols = pdmlpackets[count].get_proto_element()
-            #print(protocols)
             count2 = 0
             
             while(count2 < len(protocols)):
                 p_names = protocols[count2].get_all_proto_attrib_names()
-                #print("n",p_names)
-                
                 p_values = protocols[count2].get_all_proto_attrib_values()
-                #print("v",p_values)
                 count3 = 0
                 while(count3 < len(p_names)):
                     if(p_names[count3] == "proto name"):
@@ -187,18 +183,15 @@ class pdmlparser:
                     
                     fieldlist[count3].field_attributes_names = []
                     fieldlist[count3].field_attributes_values = []
-                    #print("cleaned field: ", count3)
                     count3+=1
                     
                 protocols[count2].proto_attributes_names = []
                 protocols[count2].proto_attributes_values = []
                 protocols[count2].field_elements = []
-              #  print("cleaned protocol: ", count2)
                 count2 += 1
                 
             pdmlpackets[count].proto_elements = []
             pdmlpackets[count].packetid = 0
-           # print("cleaned packet: ",count)
             count+=1
         return 0
     
@@ -218,6 +211,7 @@ class pdmlparser:
         with open(filename, 'r') as myfile:
             x = 0
             pdmlt = pdml()
+            self.field_depth = 0
             while(x < self.len_of_pdml):
                 data = myfile.readline()
                 
@@ -243,7 +237,6 @@ class pdmlparser:
                         print("    proto found", self.num_of_proto)
                         print(data)
                     pro = protoelement()
-                    #print("new proto created")
                     w = data.strip().split("\"")
                     xx = 0
                     while(xx < len(w)-1):
@@ -256,20 +249,21 @@ class pdmlparser:
                             
                         if(w[xx+1].find('<') != -1):
                             w[xx+1] = w[xx+1].strip('<.-')
-                        if(w[xx+1].find('>')!= -1):
+                        if(w[xx+1].find('/>')!= -1):
+                            pro.set_proto_attrib(w[xx].strip(), w[xx+1].strip())
+                            
                             w[xx+1] = w[xx+1].strip('>.-')
                         if(w[xx+1].find('=') != -1):
                             w[xx+1] = w[xx+1].strip('=.-')
-                        #print("====",w[xx].strip(),"and",w[xx+1].strip(),"====")
                         pro.set_proto_attrib(w[xx].strip(), w[xx+1].strip())
-                        #print("inserted into",pro)
-                        #print("current names", pro.get_all_proto_attrib_names())
                         xx+=2 
                     
                     p.set_protoelement(pro)
                     self.num_of_field = 0
                     self.num_of_proto+=1
                     self.total_num_of_proto+=1
+                if(data.find("</field>") != -1):
+                    self.field_depth -= 1
                     
                 if(data.find("<field ") != -1):
                     if(self.debug_print == 1):
@@ -278,10 +272,12 @@ class pdmlparser:
                 
                     field_e = fieldelement()
                     w = data.strip().split("\"")
+                   
                     xx = 0
                     while(xx < len(w)-1):
+
                         if(w[xx].find('<') != -1):
-                            w[xx] = w[xx].strip('<.-')
+                            w[xx] = w[xx].strip('<.-') 
                         if(w[xx].find('>')!= -1):
                             w[xx] = w[xx].strip('>.-')
                         if(w[xx].find('=') != -1):
@@ -293,13 +289,22 @@ class pdmlparser:
                             w[xx+1] = w[xx+1].strip('>.-')
                         if(w[xx+1].find('=') != -1):
                             w[xx+1] = w[xx+1].strip('=.-')
-
+                        
                         field_e.set_field_attrib(w[xx].strip(), w[xx+1].strip())
                         xx+=2 
-   
+                        
+                    xx = 0
+
                     pro.set_field_element(field_e)
+                    field_e.set_depth_of_indent(self.field_depth)  
                     self.num_of_field+=1
                     self.total_num_of_field+=1
+                       
+                    if(w[len(w)-1] != "/>"):
+                        field_e.endcap = ">"
+                        self.field_depth+=1
+                    else:
+                        field_e.endcap = "/>"
               
                 
                 if(data.find("</proto>") != -1):
@@ -310,7 +315,14 @@ class pdmlparser:
                     self.num_of_proto = 0
                     self.num_of_field = 0
                     
+                
+                    
                 x+=1
+                
+                if(data.find("</packet>") == -1 and data.find("</packet>") == -1 and data.find("<field ") == -1 and data.find("</field>") == -1 and data.find("<proto ") == -1 and data.find("</proto>") == -1 and data.find("<packet>") == -1 and data.find("<packet ") == -1):
+                    pdmlt.set_misc_info(data, x)
+                    print(x, data)
+                    
         return pdmlt
                 
     
