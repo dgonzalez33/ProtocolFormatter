@@ -11,18 +11,21 @@ class Capture:
         else:
             self.filePath = None
         return self.filePath
-    def __init__(self, filePath):
-        
-        self.pdmlman = pdmlmanager(filePath)
-        self.pdml = self.pdmlman.get_pdml()
-        self.save_pdml(self.pdml, filePath)
-        
-
+    
+    def __init__(self):
+#         self.save_pdml(self.pdml, filePath)
         return
+    
     def isPDML(self,filePath):
         return filePath.lower().endswith('.pdml')
     
-    def save_pdml(self,pdml,filePath):
+    def set_man(self, man):
+        self.pdmlman = man
+        self.pdml = self.pdmlman.get_pdml()
+        
+    
+    
+    def save_pdml(self,filePath):
         pdmlString = self.pdml_object_to_string(self.pdml)
         #print(pdmlString)
         miscstrings = self.pdml.get_misc_strings()
@@ -36,11 +39,7 @@ class Capture:
             cmd = str(misclinenumbers[x])+"i "+ miscstrings[x]
             call(["sed", "-i", cmd, filePath])
             x+=1
-            
-      
-        
         cmd = str(self.file_len(filePath))+"d"
-        
         call(["sed", "-i", cmd, filePath])
 
             
@@ -123,8 +122,12 @@ class Capture:
     def getFilePath(self):
         return self.filePath
     
+    def createFilePath(self, filepath):
+        print("touch",filepath)
+        call(["touch", filepath])
+    
 if(__name__ == "__main__"):
-    d = Capture("../Scripts/dns_query_response2.pdml")
+    d = Capture()
 
     
     
