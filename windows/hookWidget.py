@@ -1,7 +1,7 @@
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-from windows.hookList import HookList
+from windows.filterList import FilterList
 from windows.filterRow import FilterRow
 from windows.scriptWidget import ScriptWidget
 
@@ -20,7 +20,7 @@ class HookWidget:
             fieldLabel.set_alignment(xalign=0, yalign=1) 
             fieldContainer.pack_start(fieldLabel,True,True,0)
 
-            self.expLists = HookList()
+            self.expLists = FilterList()
             hoodAdd = Gtk.Box(spacing = 6)
             fieldContainer.pack_start(hoodAdd,True,True,0)
             hoodAdd.pack_start(self.expLists.getList(),True,True,0)
