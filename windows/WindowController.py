@@ -194,7 +194,11 @@ class WindowController:
 
         self.historical_item = Gtk.MenuItem("Historical")
         self.historical_item.connect("activate", self.create_historical_window)
-
+        
+        self.editor_item.set_sensitive(False)
+        self.historical_item.set_sensitive(False)
+        
+        
         #insert items into the drop down menu        
         self.window_menu.append(self.filter_item)
         self.window_menu.append(self.editor_item)
@@ -415,6 +419,8 @@ class WindowController:
 #                     self.capture.save_pdml(self.maincontroller.get_pdml_man().get_pdml(), self.chosenfile)
                     self.update_pdml_contents() 
                     self.save_item.set_sensitive(True)
+                    self.editor_item.set_sensitive(True)
+                    self.historical_item.set_sensitive(True)
                 else:
                     print("need to convert")
                     self.make_convert_window()
