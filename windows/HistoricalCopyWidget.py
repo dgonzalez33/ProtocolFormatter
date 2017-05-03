@@ -9,72 +9,139 @@ from gi.repository import Gtk
 
 class HistoricalCopyWidget:
 
+    def __init__(self):
+        self.liststore = Gtk.ListStore(str, str, str)
+        self.listofiterators = []
+        self.resulting_lines = []
 
     def create_widget(self):
-        #vbox is the top_level parent
-        vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-    
-        #fullContainer is a container for the whole  widget
-        fullContainer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+        vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+            
+        appliedFormattersContainer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         
-        #buttonContainer contains the buttons
-        buttonContainer = Gtk.Box(spacing=6)
+        submitbutton = Gtk.Button("Show/Hide Only Difference")
+        submitbutton.connect("clicked", self.update_filter)
+        submitbutton.show()
         
-        #pack_start says fullContainer is now a child of vbox
-        vbox.pack_start(fullContainer,True,True,0)
+        appliedFormattersContainer.add(submitbutton)
+        vbox.pack_start(appliedFormattersContainer,True,True,0)
+        filterContainer = Gtk.Box(spacing=0)
+        self.scrollContainer = Gtk.ScrolledWindow()
         
-        #create a scrollable container (ScrolledWindow is not really a 'window')
-        scrollContainer = Gtk.ScrolledWindow()
+        appliedFormattersContainer.pack_start(self.scrollContainer,True,True,0)
         
-        #create a container for the packet 
-        packetContainer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=20)
+        restorebutton = Gtk.Button("Restore Original")
+        restorebutton.connect("clicked", self.restore_orig)
+        restorebutton.show()
+        appliedFormattersContainer.add(restorebutton)
         
-        self.packetBuffer = Gtk.TextBuffer()
+        self.current_filter_language = None
+        
+        self.language_filter = self.liststore.filter_new()
+        self.language_filter.set_visible_func(self.language_filter_func)
+        
+        self.treeview = Gtk.TreeView()
+        self.sorted = Gtk.TreeModelSort(self.language_filter)
+        self.treeview.set_model(self.sorted)
+        
+        tree_selection = self.treeview.get_selection()
+        tree_selection.set_mode(Gtk.SelectionMode.MULTIPLE)
+        tree_selection.connect("changed", self.packet_tree_clicked)
+        
+        self.add_columns_to_list("Historical Difference", 0, 0) 
 
-        self.filetext = "temp"
-
-        self.packetBuffer.set_text(self.filetext)
+        frame = Gtk.Frame()
+        frame.add(filterContainer)
         
-        #create a Textviewer
-        self.packetView = Gtk.TextView()
-        self.packetView.set_buffer(self.packetBuffer)
-        
-        #packetviewer is now a child of packet container 
-        packetContainer.pack_start(self.packetView, False, False, 0)
-
-        restorebutton = Gtk.Button.new_with_label("Restore")
-        packetContainer.pack_start(restorebutton, False, False, 0)
-
-
-        
-        #add the packetview to the scroll window 
-        scrollContainer.add(packetContainer)
-        
-        #scroll window is now a child of the full container
-        fullContainer.pack_start(scrollContainer,True,True,0)
+        self.scrollContainer.add(self.treeview)
         
         return vbox
     
+    def language_filter_func(self, model, iter, data):
+        if self.current_filter_language is None or self.current_filter_language == "None":
+            return True
+        else:
+            return model[iter][2] == self.current_filter_language
+        
+    def packet_tree_clicked(self, tree_selection):
+#             print(tree_selection)
+        (model, pathlist) = tree_selection.get_selected_rows()
+        for path in pathlist :
+            tree_iter = model.get_iter(path)
+            value = model.get_value(tree_iter,0)
+            print(value)
+
+        
+
+    def add_columns_to_list(self, name, num, s_id):
+        renderer_text = Gtk.CellRendererText()
+        column_text = Gtk.TreeViewColumn(name, renderer_text, text=num, foreground=1) 
+        column_text.set_clickable(True)
+        column_text.set_sort_column_id(s_id)
+        self.treeview.append_column(column_text)
+        
+    def add_to_list(self):
+        x = 0
+        y=0
+        prev = 0
+        triggernextline = 0
+        while(x < len(self.resulting_lines)):
+            self.templist = []
+            curstr = self.resulting_lines[x]
+            if(curstr != ""):
+                if(curstr[0][0] == '+'):
+                   
+                    self.liststore.append(["("+str(y)+")"+self.resulting_lines[x], '#00FF00', "True"])
+                elif(curstr[0][0] == '-'):
+                    
+                    y+=1
+                    self.liststore.append(["("+str(y)+")"+self.resulting_lines[x], '#FF0000', "True"])
+                elif(curstr[0][0] == '?'):
+                    self.liststore.append(["("+str(y)+")"+self.resulting_lines[x], '#FFFF00', "True"])
+                    
+                    prev = y
+                else:
+                    y+=1
+                    self.liststore.append(["("+str(y)+")"+self.resulting_lines[x], '#FFFFFF', "False"])
+            x+=1
+    def refilter_list(self):
+        print("%s language selected!" % self.current_filter_language)
+        self.language_filter.refilter()    
+    
+    def add_column(self, colname):
+        self.linecolumn = Gtk.TreeViewColumn()
+        self.linecolumn.set_title(colname)
+    
+    def set_wiget_labels(self, firstfilename, secondfilename):
+        self.filelabel.set_text(firstfilename)
+        self.originallabel.set_text(secondfilename)
+        
+    def update_filter(self, stuff):
+        if(self.current_filter_language == None):
+            self.current_filter_language = "True"
+            self.refilter_list()
+            return
+        if(self.current_filter_language == "True"):
+            self.current_filter_language = None
+            self.refilter_list()
+            return
+    def restore_orig(self, stuff):   
+        print("restore was pressed") 
+        
+    def clear_list(self):
+        self.liststore.clear()   
+        
     def create_historical_copy(self, file1path, file2path):
-
-
         file1 = open(file1path , "r")
         file2 = open(file2path , "r")
-        
         line1 = file1.readlines()
         line2 = file2.readlines()
-        
-        
         d = difflib.Differ()
         diff = d.compare(line1, line2)
-        result = ''.join(diff)
-        self.filetext = result
-        self.packetBuffer.set_text(self.filetext)
-        #create a Textviewer
-        self.packetView = Gtk.TextView()
-        self.packetView.set_buffer(self.packetBuffer)
-        
-        
-        print(result)
+        self.result = ""
+        self.result = ''.join(diff)
+        self.resulting_lines = self.result.split('\n')
+        self.clear_list()
+        self.add_to_list()
 
 
