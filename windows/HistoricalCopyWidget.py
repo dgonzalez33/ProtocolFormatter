@@ -29,33 +29,18 @@ class HistoricalCopyWidget:
         #create a container for the packet 
         packetContainer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=20)
         
-        packetBuffer = Gtk.TextBuffer()
-        infile = open("../Scripts/cubic.pdml", "r")
-        file2 = open("../Scripts/cubic2.pdml", "r")
-        file3 = open("../Scripts/testcubic.txt", "w")
-        diff = difflib.ndiff(infile.readlines(), file2.readlines())
-        sys.stdout=file3
-        print ("\n".join(diff),"\n")
+        self.packetBuffer = Gtk.TextBuffer()
 
-       # diff = difflib.ndiff(infile.readlines(), file2.readlines())
-        #print ("\n".join(diff),)
+        self.filetext = "temp"
 
-#read line in for loop
-        print ("hey" )
-        file3 = open("../Scripts/testcubic (copy).txt", "r")
-       # print (file3.readlines())
-
-        filetext = "\n\n\n\n            <Historical Packet Contents compare>\n\n\n\n" + '\n'.join(file3.readlines()) + "\n"
-
-
-        packetBuffer.set_text(filetext)
+        self.packetBuffer.set_text(self.filetext)
         
         #create a Textviewer
-        packetView = Gtk.TextView()
-        packetView.set_buffer(packetBuffer)
+        self.packetView = Gtk.TextView()
+        self.packetView.set_buffer(self.packetBuffer)
         
         #packetviewer is now a child of packet container 
-        packetContainer.pack_start(packetView, False, False, 0)
+        packetContainer.pack_start(self.packetView, False, False, 0)
 
         restorebutton = Gtk.Button.new_with_label("Restore")
         packetContainer.pack_start(restorebutton, False, False, 0)
@@ -70,20 +55,26 @@ class HistoricalCopyWidget:
         
         return vbox
     
-    def create_historical_copy(self):
+    def create_historical_copy(self, file1path, file2path):
 
 
-        infile = open("../Scripts/cubic.pdml" , "r")
-        file2 = open("../Scripts/cubic2.pdml" , "r")
-       # differ = difflib.HtmlDiff()
-       # hi=differ.make_table(infile,file2)
-      #  print("table created")
-      #  print (hi)
-        diff =difflib.ndiff(infile.readlines(),file2.readlines())
+        file1 = open(file1path , "r")
+        file2 = open(file2path , "r")
+        
+        line1 = file1.readlines()
+        line2 = file2.readlines()
+        
+        
+        d = difflib.Differ()
+        diff = d.compare(line1, line2)
+        result = ''.join(diff)
+        self.filetext = result
+        self.packetBuffer.set_text(self.filetext)
+        #create a Textviewer
+        self.packetView = Gtk.TextView()
+        self.packetView.set_buffer(self.packetBuffer)
+        
+        
+        print(result)
 
-        #print( ''.join(diff),)
-        #
-
-
-    #def compare(self):
 
