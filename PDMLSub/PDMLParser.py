@@ -210,7 +210,7 @@ class pdmlparser:
     def read_file(self, filename):
         with open(filename, 'r') as myfile:
             x = 0
-            pdmlt = pdml()
+            self.pdml = pdml()
             self.field_depth = 0
             while(x < self.len_of_pdml):
                 data = myfile.readline()
@@ -228,7 +228,7 @@ class pdmlparser:
                         print(data)
                     p = packet()
                     p.set_packet_id(self.num_of_packet)
-                    pdmlt.set_packet(p)
+                    self.pdml.set_packet(p)
                     self.num_of_packet+=1
                     self.total_num_of_packet+=1
                     
@@ -277,18 +277,18 @@ class pdmlparser:
                     while(xx < len(w)-1):
 
                         if(w[xx].find('<') != -1):
-                            w[xx] = w[xx].strip('<.-') 
+                            w[xx] = w[xx].strip('<') 
                         if(w[xx].find('>')!= -1):
-                            w[xx] = w[xx].strip('>.-')
+                            w[xx] = w[xx].strip('>')
                         if(w[xx].find('=') != -1):
-                            w[xx] = w[xx].strip('=.-')
+                            w[xx] = w[xx].strip('=')
                             
                         if(w[xx+1].find('<') != -1):
-                            w[xx+1] = w[xx+1].strip('<.-')
+                            w[xx+1] = w[xx+1].strip('<')
                         if(w[xx+1].find('>')!= -1):
-                            w[xx+1] = w[xx+1].strip('>.-')
+                            w[xx+1] = w[xx+1].strip('>')
                         if(w[xx+1].find('=') != -1):
-                            w[xx+1] = w[xx+1].strip('=.-')
+                            w[xx+1] = w[xx+1].strip('=')
                         
                         field_e.set_field_attrib(w[xx].strip(), w[xx+1].strip())
                         xx+=2 
@@ -320,10 +320,10 @@ class pdmlparser:
                 x+=1
                 
                 if(data.find("</packet>") == -1 and data.find("</packet>") == -1 and data.find("<field ") == -1 and data.find("</field>") == -1 and data.find("<proto ") == -1 and data.find("</proto>") == -1 and data.find("<packet>") == -1 and data.find("<packet ") == -1):
-                    pdmlt.set_misc_info(data, x)
-                    print(x, data)
+                    self.pdml.set_misc_info(data, x)
+                    #print(x, data)
                     
-        return pdmlt
+        return self.pdml
                 
     
     

@@ -1,5 +1,6 @@
 from FileSub.Tshark_Handler import Tshark_Handler
 from PDMLSub.PDMLManager import pdmlmanager
+from subprocess import call
 
 class Capture:
     def createCapture(self, filePath):
@@ -14,21 +15,56 @@ class Capture:
         
         self.pdmlman = pdmlmanager(filePath)
         self.pdml = self.pdmlman.get_pdml()
-        self.pdml_object_to_string(self.pdml)
+        self.save_pdml(self.pdml, filePath)
+        
 
         return
     def isPDML(self,filePath):
         return filePath.lower().endswith('.pdml')
+    
     def save_pdml(self,pdml,filePath):
         pdmlString = self.pdml_object_to_string(self.pdml)
+        #print(pdmlString)
+        miscstrings = self.pdml.get_misc_strings()
+        misclinenumbers = self.pdml.get_misc_linenums()
         with open(filePath, "w") as f:
+            #print(pdmlString)
             f.write(pdmlString)    
+            x = 0
+#         print(miscstrings)
+        while(x < len(miscstrings)):
+            cmd = str(misclinenumbers[x])+"i "+ miscstrings[x]
+            call(["sed", "-i", cmd, filePath])
+            x+=1
             
+      
+        
+        cmd = str(self.file_len(filePath))+"d"
+        
+        call(["sed", "-i", cmd, filePath])
+
+            
+       
+    def file_len(self,fname):
+        with open(fname) as f:
+            for i, l in enumerate(f):
+                pass
+        return i + 1
+          
     def pdml_object_to_string(self,pdml):
         current_indent = 0
         indent = "  "
         pdmlString = ''
         packets = self.pdml.get_all_packets()
+        numofmiscline = self.pdml.get_misc_strings()
+        y = 0
+        extralinecounter = 0
+        while(y < len(numofmiscline)):
+            if(numofmiscline[y] == "\n"):
+                extralinecounter+=1
+            y+=1
+        numofmiscline = extralinecounter
+        print(numofmiscline)
         count = 0
         while(count < len(packets)):
             pdmlString += "<packet>\n"
@@ -40,8 +76,9 @@ class Capture:
                 pdmlString += (indent)+("<")
                 count3 = 0
                 while(count3 < len(protoNames)):
-                    pdmlString += (protoNames[count3]+"=\""+protoVals[count3]+"\"")
+                    pdmlString += (protoNames[count3]+"=\""+protoVals[count3]+"\" ")
                     count3 +=1
+                pdmlString = pdmlString[:-1]  
                 pdmlString += (">\n")
                 fields = protos[count2].get_field_element()
                 count4 = 0
@@ -72,8 +109,14 @@ class Capture:
                 pdmlString += ((indent)+"</proto>\n")
             count+=1
             pdmlString += "</packet>\n"
-        #pdmlString += "\n</pdml>"
-        print(pdmlString)
+            
+#         x = 0
+#         while( x < numofmiscline):
+#             pdmlString += "\n"
+#             x+=1
+        pdmlString+='\n'
+        #print(pdmlString)
+        return pdmlString
 
     def isCapture(self, filePath):
         return filePath.lower().endswith(('.pdml','.pcap','pcapng'))
