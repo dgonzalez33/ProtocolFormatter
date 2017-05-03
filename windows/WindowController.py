@@ -20,6 +20,7 @@ from windows.FilterBarWidget import FilterBarWidget
 from RestofSystem.Controller import controller
 from FileSub.Capture import Capture
 from FormatterSub.Filter import Filter
+from subprocess import call
 
 """
 Because our windows need to be customizable 
@@ -49,6 +50,7 @@ class WindowController:
     def __init__(self):
         #external controller
         self.maincontroller = controller()
+        self.capture = Capture()
         
         #Dialog Window
         self.chosenfile = ""
@@ -111,129 +113,131 @@ class WindowController:
         self.menu_bar = Gtk.MenuBar()
 
         #create file drop down menu
-        file_menu = Gtk.Menu()
+        self.file_menu = Gtk.Menu()
            
         #begin creating items for the drop down menu 
-        open_item = Gtk.MenuItem("Open")
-        open_item.connect_object("activate",self.on_Open_clicked, "open")
+        self.open_item = Gtk.MenuItem("Open")
+        self.open_item.connect_object("activate",self.on_Open_clicked, "open")
 
-        save_item = Gtk.MenuItem("Save")
-        save_item.connect_object("activate",self.on_Save_clicked, "save")
+        self.save_item = Gtk.MenuItem("Save")
+        self.save_item.connect_object("activate",self.on_Save_clicked, "save")
 
-        close_item = Gtk.MenuItem("Close")
-        close_item.connect_object("activate",self.on_Close_clicked, "close")
+        self.close_item = Gtk.MenuItem("Close")
+        self.close_item.connect_object("activate",self.on_Close_clicked, "close")
         
         #insert items into the drop down menu
-        file_menu.append(open_item)
-        file_menu.append(save_item)
-        file_menu.append(close_item)
+        self.file_menu.append(self.open_item)
+        self.file_menu.append(self.save_item)
+        self.file_menu.append(self.close_item)
         
-        open_item.show()
-        save_item.show()
-        close_item.show()
+        self.save_item.set_sensitive(False)
+        
+        self.open_item.show()
+        self.save_item.show()
+        self.close_item.show()
         
         #create edit drop down menu
-        edit_menu = Gtk.Menu()
+        self.edit_menu = Gtk.Menu()
             
         #begin creating items for the drop down menu
-        undo_item = Gtk.MenuItem("Undo")
-        undo_item.connect_object("activate",self.on_Undo_clicked, "undo")
+        self.undo_item = Gtk.MenuItem("Undo")
+        self.undo_item.connect_object("activate",self.on_Undo_clicked, "undo")
 
-        redo_item = Gtk.MenuItem("Redo")
-        redo_item.connect_object("activate",self.on_Redo_clicked, "redo")
+        self.redo_item = Gtk.MenuItem("Redo")
+        self.redo_item.connect_object("activate",self.on_Redo_clicked, "redo")
 
-        copy_item = Gtk.MenuItem("Copy")
-        copy_item.connect_object("activate",self.on_Copy_clicked, "copy")
+        self.copy_item = Gtk.MenuItem("Copy")
+        self.copy_item.connect_object("activate",self.on_Copy_clicked, "copy")
 
-        cut_item = Gtk.MenuItem("Cut")
-        cut_item.connect_object("activate",self.on_Cut_clicked, "cut")
+        self.cut_item = Gtk.MenuItem("Cut")
+        self.cut_item.connect_object("activate",self.on_Cut_clicked, "cut")
 
-        paste_item = Gtk.MenuItem("Paste")
-        paste_item.connect_object("activate",self.on_Paste_clicked, "paste")
+        self.paste_item = Gtk.MenuItem("Paste")
+        self.paste_item.connect_object("activate",self.on_Paste_clicked, "paste")
 
-        restore_item = Gtk.MenuItem("Restore")
-        restore_item.connect_object("activate",self.on_Restore_clicked, "restore")
+        self.restore_item = Gtk.MenuItem("Restore")
+        self.restore_item.connect_object("activate",self.on_Restore_clicked, "restore")
         
         #insert items into the drop down menu
-        edit_menu.append(undo_item)
-        edit_menu.append(redo_item)
-        edit_menu.append(copy_item)
-        edit_menu.append(cut_item)
-        edit_menu.append(paste_item)
-        edit_menu.append(restore_item)
+        self.edit_menu.append(self.undo_item)
+        self.edit_menu.append(self.redo_item)
+        self.edit_menu.append(self.copy_item)
+        self.edit_menu.append(self.cut_item)
+        self.edit_menu.append(self.paste_item)
+        self.edit_menu.append(self.restore_item)
         
-        undo_item.show()
-        redo_item.show()
-        copy_item.show()
-        cut_item.show()
-        paste_item.show()
-        restore_item.show()
+        self.undo_item.show()
+        self.redo_item.show()
+        self.copy_item.show()
+        self.cut_item.show()
+        self.paste_item.show()
+        self.restore_item.show()
         
         # create window drop down menu
-        window_menu = Gtk.Menu()
+        self.window_menu = Gtk.Menu()
 
         #begin creating items for the drop down menu            
-        filter_item = Gtk.MenuItem("Filter")
-        filter_item.connect("activate",self.create_filter_window)
+        self.filter_item = Gtk.MenuItem("Filter")
+        self.filter_item.connect("activate",self.create_filter_window)
 
-        editor_item = Gtk.MenuItem("Editor")
-        editor_item.connect("activate",self.create_editor_window)
+        self.editor_item = Gtk.MenuItem("Editor")
+        self.editor_item.connect("activate",self.create_editor_window)
 
-        script_item = Gtk.MenuItem("Script")
-        script_item.connect("activate",self.create_script_window)
+        self.script_item = Gtk.MenuItem("Script")
+        self.script_item.connect("activate",self.create_script_window)
 
-        hook_item = Gtk.MenuItem("Hook")
-        hook_item.connect("activate",self.create_hook_window)
+        self.hook_item = Gtk.MenuItem("Hook")
+        self.hook_item.connect("activate",self.create_hook_window)
 
-        commandline_item = Gtk.MenuItem("CommandLine")
-        commandline_item.connect("activate",self.create_commandline_window)
+        self.commandline_item = Gtk.MenuItem("CommandLine")
+        self.commandline_item.connect("activate",self.create_commandline_window)
 
-        historical_item = Gtk.MenuItem("Historical")
-        historical_item.connect("activate", self.create_historical_window)
+        self.historical_item = Gtk.MenuItem("Historical")
+        self.historical_item.connect("activate", self.create_historical_window)
 
         #insert items into the drop down menu        
-        window_menu.append(filter_item)
-        window_menu.append(editor_item)
-        window_menu.append(script_item)
-        window_menu.append(hook_item)
-        window_menu.append(commandline_item)
-        window_menu.append(historical_item)
+        self.window_menu.append(self.filter_item)
+        self.window_menu.append(self.editor_item)
+        self.window_menu.append(self.script_item)
+        self.window_menu.append(self.hook_item)
+        self.window_menu.append(self.commandline_item)
+        self.window_menu.append(self.historical_item)
         
-        filter_item.show()
-        editor_item.show()
-        script_item.show()
-        hook_item.show()
-        commandline_item.show()
-        historical_item.show()
+        self.filter_item.show()
+        self.editor_item.show()
+        self.script_item.show()
+        self.hook_item.show()
+        self.commandline_item.show()
+        self.historical_item.show()
         
         # insert drop down menus into the menu bar
-        file_root = Gtk.MenuItem("File")
-        edit_root = Gtk.MenuItem("Edit")
-        window_root = Gtk.MenuItem("Window")
-        help_root = Gtk.MenuItem("Help")
-        help_root.connect("activate", self.on_Help_clicked)
+        self.file_root = Gtk.MenuItem("File")
+        self.edit_root = Gtk.MenuItem("Edit")
+        self.window_root = Gtk.MenuItem("Window")
+        self.help_root = Gtk.MenuItem("Help")
+        self.help_root.connect("activate", self.on_Help_clicked)
         
-        file_root.show()
-        edit_root.show()
-        window_root.show()
-        help_root.show()
+        self.file_root.show()
+        self.edit_root.show()
+        self.window_root.show()
+        self.help_root.show()
         
-        file_root.set_submenu(file_menu)
-        edit_root.set_submenu(edit_menu)
-        window_root.set_submenu(window_menu)
+        self.file_root.set_submenu(self.file_menu)
+        self.edit_root.set_submenu(self.edit_menu)
+        self.window_root.set_submenu(self.window_menu)
         
         self.window_main.add(self.mainbox)
         self.mainbox.show()
         
-        menu_bar = Gtk.MenuBar()
-        self.mainbox.pack_start(menu_bar, False, False, 2)
+        self.menu_bar = Gtk.MenuBar()
+        self.mainbox.pack_start(self.menu_bar, False, False, 2)
         
-        menu_bar.show()
+        self.menu_bar.show()
         
-        menu_bar.append(file_root)
-        menu_bar.append(edit_root)
-        menu_bar.append(window_root)
-        menu_bar.append(help_root)
+        self.menu_bar.append(self.file_root)
+        self.menu_bar.append(self.edit_root)
+        self.menu_bar.append(self.window_root)
+        self.menu_bar.append(self.help_root)
         
         
 
@@ -338,6 +342,36 @@ class WindowController:
         
     def on_Save_clicked(self, widget):
         print("save was clicked")
+        w = Gtk.Window(Gtk.WindowType.POPUP)
+        self.savedialog = Gtk.FileChooserDialog("Save PDML", w,
+            Gtk.FileChooserAction.SAVE,
+            (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+             Gtk.STOCK_SAVE_AS, Gtk.ResponseType.OK))
+        self.savedialog.set_transient_for(w)
+        w.add(self.savedialog)
+        
+        response = self.savedialog.run()
+        if response == Gtk.ResponseType.OK:
+            print("Save clicked")
+            self.chosenfile = self.savedialog.get_filename()
+            print("filename chosen",self.chosenfile)
+            self.createFilePath(self.chosenfile)
+            if(self.capture.isCapture(self.chosenfile)):
+                
+                if(self.capture.isPDML(self.chosenfile)):
+                    
+                    self.capture.set_man(self.maincontroller.get_pdml_man())
+                    self.capture.save_pdml(self.chosenfile)
+                else:
+                    print("need to convert")
+                    self.make_convert_window()
+            else:
+                print("launch error window")
+                self.make_error_window("this is not a capture bruh")
+        elif response == Gtk.ResponseType.CANCEL:
+            print("Cancel clicked")
+        self.savedialog.destroy()
+        w.destroy()
     
     def on_Copy_clicked(self, widget):
         print("copy was clicked")
@@ -353,7 +387,13 @@ class WindowController:
         
     def on_Close_clicked(self, widget):
         print("close was clicked")
+        Gtk.main_quit()
+        
 
+    def createFilePath(self, filepath):
+        print("touch",filepath)
+        call(["touch", filepath])
+        
     def on_Open_clicked(self, widget):
         w = Gtk.Window(Gtk.WindowType.POPUP)
         self.opendialog = Gtk.FileChooserDialog("Please choose a file", w,
@@ -367,11 +407,14 @@ class WindowController:
             print("Open clicked")
             self.chosenfile = self.opendialog.get_filename()
             print("filename chosen",self.chosenfile)
-            self.capture = Capture(self.chosenfile)
             if(self.capture.isCapture(self.chosenfile)):
                 
                 if(self.capture.isPDML(self.chosenfile)):
+#                     self.capture.createFilePath(self.chosenfile)
+#                     self.capture.set_man(self.chosenfile)
+#                     self.capture.save_pdml(self.maincontroller.get_pdml_man().get_pdml(), self.chosenfile)
                     self.update_pdml_contents() 
+                    self.save_item.set_sensitive(True)
                 else:
                     print("need to convert")
                     self.make_convert_window()
@@ -382,7 +425,7 @@ class WindowController:
             print("Cancel clicked")
         self.opendialog.destroy()
         w.destroy()
-        
+    
     def update_pdml_contents(self):
         self.maincontroller.set_pdml_file(self.chosenfile)
         self.packet_widget.clear_list()
@@ -463,6 +506,7 @@ class WindowController:
         self.convertwindow.destroy()
         if(self.capture.isPDML(self.chosenfile)):
             self.update_pdml_contents()
+            self.save_item.set_sensitive(True)
         else:
             self.make_error_window("convert failed")
             
