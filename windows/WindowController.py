@@ -91,7 +91,7 @@ class WindowController:
         self.historybox = self.history_widget.create_widget()
 
         #Windows
-        self.window_main = Gtk.Window(Gtk.WindowType.TOPLEVEL)
+        self.window_main = Gtk.Window()
         self.create_default_window()
 
 
@@ -106,7 +106,7 @@ class WindowController:
         #create main window
         self.title = "Protocol Formatter System"
         self.window_main.set_title(self.title)
-        self.window_main.set_size_request( 1250, 800)
+        self.window_main.set_size_request( -1, -1)
         self.window_main.connect("destroy", self.destroy)
         self.mainbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         
