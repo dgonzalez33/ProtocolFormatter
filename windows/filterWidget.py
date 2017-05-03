@@ -99,6 +99,7 @@ class FilterWidget:
                         line = row[0]
                   if(first):
                         bpf += line
+                        first = false
                   else:
                         bpf += "and "+line
             model_filter = Filter(bpf,self.includeEntry.get_text(),self.excludeEntry.get_text())

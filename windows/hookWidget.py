@@ -1,8 +1,9 @@
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-from windows.filterList import FilterList
+from windows.hookList import HookList
 from windows.filterRow import FilterRow
+from windows.scriptWidget import ScriptWidget
 
 class HookWidget:
 
@@ -19,7 +20,7 @@ class HookWidget:
             fieldLabel.set_alignment(xalign=0, yalign=1) 
             fieldContainer.pack_start(fieldLabel,True,True,0)
 
-            self.expLists = FilterList()
+            self.expLists = HookList()
             hoodAdd = Gtk.Box(spacing = 6)
             fieldContainer.pack_start(hoodAdd,True,True,0)
             hoodAdd.pack_start(self.expLists.getList(),True,True,0)
@@ -42,7 +43,7 @@ class HookWidget:
             self.scriptWrapper = Gtk.Box(spacing=6)
             self.context.pack_start(self.scriptWrapper,False,False,0)
             self.createBut = Gtk.Button(label="Create Script")
-            self.createBut.connect("clicked", self.on_includeBut_clicked)
+            self.createBut.connect("clicked", self.create_script_clicked)
             self.scriptWrapper.pack_start(self.createBut,False,False,0)
             self.scriptPathEntry = Gtk.Entry()
             self.scriptPathEntry.set_text("<File Path>")
@@ -78,8 +79,15 @@ class HookWidget:
             print("Applying Filter!")
         def on_butReset_clicked(self, widget):
             print("Resetting FIlter!")
-        def on_includeBut_clicked(self, widget):
-            print("Including!") 
+        def create_script_clicked(self, widget):
+            self.script_window = Gtk.Window()
+            self.script_window.set_size_request(500, 500)
+            self.script_widget = ScriptWidget()
+            self.scriptbox = self.script_widget.create_widget()
+            self.script_window.set_keep_above(True)
+            self.script_window.add(self.scriptbox)
+            self.script_window.show_all()
+            
         def on_excludeBut_clicked(self, widget):
             print("Including!") 
         def on_addField_clicked(self, widget):
