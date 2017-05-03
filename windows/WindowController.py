@@ -366,6 +366,8 @@ class WindowController:
                     
                     self.capture.set_man(self.maincontroller.get_pdml_man())
                     self.capture.save_pdml(self.chosenfile)
+                    self.update_pdml_contents()
+                    self.historical_item.set_sensitive(True)
                 else:
                     print("need to convert")
                     self.make_convert_window()
@@ -420,7 +422,7 @@ class WindowController:
                     self.update_pdml_contents() 
                     self.save_item.set_sensitive(True)
                     self.editor_item.set_sensitive(True)
-                    self.historical_item.set_sensitive(True)
+                    
                 else:
                     print("need to convert")
                     self.make_convert_window()
