@@ -21,7 +21,7 @@ class pdml:
         
     def set_misc_info(self, value, line):
         self.misc_string.append(value)
-        self.misc_linenum.append(value)
+        self.misc_linenum.append(line)
     
     def get_all_protocols(self):
         return self.protos
@@ -38,6 +38,12 @@ class pdml:
     
     def get_all_packets(self):
         return self.packets
+    
+    def get_misc_strings(self):
+        return self.misc_string
+    
+    def get_misc_linenums(self):
+        return self.misc_linenum
     
     
     
