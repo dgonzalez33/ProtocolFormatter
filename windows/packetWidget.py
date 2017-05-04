@@ -75,6 +75,8 @@ class PacketWidget:
                 value2 = model.get_value(tree_iter, 1)
                 self.packetclicked = "<b>Packet: "+value+" Protocol: "+value2+"</b>"
                 if(self.editorisopen == 1):
+                    self.e_widget.packetnum = value
+                    self.e_widget.packetproto = value2
                     self.e_widget.packetLabel.set_markup(self.packetclicked)
                     self.e_widget.update_field_info(value, value2)
 #             adj = self.scrollContainer.get_vadjustment()
@@ -88,6 +90,7 @@ class PacketWidget:
         
         def text_edited(self, widget, path, text):
             print("tried to edit",path," with:", text)
+            
            
             
         def print_all_protos(self):

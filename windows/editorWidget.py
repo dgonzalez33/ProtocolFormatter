@@ -8,6 +8,8 @@ class EditorWidget:
     
         def __init__(self):
             self.packetLabel = Gtk.Label()
+            self.packetnum = ""
+            self.packetproto = ""
         
         def create_widget(self):
 
@@ -23,40 +25,46 @@ class EditorWidget:
             vbox.pack_start(contentBox,True,True,0)
             self.fieldscrolledview = Gtk.ScrolledWindow()
             self.valuescrolledview = Gtk.ScrolledWindow()
+            #contentBox.pack_start(self.valuescrolledview, True, True, 0)
             contentBox.pack_start(self.fieldscrolledview, True, True, 0)
-            contentBox.pack_start(self.valuescrolledview, True, True, 0)
             
-            self.fieldtreestore = Gtk.TreeStore(str)
+            
+            self.fieldtreestore = Gtk.TreeStore(str, str)
             fieldtreeview = Gtk.TreeView(self.fieldtreestore)
             self.fieldscrolledview.add(fieldtreeview)
-            fieldtvcolumn = Gtk.TreeViewColumn('Field Name')
-            fieldtreeview.append_column(fieldtvcolumn)
+            
+            
+            
             fieldcheckCell = Gtk.CellRendererToggle();
             fieldcheckCell.connect("toggled", self.on_cell_toggled)
             fieldcell = Gtk.CellRendererText()
-            fieldcell.set_property("editable", True)
+            fieldcell.set_property("editable", False)
             fieldcell.connect("edited", self.text_edited)
-            fieldtvcolumn.pack_start(fieldcell, True)
+            
+            #fieldcheckCell2 = Gtk.CellRendererToggle();
+            #fieldcheckCell2.connect("toggled", self.on_cell_toggled)
+            fieldcell2 = Gtk.CellRendererText()
+            fieldcell2.set_property("editable", True)
+            fieldcell2.connect("edited", self.text_edited)
+            
+            fieldtvcolumn = Gtk.TreeViewColumn('Field')
+            fieldtreeview.append_column(fieldtvcolumn)
+            fieldtvcolumn2 = Gtk.TreeViewColumn('Value')
+            fieldtreeview.append_column(fieldtvcolumn2)
+            
             fieldtvcolumn.pack_start(fieldcheckCell, True)
+            fieldtvcolumn.pack_start(fieldcell, True)
             fieldtvcolumn.add_attribute(fieldcell, 'text', 0)
+            
+            fieldtvcolumn2.pack_start(fieldcell2, True)
+            #fieldtvcolumn2.pack_start(fieldcheckCell2, True)
+            fieldtvcolumn2.add_attribute(fieldcell2, 'text', 1)
+            
             fieldtreeview.set_search_column(0)
             fieldtreeview.set_reorderable(True)
+            fieldtreeview.connect('size-allocate', self.treeview_changed)
 
-            self.valuetreestore = Gtk.TreeStore(str)
-            valuetreeview = Gtk.TreeView(self.valuetreestore)
-            self.valuescrolledview.add(valuetreeview)
-            valuetvcolumn = Gtk.TreeViewColumn('Value')
-            valuetreeview.append_column(valuetvcolumn)
-            valuecell = Gtk.CellRendererText()
-            valuecheckCell = Gtk.CellRendererToggle();
-            valuecheckCell.connect("toggled", self.on_cell_toggled)
-            valuecell.set_property("editable", True)
-            valuecell.connect("edited", self.text_edited)
-            valuetvcolumn.pack_start(valuecell, True)
-            valuetvcolumn.pack_start(valuecheckCell, True)
-            valuetvcolumn.add_attribute(valuecell, 'text', 0)
-            valuetreeview.set_search_column(0)
-            valuetreeview.set_reorderable(True)
+            
             
             
             legendBox = Gtk.Box(spacing=6)
@@ -79,7 +87,11 @@ class EditorWidget:
 
             
 
-        
+        def treeview_changed(self, widget, event, data = None):
+            adj = self.fieldscrolledview.get_vadjustment()
+            
+            
+            
         def on_hide_toggled(self, button, name):
             if button.get_active():
                 state = "on"
@@ -94,11 +106,43 @@ class EditorWidget:
             print(path)
             
         def text_edited(self, widget, path, text):
-            print("Added "+text+"!")
+#             print("Added "+text+" at path:", path)
+            
+            num = self.packetnum
+            proto = self.packetproto
+            fieldname = self.fieldtreestore[path[0]][1]
+            fieldname = fieldname.split(' ', 1)[-1]
+            
+            attribname = self.fieldtreestore[path][0]
+            attribname = attribname.split(' ', 1)[-1]
+
+            fieldelement = self.pdmlman.get_field_element(int(num), proto, fieldname)
+            
+            print("packetnum",num)
+            print("proto", proto)
+            print("fieldname",fieldname)
+            print("attribname", attribname)
+            print(fieldelement)
+            
+            attribsnames  = fieldelement.field_attributes_names
+            attribvalues = fieldelement.field_attributes_values
+            print(attribsnames)
+            print(attribvalues)
+            x = 0
+            while(x < len(attribsnames)):
+#                 print(attribsnames[x])
+                if(attribsnames[x] == attribname):
+                    attribvalues[x] = text
+                    print("set ", attribsnames[x], " to ", text)
+                x+=1
+            
+            self.fieldtreestore[path][1] = text
+
+            
         
         def clear_list(self):
             self.fieldtreestore.clear()
-            self.valuetreestore.clear()
+            
         
         def update_field_info(self, packetnum, proto):
             self.clear_list()
@@ -114,14 +158,11 @@ class EditorWidget:
             while(x < len(fields)):
                 fieldnames = fields[x].get_all_field_attributes_name()
                 fieldvalues = fields[x].get_all_field_attributes_value()
-                
-                
-                fielditer = self.fieldtreestore.append(None, ["("+str(x)+") "+fieldnames[0]])
-                valueiter = self.valuetreestore.append(None, ["("+str(x)+") "+fieldvalues[0]])
+
+                fielditer = self.fieldtreestore.append(None, ["("+str(x)+") "+fieldnames[0], fieldvalues[0]])
                 y = 1
                 while(y < len(fieldnames)):
-                    self.fieldtreestore.append(fielditer, ["["+str(y)+"] "+fieldnames[y]])
-                    self.valuetreestore.append(valueiter, ["["+str(y)+"] "+fieldvalues[y]])
+                    self.fieldtreestore.append(fielditer, ["["+str(y-1)+"] "+fieldnames[y],fieldvalues[y]])
                     y+=1
                 
                 x+=1

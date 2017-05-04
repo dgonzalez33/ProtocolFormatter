@@ -100,6 +100,7 @@ class pdmlparser:
                             count4 = 0
                             while(count4 < len(f_names)):
                                 if(f_names[count4] == "field name"):
+                                    #print(f_values[count4])
                                     if(f_values[count4] == key):
                                         return fields[count3]
                                 count4 +=1
@@ -107,6 +108,8 @@ class pdmlparser:
                 count2 += 1
             count+=1   
         return "error (not found)"
+    
+    
         
     def get_all_packets_of_pdml(self):
         return self.pdml.get_all_packets()
