@@ -81,12 +81,17 @@ class Filter:
                 orList.append(ors)
             andList.append(orList)
         self.parseList = andList
+        #print(andList)
         return andList
 
-    def applyFilter(self, pdmlMan):
+    def set_pdmlman(self, pman):
+        self.pdmlman = pman
+
+    def applyFilter(self):
+        self.setFilter()
         self.protosKept = list()
         self.viewProtos = list()
-        packets = pdmlMan.get_all_packets()
+        packets = self.pdmlman.get_all_packets()
         for pack in packets:
             protos = pack.get_proto_element()
             for proto in protos:
@@ -134,12 +139,13 @@ class Filter:
 
     #             fields = proto.get_field_element()
     def getFormatterProtos(self):
-        return self.protosKept                
+        return self.protosKept   
+                 
     def getViewProtos(self):
         return self.viewProtos
 
     def setContentFilter(self, iContentFilter, eContentFilter):
-        self.iContentFilter = icontentFilter
+        self.iContentFilter = iContentFilter
         self.eContentFilter = eContentFilter
 
     def saveFilter(self,name):
@@ -151,7 +157,7 @@ class Filter:
         with open(dir_path+"/Filters/"+name+".json", "w") as f:
             json.dump(filterJson,f)
 
-    def __init__(self, bpfFilter, iContentFilter, eContentFilter):
+    def __init__(self):
         self.protocols = ['ether', 'fddi','tr','wlan','ip','ip6','arp','rarp',
         'decnet', 'tcp', 'udp','eth']
         self.ipProtos = ['icmp', 'icmp6', 'igmp', 'igrp', 'pim', 'ah', 'esp', 'vrrp', 'udp','tcp']
@@ -161,10 +167,15 @@ class Filter:
         self.conditionals = ['==','!=','>','<','>=','<=']
         self.conjuctions = ['and', 'or','&&', '||']
         self.dirs = ['src','dst']
-        self.bpfFilter = bpfFilter+" "
-        self.iContentFilter = iContentFilter
-        self.eContentFilter = eContentFilter
+        self.bpfFilter = ""
+        self.iContentFilter = ""
+        self.eContentFilter = ""
         self.parseList = list()
+        
+    def set_bpf_filter(self, bpf, icontent, econtent):
+        self.iContentFilter = icontent
+        self.eContentFilter = econtent
+        self.bpfFilter = bpf+" "
 
     
 
