@@ -16,8 +16,8 @@ class FilterWidget:
 
             bpfLabel = Gtk.Label()
             bpfLabel.set_markup("<b>BPF Filter</b>")
-            bpfLabel.set_alignment(xalign=0, yalign=1) 
-            bpfContainer.pack_start(bpfLabel,True,True,0)
+            bpfLabel.set_alignment(xalign=0, yalign=0) 
+            bpfContainer.pack_start(bpfLabel,False,False,0)
             bpfContainer.pack_start(filterContainer,True,True,0)
             self.expLists = FilterList()
             filterContainer.pack_start(self.expLists.getList(),True,True,0)

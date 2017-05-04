@@ -13,16 +13,22 @@ class HistoricalCopyWidget:
         self.liststore = Gtk.ListStore(str, str, str)
         self.listofiterators = []
         self.resulting_lines = []
+        
 
     def create_widget(self):
         vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
             
         appliedFormattersContainer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         
+        self.label = Gtk.Label()
+        self.label.set_text("")
+        self.label.show()
+        
         submitbutton = Gtk.Button("Show/Hide Only Difference")
         submitbutton.connect("clicked", self.update_filter)
         submitbutton.show()
         
+        appliedFormattersContainer.add(self.label)
         appliedFormattersContainer.add(submitbutton)
         vbox.pack_start(appliedFormattersContainer,True,True,0)
         filterContainer = Gtk.Box(spacing=0)
@@ -56,6 +62,9 @@ class HistoricalCopyWidget:
         self.scrollContainer.add(self.treeview)
         
         return vbox
+    
+    def update_label(self, value):
+        self.label.set_text(value)
     
     def language_filter_func(self, model, iter, data):
         if self.current_filter_language is None or self.current_filter_language == "None":

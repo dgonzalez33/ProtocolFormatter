@@ -303,7 +303,7 @@ class WindowController:
         global filterOpen
         if(not filterOpen):
             self.filter_window = Gtk.Window()
-            self.filter_window.set_size_request(500, 300)
+            self.filter_window.set_size_request(500, 550)
             self.filterbox = self.filter_widget.create_widget()
             self.insert_widget_to_window("Filter Window", self.filterbox, self.filter_window)
             filterOpen = True
@@ -332,7 +332,9 @@ class WindowController:
             self.history_window = Gtk.Window()
             self.history_window.set_size_request(500, 500)
             self.historybox = self.history_widget.create_widget()
-            self.history_widget.create_historical_copy(self.chosenfile, "../Scripts/cubic2.pdml")
+            val = self.chosenfile+ "  VS  "+ self.previousfile
+            self.history_widget.update_label(val)
+            self.history_widget.create_historical_copy(self.chosenfile, self.previousfile)
 #             self.history_widget.check_line_colors()
             self.insert_widget_to_window("Historical Copy Window", self.historybox, self.history_window)
             histOpen = True
@@ -463,7 +465,8 @@ class WindowController:
         response = self.savedialog.run()
         if response == Gtk.ResponseType.OK:
             print("Save clicked")
-            self.previousfile = self.chosenfile
+            if(self.previousfile != self.chosenfile):
+                self.previousfile = self.chosenfile
             self.chosenfile = self.savedialog.get_filename()
             print("filename chosen",self.chosenfile)
             self.createFilePath(self.chosenfile)
