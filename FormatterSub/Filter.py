@@ -84,7 +84,8 @@ class Filter:
         return andList
 
     def applyFilter(self, pdmlMan):
-        protosKept = list()
+        self.protosKept = list()
+        self.viewProtos = list()
         packets = pdmlMan.get_all_packets()
         for pack in packets:
             protos = pack.get_proto_element()
@@ -115,9 +116,10 @@ class Filter:
                             break
                     isKeptBool = isOrKeptBool and isKeptBool                            
                 if(isKeptBool is True):
-                    protosKept.append(proto)
-                    break                
-        return protosKept
+                    self.protosKept.append(proto)
+                    self.viewProtos.append( (pack.get_packet_id(), protoVals[protoNameInd]) )
+                    #break
+        # return self.protosKept
 
     # def applyContent(self, pdmlMan):
     #     protosKept = list()
@@ -131,8 +133,10 @@ class Filter:
     #             for names,vals in zip(protoNames,protoVals):
 
     #             fields = proto.get_field_element()
-                
-
+    def getFormatterProtos(self):
+        return self.protosKept                
+    def getViewProtos(self):
+        return self.viewProtos
 
     def setContentFilter(self, iContentFilter, eContentFilter):
         self.iContentFilter = icontentFilter
@@ -164,12 +168,13 @@ class Filter:
 
     
 
-# sfilter = Filter("eth")
+
+# sfilter = Filter("ip net 192","","")
 # result = sfilter.setFilter()
 # print(result)
-# protos = sfilter.applyFilter( pdmlmanager("ProtocolFormatter/Scripts/cubic.pdml") )
+# sfilter.applyFilter( pdmlmanager("Scripts/cubic.pdml") )
 # pdmlString = ""
-# for proto in protos:
+# for proto in sfilter.protosKept:
 #     protoNames = proto.get_all_proto_attrib_names()
 #     protoVals = proto.get_all_proto_attrib_values()
 #     pdmlString += ("<")
@@ -185,4 +190,6 @@ class Filter:
 #             pdmlString += (name+"=\""+val+"\"")
 #         pdmlString += ("/>\n")
 #     pdmlString += ("</proto>\n")
-# print(pdmlString)
+# # print(pdmlString)
+# protView = sfilter.getViewProtos()
+# print(protView)

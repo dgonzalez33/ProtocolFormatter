@@ -4,10 +4,8 @@ from gi.repository import Gtk
 from windows.hookList import HookList
 from windows.filterRow import FilterRow
 from windows.scriptWidget import ScriptWidget
-
+import os.path as osp
 class HookWidget:
-
-        
             
         def create_widget(self):
             vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
@@ -48,17 +46,9 @@ class HookWidget:
             self.scriptPathEntry = Gtk.Entry()
             self.scriptPathEntry.set_text("<File Path>")
             self.scriptWrapper.pack_start(self.scriptPathEntry,True,True,0)
-
-
-            # self.excludeWrapper = Gtk.Box(spacing=6)
-            # self.context.pack_start(self.excludeWrapper,False,False,0)
-            # self.excludeBut = Gtk.Button(label="Exclude")
-            # self.excludeBut.connect("clicked", self.on_excludeBut_clicked)
-            # self.excludeWrapper.pack_start(self.excludeBut,False,False,0)
-            # self.excludeEntry = Gtk.Entry()
-            # self.excludeEntry.set_text("<Enter String>")
-            # self.excludeWrapper.pack_start(self.excludeEntry,True,True,0)
-
+            self.addHook = Gtk.Button(label="Add Script")
+            self.addHook.connect("clicked", self.add_script_clicked)
+            self.scriptWrapper.pack_start(self.addHook,False,False,0)
             self.box = Gtk.Box(spacing=6)
             vbox.pack_start(self.box,False,False,0)
             customLabel = Gtk.Label("Custom Name: ")
@@ -67,16 +57,36 @@ class HookWidget:
             self.customName.set_text("<Name of Hook>")
             self.box.pack_start(self.customName, False, False, 0)
             self.butCreate = Gtk.Button(label="Create Hook")
-            # self.butCreate.connect("clicked", self.on_butCreate_clicked)
+            self.butCreate.connect("clicked", self.on_butCreate_clicked)
             self.box.pack_start(self.butCreate,False,False,0)
             self.butCancel = Gtk.Button(label="Cancel")
-            # self.butCancel.connect("clicked",self.on_butReset_clicked)
             self.box.pack_start(self.butCancel,False,False,0)
             
             return vbox
             
+        def add_script_clicked(self, widget):
+            w = Gtk.Window(Gtk.WindowType.POPUP)
+            self.opendialog = Gtk.FileChooserDialog("Please choose a file", w,
+                Gtk.FileChooserAction.OPEN,
+                (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+                 Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
+            self.opendialog.set_current_folder(osp.abspath('../Scripts'))
+            self.opendialog.set_transient_for(w)
+            w.add(self.opendialog)
+            response = self.opendialog.run()
+            if response == Gtk.ResponseType.OK:
+                self.chosenfile = self.opendialog.get_filename()
+                self.scriptPathEntry.set_text(self.chosenfile)
+            elif response == Gtk.ResponseType.CANCEL:
+                print("Cancel clicked")
+            self.opendialog.destroy()
+            w.destroy()
+        def set_applied_hooks(self):
+            print("eventua;;y")
+        def set_fields(self,fields):
+            print("eventually")
         def on_butCreate_clicked(self, widget):
-            print("Applying Filter!")
+            print("eventually")
         def on_butReset_clicked(self, widget):
             print("Resetting FIlter!")
         def create_script_clicked(self, widget):
