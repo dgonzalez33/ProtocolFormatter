@@ -282,6 +282,8 @@ class WindowController:
     def create_editor_window(self, widget):
         global editorOpen
         if(not editorOpen):
+            self.modeLabel.modify_fg(Gtk.StateFlags.NORMAL, Gdk.color_parse("red") )
+            self.modeLabel.set_text("Edit")
             self.editor_window = Gtk.Window()
             self.editor_window.set_size_request(500, 500)
             self.packet_widget.set_editor_widget(self.editor_widget)
@@ -434,8 +436,15 @@ class WindowController:
         redoButton.connect("clicked",self.on_Redo_clicked)
         redoButton.add(r_imagebox)
         buttonContainer.pack_start(redoButton,False,False,2)
+        
+        m_label = Gtk.Label("Mode of Operation:")
+        
+        self.modeLabel = Gtk.Label("")
+        self.modeLabel.modify_font(Pango.FontDescription("serif,monospace bold italic condensed 12"))
 
         fullContainer.pack_start(buttonContainer,False,False,4)
+        fullContainer.pack_start(m_label, False, False, 4)
+        fullContainer.pack_start(self.modeLabel,False,False,4)
         return vbox
     
     
@@ -530,6 +539,8 @@ class WindowController:
             if(self.capture.isCapture(self.chosenfile)):
                 
                 if(self.capture.isPDML(self.chosenfile)):
+                    self.modeLabel.modify_fg(Gtk.StateFlags.NORMAL, Gdk.color_parse("yellow") )
+                    self.modeLabel.set_text("Filter")
 #                     self.capture.createFilePath(self.chosenfile)
 #                     self.capture.set_man(self.chosenfile)
 #                     self.capture.save_pdml(self.maincontroller.get_pdml_man().get_pdml(), self.chosenfile)
@@ -633,6 +644,8 @@ class WindowController:
             self.update_pdml_contents()
             self.save_item.set_sensitive(True)
             self.saveButton.set_sensitive(True)
+            self.modeLabel.modify_fg(Gtk.StateFlags.NORMAL, Gdk.color_parse("yellow") )
+            self.modeLabel.set_text("Filter")
         else:
             self.make_error_window("convert failed")
             
@@ -647,6 +660,8 @@ class WindowController:
 
     def destroyEditor(self, w):
         print("editor destroyed! \m/")
+        self.modeLabel.modify_fg(Gtk.StateFlags.NORMAL, Gdk.color_parse("yellow") )
+        self.modeLabel.set_text("Filter")
         self.packet_widget.editorisopen = 0
         global editorOpen
         editorOpen = False   
