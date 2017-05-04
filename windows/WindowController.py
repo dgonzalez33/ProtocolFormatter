@@ -555,6 +555,7 @@ class WindowController:
             else:
                 print("launch error window")
                 self.make_error_window("this is not a capture bruh")
+
         elif response == Gtk.ResponseType.CANCEL:
             print("Cancel clicked")
         self.opendialog.destroy()
@@ -652,6 +653,7 @@ class WindowController:
         
     def destroy(self, w):
         print("main destroyed! \m/")
+	Gtk.main_quit()
 
     def destroyComm(self, w):
         print("comm destroyed! \m/")
