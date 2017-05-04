@@ -581,6 +581,7 @@ class WindowController:
        
         packets = self.maincontroller.get_all_packets()
         self.editor_widget.set_pdml_man(self.maincontroller.get_pdml_man())
+        self.packet_widget.clear_filter_list()
         self.packet_widget.update_packet_window(packets)
         
     def make_error_window(self, message):

@@ -128,6 +128,7 @@ class FilterWidget:
         def on_butReset_clicked(self, widget):
             self.includeEntry.set_text("")
             self.excludeEntry.set_text("")
+            self.packetwidget.clear_filter_list()
             for row in self.listbox:
                 self.listbox.remove(row)
                 

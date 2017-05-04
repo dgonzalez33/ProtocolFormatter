@@ -146,7 +146,7 @@ class HistoricalCopyWidget:
         line1 = file1.readlines()
         line2 = file2.readlines()
         d = difflib.Differ()
-        diff = d.compare(line1, line2)
+        diff = d.compare(line2, line1)
         self.result = ""
         self.result = ''.join(diff)
         self.resulting_lines = self.result.split('\n')

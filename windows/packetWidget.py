@@ -7,7 +7,7 @@ from windows.editorWidget import EditorWidget
 class PacketWidget:
 
         def __init__(self):
-            self.liststore = Gtk.ListStore(str, str, str, str)
+            self.liststore = Gtk.ListStore(str, str, str, str, str)
             self.packetclicked = ""
             self.e_widget = EditorWidget()
             self.listofiterators = []
@@ -29,7 +29,7 @@ class PacketWidget:
             appliedFormattersContainer.pack_start(self.scrollContainer,True,True,0)
             
             
-            self.current_filter_language = None
+            self.current_filter_language = "True"
             
             self.language_filter = self.liststore.filter_new()
             self.language_filter.set_visible_func(self.language_filter_func)
@@ -51,6 +51,7 @@ class PacketWidget:
             frame.add(filterContainer)
             
             self.scrollContainer.add(self.treeview)
+            self.currentpackets = []
             
             
             
@@ -64,11 +65,58 @@ class PacketWidget:
             if self.current_filter_language is None or self.current_filter_language == "None":
                 return True
             else:
-                return model[iter][1] == self.current_filter_language
+                return model[iter][4] == self.current_filter_language
   
         def set_filter_list(self, flist):
-            self.filterlist = flist
+            self.daList = flist
+           
+            if(len(self.daList) < 1):
+                x = 0
+                self.filterlist.clear()
+                print("i was empty")
+                while(x < len(self.currentpackets)):
+                    proto = self.currentpackets[x].get_proto_element()
+                    y = 0 
+                    while(y < len(proto)):
+                    
+                        self.filterlist.append("False")
+                        y+=1
+                    x+=1
+            else:
+                print(self.daList[0][0], self.daList[0][1])
+                filterindex = 0
+                x = 0
+                while(x < len(self.currentpackets)):
+                    protos = self.currentpackets[x].get_proto_element()
+                    y = 0
+                    while(y < len(protos)):
+                        print(protos[y].proto_attributes_values[0], "+", self.daList[0][1], self.currentpackets[x].packetid, self.daList[x][0])
+                        if(self.currentpackets[x].packetid == self.daList[x][0] and protos[y].proto_attributes_values[0] == self.daList[0][1]):
+                            print("packet",x," and proto",y)
+                            self.filterlist[filterindex] = "True"
+                            print("true")
+                            filterindex+=1
+                        else:
+                            print("packet",x," and proto",y)
+                            self.filterlist[filterindex] = "False"
+                            print("false")
+                            filterindex+=1
+                            
+                        print(filterindex)
+                        y+=1
+                    x+=1
+                
+            self.clear_list()
+            self.update_packet_window(self.currentpackets)   
+            self.refilter_list()
             print("yay ", self.filterlist)
+        
+        def clear_filter_list(self):
+            x = 0
+            self.filterlist = []
+            self.clear_list()
+            self.update_packet_window(self.currentpackets) 
+            self.refilter_list()
         
         def packet_tree_clicked(self, tree_selection):
 #             print(tree_selection)
@@ -95,7 +143,7 @@ class PacketWidget:
         def text_edited(self, widget, path, text):
             print("tried to edit",path," with:", text)
             
-           
+       
             
         def print_all_protos(self):
             x = 0
@@ -109,6 +157,21 @@ class PacketWidget:
             self.language_filter.refilter()
 
         def update_packet_window(self, packets):
+            self.currentpackets = packets
+            
+            if(len(self.filterlist) < 1):
+                x = 0
+                print("i was empty :)")
+                while(x < len(packets)):
+                    proto = packets[x].get_proto_element()
+                    y = 0 
+                    while(y < len(proto)):
+                    
+                        self.filterlist.append("True")
+                        y+=1
+                    x+=1
+            
+            filterindex = 0
             x = 0
             while(x < len(packets)):
                 self.rowvalue = []
@@ -136,14 +199,21 @@ class PacketWidget:
                         self.field = proto[y].get_field_element_at_index(3)
                         self.date = self.field.field_attributes_values[2]
                         self.rowvalue.append(self.date)
+                        self.rowvalue.append(self.filterlist[filterindex])
+                        filterindex+=1
+                        
                     else:
                         self.rowvalue.append(self.date)
+                        self.rowvalue.append(self.filterlist[filterindex])
+                        filterindex+=1
                         
-                    if(len(self.rowvalue) != 4):
-                        print(self.owvalue)
+                    if(len(self.rowvalue) != 5):
+                        print(self.rowvalue)
                         self.rowvalue.clear()
                         self.rowvalue.append(self.p_name)
+                        
                     else:  
+                        #print("here",self.rowvalue)
                         self.add_to_list(self.rowvalue)
                         self.rowvalue.clear()
                         self.rowvalue.append(self.p_name)
