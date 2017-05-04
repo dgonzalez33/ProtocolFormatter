@@ -46,7 +46,6 @@ class packet:
     
 
 
-
 if(__name__ == "__main__"):
-    b = packet()
+    b = packet().to_String()
     

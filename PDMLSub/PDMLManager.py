@@ -1,3 +1,6 @@
+import sys
+sys.path.insert(0, '../')
+
 from PDMLSub.PDMLParser import pdmlparser
 
 class pdmlmanager:
