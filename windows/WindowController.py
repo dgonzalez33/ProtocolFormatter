@@ -51,6 +51,7 @@ class WindowController:
         #external controller
         self.maincontroller = controller()
         self.capture = Capture()
+        self.model_filter = Filter()
         
         #Dialog Window
         self.chosenfile = ""
@@ -69,6 +70,7 @@ class WindowController:
         #self.icon_widget = iconBar()
         self.filter_widget = FilterBarWidget()
         self.packet_widget = PacketWidget()
+        
         self.formatter_widget = FormatterWidget()
         self.editor_widget = EditorWidget()
         self.script_widget = ScriptWidget()
@@ -306,6 +308,7 @@ class WindowController:
         if(not filterOpen):
             self.filter_window = Gtk.Window()
             self.filter_window.set_size_request(500, 550)
+            self.filter_widget.set_packet_widget(self.packet_widget)
             self.filterbox = self.filter_widget.create_widget()
             self.insert_widget_to_window("Filter Window", self.filterbox, self.filter_window)
             filterOpen = True
@@ -401,7 +404,7 @@ class WindowController:
         f_label.show()
         filterButton = Gtk.Button()
         filterButton.set_alignment(xalign=0.0, yalign=1)
-        filterButton.connect("clicked",self.on_Filter_clicked)
+        filterButton.connect("clicked",self.create_filter_window)
         filterButton.add(f_imagebox)
         buttonContainer.pack_start(filterButton,False,False,2)
         
@@ -459,6 +462,7 @@ class WindowController:
         print("redo was clicked")
         
     def on_Filter_clicked(self, widget):
+        
         print("filter was clicked")
         
     def on_Save_clicked(self, widget):
@@ -486,6 +490,8 @@ class WindowController:
                     
                     self.capture.set_man(self.maincontroller.get_pdml_man())
                     self.capture.save_pdml(self.chosenfile)
+                    self.model_filter.set_pdmlman(self.maincontroller.get_pdml_man())
+                    self.filter_widget.set_Filter_Inst(self.model_filter)
                     self.update_pdml_contents()
                     self.historical_item.set_sensitive(True)
                     
@@ -555,7 +561,6 @@ class WindowController:
             else:
                 print("launch error window")
                 self.make_error_window("this is not a capture bruh")
-
         elif response == Gtk.ResponseType.CANCEL:
             print("Cancel clicked")
         self.opendialog.destroy()
@@ -563,53 +568,15 @@ class WindowController:
     
     def update_pdml_contents(self):
         self.maincontroller.set_pdml_file(self.chosenfile)
-        
+        self.model_filter.set_pdmlman(self.maincontroller.get_pdml_man())
+        self.filter_widget.set_Filter_Inst(self.model_filter)
+        filterlist = self.filter_widget.get_filter_list()
         self.history_widget.clear_list()
         self.packet_widget.clear_list()
+       
         packets = self.maincontroller.get_all_packets()
         self.editor_widget.set_pdml_man(self.maincontroller.get_pdml_man())
-        x = 0
-        while(x < len(packets)):
-            self.rowvalue = []
-            self.p_name = ""
-            if(x < 10):
-                self.p_name = "0"+str(packets[x].get_packet_id())
-            else:
-                self.p_name =""+str(packets[x].get_packet_id())
-                
-            self.rowvalue.append(self.p_name)
-                
-            proto = packets[x].get_proto_element()
-            y = 0
-            while(y < len(proto)):
-                self.rowvalue.append(proto[y].proto_attributes_values[0])
-                
-                if(proto[y].proto_attributes_values[0] == "geninfo"):
-                    self.rowvalue.append(proto[y].proto_attributes_values[2])
-                elif(len(proto[y].proto_attributes_values) > 1):
-                    self.rowvalue.append(proto[y].proto_attributes_values[1])
-                else:
-                    self.rowvalue.append("")
-
-                if(proto[y].proto_attributes_values[0] == "geninfo"):
-                    self.field = proto[y].get_field_element_at_index(3)
-                    self.date = self.field.field_attributes_values[2]
-                    self.rowvalue.append(self.date)
-                else:
-                    self.rowvalue.append(self.date)
-                    
-                if(len(self.rowvalue) != 4):
-                    print(self.owvalue)
-                    self.rowvalue.clear()
-                    self.rowvalue.append(self.p_name)
-                else:  
-                    self.packet_widget.add_to_list(self.rowvalue)
-                    self.rowvalue.clear()
-                    self.rowvalue.append(self.p_name)
-                y+=1
-            self.rowvalue.clear()
-                
-            x+=1  
+        self.packet_widget.update_packet_window(packets)
         
     def make_error_window(self, message):
         ww = Gtk.Window()
@@ -653,7 +620,6 @@ class WindowController:
         
     def destroy(self, w):
         print("main destroyed! \m/")
-	Gtk.main_quit()
 
     def destroyComm(self, w):
         print("comm destroyed! \m/")

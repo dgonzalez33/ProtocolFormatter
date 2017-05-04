@@ -12,6 +12,7 @@ class PacketWidget:
             self.e_widget = EditorWidget()
             self.listofiterators = []
             self.editorisopen = 0
+            self.filterlist = []
             
         
              
@@ -65,6 +66,9 @@ class PacketWidget:
             else:
                 return model[iter][1] == self.current_filter_language
   
+        def set_filter_list(self, flist):
+            self.filterlist = flist
+            print("yay ", self.filterlist)
         
         def packet_tree_clicked(self, tree_selection):
 #             print(tree_selection)
@@ -104,7 +108,49 @@ class PacketWidget:
             #we update the filter, which updates in turn the view
             self.language_filter.refilter()
 
-            
+        def update_packet_window(self, packets):
+            x = 0
+            while(x < len(packets)):
+                self.rowvalue = []
+                self.p_name = ""
+                if(x < 10):
+                    self.p_name = "0"+str(packets[x].get_packet_id())
+                else:
+                    self.p_name =""+str(packets[x].get_packet_id())
+                    
+                self.rowvalue.append(self.p_name)
+                    
+                proto = packets[x].get_proto_element()
+                y = 0
+                while(y < len(proto)):
+                    self.rowvalue.append(proto[y].proto_attributes_values[0])
+                    
+                    if(proto[y].proto_attributes_values[0] == "geninfo"):
+                        self.rowvalue.append(proto[y].proto_attributes_values[2])
+                    elif(len(proto[y].proto_attributes_values) > 1):
+                        self.rowvalue.append(proto[y].proto_attributes_values[1])
+                    else:
+                        self.rowvalue.append("")
+    
+                    if(proto[y].proto_attributes_values[0] == "geninfo"):
+                        self.field = proto[y].get_field_element_at_index(3)
+                        self.date = self.field.field_attributes_values[2]
+                        self.rowvalue.append(self.date)
+                    else:
+                        self.rowvalue.append(self.date)
+                        
+                    if(len(self.rowvalue) != 4):
+                        print(self.owvalue)
+                        self.rowvalue.clear()
+                        self.rowvalue.append(self.p_name)
+                    else:  
+                        self.add_to_list(self.rowvalue)
+                        self.rowvalue.clear()
+                        self.rowvalue.append(self.p_name)
+                    y+=1
+                self.rowvalue.clear()
+                    
+                x+=1  
                 
             
         def add_columns_to_list(self, name, num, s_id):

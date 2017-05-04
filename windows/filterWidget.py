@@ -4,8 +4,16 @@ from gi.repository import Gtk
 from windows.filterList import FilterList
 from windows.filterRow import FilterRow
 from FormatterSub.Filter import Filter
+from windows.packetWidget import PacketWidget
 
 class FilterWidget:
+
+        def __init__(self):
+            self.filterlist = []
+            self.packetwidget = PacketWidget()
+            
+        def set_packet_widget(self, pwidget):
+            self.packetwidget = pwidget
 
         def create_widget(self):
             vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
@@ -89,38 +97,52 @@ class FilterWidget:
                 row = FilterRow(self.listbox,self.expLists.getSelected()[0],self.primValue,self.filters)
                 self.listbox.add(row.getRow())
                 self.listbox.show_all()   
+                
         def on_butCreate_clicked(self, widget):
             bpf = ""
             first = True
             for row in self.filters:
-                  if(row[1]=="Type"):
-                        line = row[0] + " " + row[1]
-                  else:
-                        line = row[0]
-                  if(first):
-                        bpf += line
-                        first = false
-                  else:
+                if(row[1]=="Type"):
+                    line = row[0] + " " + row[1]
+                else:
+                    line = row[0]
+                if(first):
+                    bpf += line
+                    first = False
+                else:
                         bpf += "and "+line
-            model_filter = Filter(bpf,self.includeEntry.get_text(),self.excludeEntry.get_text())
-            model_filter.saveFilter(self.customName.get_text())
-
+            print(bpf)
+            self.model_filter.set_bpf_filter(bpf, self.includeEntry.get_text(), self.excludeEntry.get_text())
+            self.model_filter.applyFilter()
+            self.model_filter.saveFilter(self.customName.get_text())
+            self.filterlist = self.model_filter.getViewProtos()
+            self.packetwidget.set_filter_list(self.filterlist)
             print("Applying Filter!")
+            
+        def set_Filter_Inst(self, modelf):
+            self.model_filter = modelf
+            
+        def get_filter_list(self):
+            return self.filterlist
+            
         def on_butReset_clicked(self, widget):
             self.includeEntry.set_text("")
             self.excludeEntry.set_text("")
             for row in self.listbox:
-                  self.listbox.remove(row)
+                self.listbox.remove(row)
+                
         def on_includeBut_clicked(self, widget):
             print("Including!") 
+            
         def on_excludeBut_clicked(self, widget):
             print("Including!") 
+            
         def on_addFilter_clicked(self, widget):
             selected = self.expLists.getSelected()
             self.filters.append(selected)
             if(selected[1] == "Type"):
-                  self.askForValue()
+                self.askForValue()
             else:
-                  row = FilterRow(self.listbox,selected[0],selected[1],self.filters)
-                  self.listbox.add(row.getRow())
-                  self.listbox.show_all()    
+                row = FilterRow(self.listbox,selected[0],selected[1],self.filters)
+                self.listbox.add(row.getRow())
+                self.listbox.show_all()    
