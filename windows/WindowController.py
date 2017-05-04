@@ -545,6 +545,7 @@ class WindowController:
             if(self.capture.isCapture(self.chosenfile)):
                 
                 if(self.capture.isPDML(self.chosenfile)):
+                    
                     self.modeLabel.modify_fg(Gtk.StateFlags.NORMAL, Gdk.color_parse("yellow") )
                     self.modeLabel.set_text("Filter")
 #                     self.capture.createFilePath(self.chosenfile)
@@ -567,7 +568,11 @@ class WindowController:
         w.destroy()
     
     def update_pdml_contents(self):
+        
         self.maincontroller.set_pdml_file(self.chosenfile)
+        
+        self.capture.set_man(self.maincontroller.get_pdml_man())
+        self.capture.save_pdml(self.chosenfile)
         self.model_filter.set_pdmlman(self.maincontroller.get_pdml_man())
         self.filter_widget.set_Filter_Inst(self.model_filter)
         filterlist = self.filter_widget.get_filter_list()
