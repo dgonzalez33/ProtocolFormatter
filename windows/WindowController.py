@@ -626,6 +626,7 @@ class WindowController:
         
     def destroy(self, w):
         print("main destroyed! \m/")
+	Gtk.main_quit()
 
     def destroyComm(self, w):
         print("comm destroyed! \m/")
