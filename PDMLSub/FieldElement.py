@@ -15,11 +15,19 @@ class fieldelement:
         return 0
         
         
-    
+    def set_field_to_field(self,field):
+        i = 0
+        for attrs,vals in zip(field.get_all_field_attributes_name(),field.get_all_field_attributes_value()):
+            self.field_attributes_names[i] = attrs
+            self.field_attributes_values[i] = vals
+            i += 1
     def set_field_attrib(self, key, val):
-        self.field_attributes_names.append(key)
-        self.field_attributes_values.append(val)
-        
+        if key not in self.field_attributes_names:
+            self.field_attributes_names.append(key)
+            self.field_attributes_values.append(val)
+        else:
+            keyInd = self.field_attributes_names.index(key)
+            self.field_attributes_values[keyInd] = val
     def set_depth_of_indent(self, val):
         self.depth_of_indent = val
         
