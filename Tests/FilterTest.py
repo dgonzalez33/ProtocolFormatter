@@ -17,11 +17,11 @@ class FilterTest(unittest.TestCase):
 		self.newfilter2.saveFilter("")
 		self.newfilter3.saveFilter("3")
 		
-		self.assertEqual(self.newfilter1.fileExists("testFilter"),1,"Filter Exists")
+		self.assertEqual(open('FormatterSub/Filters/testFilter.json'),1,"Filter Exists")
 		
-		self.assertEqual(self.newfilter2.fileExists(""),1,"Filter Exists")
+		self.assertEqual(open('FormatterSub/Filters/3.json'),1,"Filter Exists")
 		
-		self.assertEqual(self.newfilter3.fileExists("3"),0,"Filter does not exist")
+		self.assertEqual(open('FormatterSub/Filters/.json'),0,"Filter does not exist")
 		
 		
 if __name__ == '__main__':
