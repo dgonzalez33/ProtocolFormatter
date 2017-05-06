@@ -6,6 +6,8 @@ import sys
 #from difflib_data import *
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
+from RestofSystem.Controller import controller
+from FileSub.Capture import Capture
 
 class HistoricalCopyWidget:
 
@@ -79,8 +81,19 @@ class HistoricalCopyWidget:
             tree_iter = model.get_iter(path)
             value = model.get_value(tree_iter,0)
             print(value)
-
+   
         
+    def set_controller(self, contr):
+        self.controller = contr
+        
+    def set_capture(self, capt):
+        self.capture = capt
+        
+    def set_current_file_name(self, name):
+        self.current_file_name = name
+        
+    def set_historical_file_name(self, name):
+        self.historical_file_name = name
 
     def add_columns_to_list(self, name, num, s_id):
         renderer_text = Gtk.CellRendererText()
@@ -136,6 +149,12 @@ class HistoricalCopyWidget:
             return
     def restore_orig(self, stuff):   
         print("restore was pressed") 
+        self.controller.set_pdml_file(self.historical_file_name)
+        self.capture.set_man(self.controller.get_pdml_man())
+        self.capture.save_pdml(self.current_file_name)
+        self.controller.set_pdml_file(self.current_file_name)
+        self.capture.set_man(self.controller.get_pdml_man())
+        
         
     def clear_list(self):
         self.liststore.clear()   
