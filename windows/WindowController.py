@@ -4,6 +4,7 @@ sys.path.insert(0, '../')
 import gi
 from numpy import empty
 from threading import Thread
+import os.path
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Pango, GObject, Gdk
 from windows.scriptWidget import ScriptWidget
@@ -110,7 +111,7 @@ class WindowController:
         self.title = "Protocol Formatter System"
         self.window_main.set_title(self.title)
         self.window_main.set_size_request( -1, -1)
-        self.window_main.connect("destroy", self.destroy)
+        self.window_main.connect("destroy", self.destroymain)
         self.mainbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         
         self.menu_bar = Gtk.MenuBar()
@@ -337,9 +338,14 @@ class WindowController:
             self.history_window = Gtk.Window()
             self.history_window.set_size_request(500, 500)
             self.historybox = self.history_widget.create_widget()
+            #self.capture.save_pdml(self.chosenfile)
+            
+            self.tempname = self.chosenfile+"_temp"
+            self.capture.save_pdml(self.tempname)
+            
             val = self.chosenfile+ "  VS  "+ self.previousfile
             self.history_widget.update_label(val)
-            self.history_widget.create_historical_copy(self.chosenfile, self.previousfile)
+            self.history_widget.create_historical_copy(self.tempname, self.previousfile)
 #             self.history_widget.check_line_colors()
             self.insert_widget_to_window("Historical Copy Window", self.historybox, self.history_window)
             histOpen = True
@@ -467,44 +473,51 @@ class WindowController:
         
     def on_Save_clicked(self, widget):
         print("save was clicked")
-        w = Gtk.Window(Gtk.WindowType.POPUP)
-        self.savedialog = Gtk.FileChooserDialog("Save PDML", w,
-            Gtk.FileChooserAction.SAVE,
-            (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
-             Gtk.STOCK_SAVE_AS, Gtk.ResponseType.OK))
-        self.savedialog.set_transient_for(w)
-        w.add(self.savedialog)
+        self.capture.set_man(self.maincontroller.get_pdml_man())
+        self.capture.save_pdml(self.chosenfile)
+#         self.model_filter.set_pdmlman(self.maincontroller.get_pdml_man())
+#         self.filter_widget.set_Filter_Inst(self.model_filter)
+        self.update_pdml_contents()
+        self.make_prompt_window("saved "+self.chosenfile)
         
-        response = self.savedialog.run()
-        if response == Gtk.ResponseType.OK:
-            print("Save clicked")
-            if(self.previousfile != self.chosenfile):
-                self.previousfile = self.chosenfile
-            self.chosenfile = self.savedialog.get_filename()
-            print("filename chosen",self.chosenfile)
-            self.createFilePath(self.chosenfile)
-            
-            if(self.capture.isCapture(self.chosenfile)):
-                
-                if(self.capture.isPDML(self.chosenfile)):
-                    
-                    self.capture.set_man(self.maincontroller.get_pdml_man())
-                    self.capture.save_pdml(self.chosenfile)
-                    self.model_filter.set_pdmlman(self.maincontroller.get_pdml_man())
-                    self.filter_widget.set_Filter_Inst(self.model_filter)
-                    self.update_pdml_contents()
-                    self.historical_item.set_sensitive(True)
-                    
-                else:
-                    print("need to convert")
-                    self.make_convert_window()
-            else:
-                print("launch error window")
-                self.make_error_window("this is not a capture bruh")
-        elif response == Gtk.ResponseType.CANCEL:
-            print("Cancel clicked")
-        self.savedialog.destroy()
-        w.destroy()
+#         w = Gtk.Window(Gtk.WindowType.POPUP)
+#         self.savedialog = Gtk.FileChooserDialog("Save PDML", w,
+#             Gtk.FileChooserAction.SAVE,
+#             (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+#              Gtk.STOCK_SAVE_AS, Gtk.ResponseType.OK))
+#         self.savedialog.set_transient_for(w)
+#         w.add(self.savedialog)
+#         
+#         response = self.savedialog.run()
+#         if response == Gtk.ResponseType.OK:
+#             print("Save clicked")
+#             if(self.previousfile != self.chosenfile):
+#                 self.previousfile = self.chosenfile
+#             self.chosenfile = self.savedialog.get_filename()
+#             print("filename chosen",self.chosenfile)
+#             self.createFilePath(self.chosenfile)
+#             
+#             if(self.capture.isCapture(self.chosenfile)):
+#                 
+#                 if(self.capture.isPDML(self.chosenfile)):
+#                     
+#                     self.capture.set_man(self.maincontroller.get_pdml_man())
+#                     self.capture.save_pdml(self.chosenfile)
+#                     self.model_filter.set_pdmlman(self.maincontroller.get_pdml_man())
+#                     self.filter_widget.set_Filter_Inst(self.model_filter)
+#                     self.update_pdml_contents()
+#                     self.historical_item.set_sensitive(True)
+#                     
+#                 else:
+#                     print("need to convert")
+#                     self.make_convert_window()
+#             else:
+#                 print("launch error window")
+#                 self.make_error_window("this is not a capture bruh")
+#         elif response == Gtk.ResponseType.CANCEL:
+#             print("Cancel clicked")
+#         self.savedialog.destroy()
+#         w.destroy()
     
     def on_Copy_clicked(self, widget):
         print("copy was clicked")
@@ -546,15 +559,33 @@ class WindowController:
                 
                 if(self.capture.isPDML(self.chosenfile)):
                     
+                    self.maincontroller.set_pdml_file(self.chosenfile)
+                    self.capture.set_man(self.maincontroller.get_pdml_man())
+                    self.capture.save_pdml(self.chosenfile)
+                    
+                    
+                    if(os.path.isfile(self.chosenfile+".history")): 
+                        print("file already exists")
+                        self.previousfile = self.chosenfile+".history"
+                    else:
+                        self.previousfile = self.chosenfile+".history"
+                        self.createFilePath(self.previousfile)
+                        self.capture.set_man(self.maincontroller.get_pdml_man())
+                        self.capture.save_pdml(self.previousfile)
+                        self.make_prompt_window("historical copy saved")
+                    
                     self.modeLabel.modify_fg(Gtk.StateFlags.NORMAL, Gdk.color_parse("yellow") )
                     self.modeLabel.set_text("Filter")
 #                     self.capture.createFilePath(self.chosenfile)
 #                     self.capture.set_man(self.chosenfile)
 #                     self.capture.save_pdml(self.maincontroller.get_pdml_man().get_pdml(), self.chosenfile)
+                    
                     self.update_pdml_contents() 
                     self.save_item.set_sensitive(True)
                     self.saveButton.set_sensitive(True)
                     self.editor_item.set_sensitive(True)
+                    self.historical_item.set_sensitive(True)
+                    
                     
                 else:
                     print("need to convert")
@@ -569,10 +600,6 @@ class WindowController:
     
     def update_pdml_contents(self):
         
-        self.maincontroller.set_pdml_file(self.chosenfile)
-        
-        self.capture.set_man(self.maincontroller.get_pdml_man())
-        self.capture.save_pdml(self.chosenfile)
         self.model_filter.set_pdmlman(self.maincontroller.get_pdml_man())
         self.filter_widget.set_Filter_Inst(self.model_filter)
         filterlist = self.filter_widget.get_filter_list()
@@ -597,6 +624,17 @@ class WindowController:
         
         self.insert_widget_to_window("Error", button, ww)
         
+    def make_prompt_window(self, message):
+        ww = Gtk.Window()
+        ww.set_size_request(150, 75)
+        ww.set_keep_above(True)
+        ww.connect("destroy", self.destroy)
+        button = Gtk.Button(message)
+        button.modify_fg(Gtk.StateFlags.NORMAL, Gdk.color_parse("white") )
+        #colorb = Gtk.ColorButton(button, Gdk.Color(1,0,0))
+        #button.modify_bg(Gtk.StateType.PRELIGHT, color)z
+        self.insert_widget_to_window("Message", button, ww)
+        
     def make_convert_window(self):
         self.convertwindow = Gtk.Window()
         self.convertwindow.set_size_request(150, 75)
@@ -615,6 +653,22 @@ class WindowController:
         self.chosenfile = self.capture.createCapture(self.chosenfile)
         self.convertwindow.destroy()
         if(self.capture.isPDML(self.chosenfile)):
+            
+            self.maincontroller.set_pdml_file(self.chosenfile)
+            self.capture.set_man(self.maincontroller.get_pdml_man())
+            self.capture.save_pdml(self.chosenfile)
+            
+            
+            if(os.path.isfile(self.chosenfile+".history")): 
+                print("file already exists")
+                self.previousfile = self.chosenfile+".history"
+            else:
+                self.previousfile = self.chosenfile+".history"
+                self.createFilePath(self.previousfile)
+                self.capture.set_man(self.maincontroller.get_pdml_man())
+                self.capture.save_pdml(self.previousfile)
+                self.make_prompt_window("historical copy saved")
+                
             self.update_pdml_contents()
             self.save_item.set_sensitive(True)
             self.saveButton.set_sensitive(True)
@@ -625,9 +679,12 @@ class WindowController:
             
         
     def destroy(self, w):
+#         if(os.path.isfile(self.chosenfile+".history")): 
+#             call(["rm", self.chosenfile+"_temp"])
         print("main destroyed! \m/")
-	Gtk.main_quit()
-
+    
+    def destroymain(self, w):
+        Gtk.main_quit()
     def destroyComm(self, w):
         print("comm destroyed! \m/")
         global commOpen
@@ -653,6 +710,7 @@ class WindowController:
 
     def destroyHist(self, w):
         print("hist destroyed! \m/")
+        call(["rm", self.chosenfile+"_temp"])
         global histOpen
         histOpen = False 
 
