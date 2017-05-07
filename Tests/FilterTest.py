@@ -16,7 +16,7 @@ class FilterTest(unittest.TestCase):
 	def testsaveFilter(self):
 		self.newfilter1.saveFilter("testFilter")
 		self.newfilter2.saveFilter("")
-		self.newfilter3.saveFilter("3")
+		self.newfilter3.saveFilter(3)
 		
 		self.assertEqual(open('FormatterSub/Filters/testFilter.json'),1,"Filter does not exist")
 		
