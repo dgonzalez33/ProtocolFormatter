@@ -20,7 +20,10 @@ software_list = [("host","Type"),
                                 ('rarp','Proto'),
                                 ('decnet','Proto'),
                                 ('tcp','Proto'),
-                                ('udp','Proto')]
+                                ('udp','Proto'),
+                                ('and', 'Conjuction'),
+                                ('or', 'Conjuction'),
+                                ('not', 'Negation')]
 class FilterList():
     def __init__(self):
         #Setting up the self.grid in which the elements are to be positionned
