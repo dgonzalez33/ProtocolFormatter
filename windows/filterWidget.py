@@ -99,7 +99,7 @@ class FilterWidget:
         def set_pdmlman(self, pdml):
             self.model.filter.set_pdmlman(pdml)
         def get_filter_list(self):
-            return self.
+            return self.filterlist
         def get_filter(self):
             return self.bpf
         def on_butCreate_clicked(self, widget):
@@ -112,7 +112,7 @@ class FilterWidget:
                   else:
                         self.bpf += " "+line
             print(self.bpf)
-            self.model_filter.set_bpf_filter(bpf, "","")
+            self.model_filter.set_bpf_filter(self.bpf, "","")
             self.model_filter.saveFilter(self.customName.get_text())
             self.filterlist = self.model_filter.getViewProtos()
             print(self.filterlist)
