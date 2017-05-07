@@ -115,7 +115,7 @@ class PacketWidget:
             x = 0
             self.filterlist = []
             self.clear_list()
-            self.update_packet_window(self.currentpackets) 
+           #self.update_packet_window(self.currentpackets) 
             self.refilter_list()
         
         def packet_tree_clicked(self, tree_selection):
@@ -173,6 +173,7 @@ class PacketWidget:
             
             filterindex = 0
             x = 0
+            print("packetwidget", len(packets))
             while(x < len(packets)):
                 self.rowvalue = []
                 self.p_name = ""
@@ -208,7 +209,7 @@ class PacketWidget:
                         filterindex+=1
                         
                     if(len(self.rowvalue) != 5):
-                        print(self.rowvalue)
+                        print("packetwidget mistake", self.rowvalue)
                         self.rowvalue.clear()
                         self.rowvalue.append(self.p_name)
                         
