@@ -97,7 +97,7 @@ class FilterWidget:
                 self.listbox.add(row.getRow())
                 self.listbox.show_all()   
         def set_pdmlman(self, pdml):
-            self.model.filter.set_pdmlman(pdml)
+            self.model_filter.set_pdmlman(pdml)
         def get_filter_list(self):
             return self.filterlist
         def get_filter(self):
