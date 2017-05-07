@@ -10,7 +10,7 @@ class RuleTest(unittest.TestCase):
 		self.testManager = pdmlmanager("Scripts/dns_query_response2.pdml")
 		self.testRule = Rule()
 		
-	def testapplyRules(self):
+	def testapplyRule(self):
 		self.testRule.applyRule(self.testManager)
 		
 		
