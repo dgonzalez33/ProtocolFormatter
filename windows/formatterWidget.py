@@ -79,7 +79,9 @@ class FormatterWidget:
             buttonCont.pack_start(deleteRule,True,True,0)
 
             return vbox
-
+        
+        def set_pdmlman(self, pdmlman):
+            self.personalman = pdmlman
             
         def on_Apply_clicked(self, widget):
             print("Applying Formatter!")
