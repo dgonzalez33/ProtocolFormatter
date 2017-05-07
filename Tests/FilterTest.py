@@ -1,5 +1,6 @@
 import unittest
 #import sys
+import os
 
 #sys.path.insert(0, '../')
 from FormatterSub.Filter import Filter
