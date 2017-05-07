@@ -11,7 +11,7 @@ class RuleTest(unittest.TestCase):
 		self.testRule = Rule()
 		
 	def testapplyRules(self):
-		self.testRule.applyRules(testManager)
+		self.testRule.applyRule(self.testManager)
 		
 		
 if __name__ == '__main__':
