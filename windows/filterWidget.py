@@ -96,8 +96,8 @@ class FilterWidget:
                 row = FilterRow(self.listbox,self.expLists.getSelected()[0],self.primValue,self.filters)
                 self.listbox.add(row.getRow())
                 self.listbox.show_all()   
-        def set_pdmlman(self, pdml):
-            self.model_filter.set_pdmlman(pdml)
+        def set_pdmlman(self, pdmlman):
+            self.personalman = pdmlman
         def get_filter_list(self):
             return self.filterlist
         def get_filter(self):
@@ -105,15 +105,18 @@ class FilterWidget:
         def on_butCreate_clicked(self, widget):
             first = True
             for row in self.filters:
-                  line = row[0] + " " + row[1]
-                  if(first):
-                        self.bpf += line
-                        first = False
-                  else:
+                line = row[0] + " " + row[1]
+                if(first):
+                    self.bpf += line
+                    first = False
+                else:
                         self.bpf += " "+line
             print(self.bpf)
+            print(self.model_filter)
+            self.model_filter.set_pdmlman(self.personalman)
             self.model_filter.set_bpf_filter(self.bpf, "","")
             self.model_filter.saveFilter(self.customName.get_text())
+            self.model_filter.applyFilter()
             self.filterlist = self.model_filter.getViewProtos()
             print(self.filterlist)
             self.packetwidget.set_filter_list(self.filterlist)
@@ -123,7 +126,7 @@ class FilterWidget:
             self.packetwidget.clear_filter_list()
             self.excludeEntry.set_text("")
             for row in self.listbox:
-                  self.listbox.remove(row)
+                self.listbox.remove(row)
         def on_includeBut_clicked(self, widget):
             print("Including!") 
         def on_excludeBut_clicked(self, widget):
@@ -131,8 +134,8 @@ class FilterWidget:
         def on_addFilter_clicked(self, widget):
             selected = self.expLists.getSelected()
             if(selected[1] == "Type"):
-                  self.askForValue()
+                self.askForValue()
             else:
-                  row = FilterRow(self.listbox,selected[0],selected[1],self.filters)
-                  self.listbox.add(row.getRow())
-                  self.listbox.show_all()    
+                row = FilterRow(self.listbox,selected[0],selected[1],self.filters)
+                self.listbox.add(row.getRow())
+                self.listbox.show_all() 
