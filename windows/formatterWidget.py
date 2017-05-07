@@ -22,9 +22,9 @@ class FormatterWidget:
             appliedFormattersContainer.pack_start(appliedFormattersLabel,True,True,0)
             appliedFormattersContainer.pack_start(self.appliedscrollContainer,True,True,0)
             self.appliedscrollContainer.add(filterContainer)
-            self.listbox = Gtk.ListBox()
-            self.listbox.set_selection_mode(Gtk.SelectionMode.NONE)
-            filterContainer.pack_start(self.listbox,True,True,0)
+            self.appliedlistbox = Gtk.ListBox()
+            self.appliedlistbox.set_selection_mode(Gtk.SelectionMode.NONE)
+            filterContainer.pack_start(self.appliedlistbox,True,True,0)
 
 
             rulesContainer = Gtk.Box(spacing=6)
@@ -66,28 +66,36 @@ class FormatterWidget:
 #             actionEx2.set_markup("Action 3.2")
 #             actionEx2.set_alignment(xalign=0, yalign=1) 
 #             conRule.pack_start(actionEx2,False,True,0)
-#             buttonCont = Gtk.Box(spacing=6)
-#             vbox.pack_start(buttonCont,False,True,0)
-#             createRule = Gtk.Button(label="Create Rule")
-#             buttonCont.pack_start(createRule,False,True,0)
-#             deleteRule = Gtk.Button(label="Delete Rule")
-#             buttonCont.pack_start(deleteRule,True,True,0)
+            buttonCont = Gtk.Box(spacing=6)
+            vbox.pack_start(buttonCont,False,True,0)
+            applyRule = Gtk.Button(label="Apply Formatter")
+            applyRule.connect("clicked", self.on_Apply_clicked)
+            buttonCont.pack_start(applyRule,False,True,0)
+            createRule = Gtk.Button(label="Create Rule")
+            createRule.connect("clicked", self.on_Create_clicked)
+            buttonCont.pack_start(createRule,False,True,0)
+            deleteRule = Gtk.Button(label="Delete Rule")
+            deleteRule.connect("clicked", self.on_Delete_clicked)
+            buttonCont.pack_start(deleteRule,True,True,0)
 
             return vbox
 
             
-        def on_butCreate_clicked(self, widget):
-            print("Applying Filter!")
-        def on_butReset_clicked(self, widget):
-            print("Resetting FIlter!")
-        def on_includeBut_clicked(self, widget):
-            print("Including!") 
-        def on_excludeBut_clicked(self, widget):
-            print("Including!") 
-        def on_addFilter_clicked(self, widget):
-            selected = self.expLists.getSelected()
-            print(selected[0])
-            row = FilterRow(self.listbox,selected[0],selected[1],list())
-            self.listbox.add(row.getRow())
-            self.listbox.show_all()    
+        def on_Apply_clicked(self, widget):
+            print("Applying Formatter!")
+            
+        def on_Create_clicked(self, widget):
+            print("Creating Rule!")
+        def on_Delete_clicked(self, widget):
+            print("Deleting Rule!") 
+            
+#         def on_excludeBut_clicked(self, widget):
+#             print("Including!") 
+#             
+#         def on_addFilter_clicked(self, widget):
+#             selected = self.expLists.getSelected()
+#             print(selected[0])
+#             row = FilterRow(self.listbox,selected[0],selected[1],list())
+#             self.listbox.add(row.getRow())
+#             self.listbox.show_all()    
 
