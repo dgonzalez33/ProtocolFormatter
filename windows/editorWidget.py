@@ -13,9 +13,9 @@ class EditorWidget:
             self.packetLabel = Gtk.Label()
             self.packetnum = ""
             self.packetproto = ""
-            self.annotate_actions = []
-            self.hiding_actions = []
-            self.renaming_actions = []
+            self.annotate_actions = {}
+            self.hiding_actions = {}
+            self.renaming_actions = {}
             
         def create_widget(self):
 
@@ -146,7 +146,7 @@ class EditorWidget:
             x = 0
             
             if(attribname == "Annotate"):
-                self.annotate_actions.append(AnnotatingAction(attribname, text, fieldname))
+                self.annotate_actions[proto] = (AnnotatingAction(attribname, text, fieldname))
             else:
                 while(x < len(attribsnames)):
     #                 print(attribsnames[x])
@@ -154,7 +154,7 @@ class EditorWidget:
                         if(attribvalues[x] != text):
                             attribvalues[x] = text
                             print("set ", attribsnames[x], " to ", text)
-                            self.renaming_actions.append(RenamingAction(attribname, text, fieldname))
+                            self.renaming_actions[proto] = (RenamingAction(attribname, text, fieldname))
                     x+=1
             
             self.fieldtreestore[path][1] = text
