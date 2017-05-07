@@ -10,6 +10,7 @@ class FilterWidget:
 
         def __init__(self):
             self.filterlist = []
+            self.bpf = ""
             self.packetwidget = PacketWidget()
             
         def set_packet_widget(self, pwidget):
@@ -17,7 +18,7 @@ class FilterWidget:
 
         def create_widget(self):
             vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-            self.model_filter = None
+            self.model_filter = Filter()
             bpfContainer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
             vbox.pack_start(bpfContainer,True,True,0)
             filterContainer = Gtk.Box(spacing=6)
@@ -95,22 +96,22 @@ class FilterWidget:
                 row = FilterRow(self.listbox,self.expLists.getSelected()[0],self.primValue,self.filters)
                 self.listbox.add(row.getRow())
                 self.listbox.show_all()   
-        def set_Filter_Inst(self, modelf):
-            self.model_filter = modelf
+        def set_pdmlman(self, pdml):
+            self.model.filter.set_pdmlman(pdml)
         def get_filter_list(self):
-            return self.filterlist
+            return self.
+        def get_filter(self):
+            return self.bpf
         def on_butCreate_clicked(self, widget):
-            bpf = ""
             first = True
             for row in self.filters:
                   line = row[0] + " " + row[1]
                   if(first):
-                        bpf += line
+                        self.bpf += line
                         first = False
                   else:
-                        bpf += " "+line
-            print(bpf)
-            self.model_filter = Filter()
+                        self.bpf += " "+line
+            print(self.bpf)
             self.model_filter.set_bpf_filter(bpf, "","")
             self.model_filter.saveFilter(self.customName.get_text())
             self.filterlist = self.model_filter.getViewProtos()
