@@ -139,3 +139,4 @@ class FilterWidget:
                 row = FilterRow(self.listbox,selected[0],selected[1],self.filters)
                 self.listbox.add(row.getRow())
                 self.listbox.show_all() 
+                self.listbox.show_all()    
