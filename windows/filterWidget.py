@@ -104,14 +104,18 @@ class FilterWidget:
             return self.bpf
         def on_butCreate_clicked(self, widget):
             first = True
+            self.bpf = ""
             for row in self.filters:
-                line = row[0] + " " + row[1]
+                if(row[1] == ""):
+                    line = row[0]
+                else:
+                    line = row[0] + " " + row[1]
                 if(first):
                     self.bpf += line
                     first = False
                 else:
-                        self.bpf += " "+line
-            print(self.bpf)
+                    self.bpf += " "+line
+            print(self.bpf+"|")
             print(self.model_filter)
             self.model_filter.set_pdmlman(self.personalman)
             self.model_filter.set_bpf_filter(self.bpf, "","")

@@ -4,7 +4,10 @@ import os
 import json
 from PDMLSub.PDMLManager import pdmlmanager
 class Filter:
-    def setFilter(self):
+    def setFilter(self):      
+        if(self.bpfFilter == " "):
+            self.parseList = ""
+            return      
         self.bpfFilter = self.bpfFilter.replace("&&", "and")
         self.bpfFilter = self.bpfFilter.replace("||", "or")
         self.bpfFilter = self.bpfFilter.replace("!", "not")
@@ -40,8 +43,6 @@ class Filter:
             self.bpfFilter = self.bpfFilter.replace("ip proto "+proto,proto)
         for proto in self.isoProtos:
             self.bpfFilter = self.bpfFilter.replace("iso proto "+proto,proto)
-        for proto in self.protocols:
-            self.bpfFilter = self.bpfFilter.replace(proto+" ",proto+".")
         # self.bpfFilter = self.bpfFilter.replace("ip ","ip.")
         parseList = self.bpfFilter.split("and")
         andList = list()
@@ -50,6 +51,8 @@ class Filter:
             orList = list()
             for primOr in parseOr:
                 primOr = primOr.rstrip().lstrip()
+                for proto in self.protocols:
+                    primOr = primOr.replace(proto+" ",proto+".")
                 if("net" in primOr):
                     primOr = primOr.replace("net", "host")
                     primOr += ".*"
@@ -64,7 +67,12 @@ class Filter:
                         primOr = primOr[:0] + "(?!"+primOr[0:] + ")"
                 ors = primOr.split(" ")
                 if("." not in ors[0]):
-                    ors[0] = '.*[.]'+ors[0]+"$"
+                    skip = False
+                    for proto in self.protocols:
+                        if proto in ors[0]:
+                            skip = True
+                    if(skip is False):
+                        ors[0] = '.*[.]'+ors[0]+"$"
                 if(ors[0][-2:] == ".$"):
                     ors[0] = ors[0][:-2]
                 if(ors[0][-3:] == ".$)"):
@@ -81,15 +89,17 @@ class Filter:
                 orList.append(ors)
             andList.append(orList)
         self.parseList = andList
-        #print(andList)
+        print(andList)
         return andList
 
     def set_pdmlman(self, pman):
         self.pdmlman = pman
-
+    def get_pdmlman(self):
+        return self.pdmlman
     def applyFilter(self):
         self.setFilter()
         self.protosKept = list()
+        self.viewProtos = list()
         packets = self.pdmlman.get_all_packets()
         for pack in packets:
             protos = pack.get_proto_element()
@@ -168,6 +178,7 @@ class Filter:
         self.iContentFilter = ""
         self.viewProtos = list()
         self.eContentFilter = ""
+        self.pdmlman = None
         self.parseList = list()
         
     def set_bpf_filter(self, bpf, icontent, econtent):

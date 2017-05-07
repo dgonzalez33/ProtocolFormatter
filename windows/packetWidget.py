@@ -83,26 +83,33 @@ class PacketWidget:
                         y+=1
                     x+=1
             else:
-                print(self.daList[0][0], self.daList[0][1])
                 filterindex = 0
                 x = 0
+
                 while(x < len(self.currentpackets)):
                     protos = self.currentpackets[x].get_proto_element()
                     y = 0
                     while(y < len(protos)):
-                        print(protos[y].proto_attributes_values[0], "+", self.daList[0][1], self.currentpackets[x].packetid, self.daList[x][0])
-                        if(self.currentpackets[x].packetid == self.daList[x][0] and protos[y].proto_attributes_values[0] == self.daList[0][1]):
-                            print("packet",x," and proto",y)
-                            self.filterlist[filterindex] = "True"
-                            print("true")
-                            filterindex+=1
-                        else:
-                            print("packet",x," and proto",y)
-                            self.filterlist[filterindex] = "False"
-                            print("false")
-                            filterindex+=1
+                        self.filterlist[filterindex] = "False"
+                        for tup in self.daList:
+                            if(self.currentpackets[x].packetid == tup[0] and protos[y].proto_attributes_values[0] == tup[1]):
+                                print(str(tup[0])+":"+str(tup[1]))
+                                self.filterlist[filterindex] = "True"
+                                print("filterIndex"+str(filterindex))
+                                break                            
+                        # if(self.currentpackets[x].packetid == self.daList[x][0] and protos[y].proto_attributes_values[0] == self.daList[x][1]):
+                        #     print("packet",x," and proto",y)
+                        #     self.filterlist[filterindex] = "True"
+                        #     print("true")
+                        #     filterindex+=1
+                        # else:
+                        #     print("packet",x," and proto",y)
+                        #     self.filterlist[filterindex] = "False"
+                        #     print("false")
+                        #     filterindex+=1
                             
-                        print(filterindex)
+                        print(str(filterindex)+":"+str(self.filterlist[filterindex]))
+                        filterindex+=1
                         y+=1
                     x+=1
                 
