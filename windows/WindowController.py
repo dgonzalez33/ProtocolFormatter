@@ -475,7 +475,7 @@ class WindowController:
         print("save was clicked")
         self.capture.set_man(self.maincontroller.get_pdml_man())
         self.capture.save_pdml(self.chosenfile)
-        self.model_filter.set_pdmlman(self.maincontroller.get_pdml_man())
+        #self.model_filter.set_pdmlman(self.maincontroller.get_pdml_man())
         self.filter_widget.set_pdmlman(self.maincontroller.get_pdml_man())
         self.update_pdml_contents()
         self.make_prompt_window("saved "+self.chosenfile)
@@ -567,7 +567,7 @@ class WindowController:
     
     def update_pdml_contents(self):
         
-        self.model_filter.set_pdmlman(self.maincontroller.get_pdml_man())
+        #self.model_filter.set_pdmlman(self.maincontroller.get_pdml_man())
         self.filter_widget.set_pdmlman(self.maincontroller.get_pdml_man())
         #self.filter_widget.set_Filter_Inst(self.model_filter)
         filterlist = self.filter_widget.get_filter_list()
