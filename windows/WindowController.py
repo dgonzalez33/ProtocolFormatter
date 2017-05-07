@@ -473,10 +473,10 @@ class WindowController:
         
     def on_Save_clicked(self, widget):
         print("save was clicked")
-        #self.capture.set_man(self.maincontroller.get_pdml_man())
+        self.capture.set_man(self.maincontroller.get_pdml_man())
         self.capture.save_pdml(self.chosenfile)
-#         self.model_filter.set_pdmlman(self.maincontroller.get_pdml_man())
-#         self.filter_widget.set_Filter_Inst(self.model_filter)
+        self.model_filter.set_pdmlman(self.maincontroller.get_pdml_man())
+        self.filter_widget.set_Filter_Inst(self.model_filter)
         self.update_pdml_contents()
         self.make_prompt_window("saved "+self.chosenfile)
 
@@ -536,7 +536,7 @@ class WindowController:
                     else:
                         self.previousfile = self.chosenfile+".history"
                         self.createFilePath(self.previousfile)
-                        #self.capture.set_man(self.maincontroller.get_pdml_man())
+                        self.capture.set_man(self.maincontroller.get_pdml_man())
                         self.capture.save_pdml(self.previousfile)
                         self.history_widget.set_controller(self.maincontroller)
                         self.history_widget.set_capture(self.capture)
@@ -572,11 +572,11 @@ class WindowController:
         filterlist = self.filter_widget.get_filter_list()
         self.history_widget.clear_list()
         self.packet_widget.clear_list()
-       
         packets = self.maincontroller.get_all_packets()
         self.editor_widget.set_pdml_man(self.maincontroller.get_pdml_man())
         self.packet_widget.clear_filter_list()
         self.packet_widget.update_packet_window(packets)
+        
         
     def make_error_window(self, message):
         ww = Gtk.Window()
