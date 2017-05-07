@@ -37,23 +37,5 @@ class Rule:
                         # field.get_all_field_attributes_value()[0] = booboo
                         print(field.get_all_field_attributes_value())
                         changes[field] = temp
-        pdmlString = ""
-        for proto in protoList:
-            protoNames = proto.get_all_proto_attrib_names()
-            protoVals = proto.get_all_proto_attrib_values()
-            pdmlString += ("<")
-            for name, val in zip(protoNames,protoVals):
-                pdmlString += (name+"=\""+val+"\"")
-            pdmlString += (">\n")
-            fields = proto.get_field_element()
-            for field in fields:
-                fieldNames = field.get_all_field_attributes_name()
-                fieldValues = field.get_all_field_attributes_value()
-                pdmlString += ("\t<")
-                for name, val in zip(fieldNames, fieldValues):
-                    pdmlString += (name+"=\""+val+"\"")
-                pdmlString += ("/>\n")
-            pdmlString += ("</proto>\n")
-        print(pdmlString)
         return changes
 

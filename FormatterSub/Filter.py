@@ -144,7 +144,7 @@ class Filter:
         return self.viewProtos
 
     def saveFilter(self,name):
-        filterJson = filterToJson()
+        filterJson = self.filterToJson()
         dir_path = os.path.dirname(os.path.realpath(__file__))
         with open(dir_path+"/Filters/"+name+".json", "w") as f:
             json.dump(filterJson,f)
