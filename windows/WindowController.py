@@ -183,6 +183,7 @@ class WindowController:
         #begin creating items for the drop down menu            
         self.filter_item = Gtk.MenuItem("Filter")
         self.filter_item.connect("activate",self.create_filter_window)
+        self.filter_item.set_sensitive(False)
 
         self.editor_item = Gtk.MenuItem("Editor")
         self.editor_item.connect("activate",self.create_editor_window)
@@ -289,6 +290,7 @@ class WindowController:
             self.modeLabel.set_text("Edit")
             self.editor_window = Gtk.Window()
             self.editor_window.set_size_request(500, 500)
+            self.editor_window.add_events(Gdk.EventMask.BUTTON_PRESS_MASK)
             self.packet_widget.set_editor_widget(self.editor_widget)
             self.packet_widget.editorisopen = 1
             self.editorbox = self.editor_widget.create_widget()
@@ -408,11 +410,12 @@ class WindowController:
         f_imagebox.pack_start(f_label, False, False, 0)
         f_image.show()
         f_label.show()
-        filterButton = Gtk.Button()
-        filterButton.set_alignment(xalign=0.0, yalign=1)
-        filterButton.connect("clicked",self.create_filter_window)
-        filterButton.add(f_imagebox)
-        buttonContainer.pack_start(filterButton,False,False,2)
+        self.filterButton = Gtk.Button()
+        self.filterButton.set_alignment(xalign=0.0, yalign=1)
+        self.filterButton.connect("clicked",self.create_filter_window)
+        self.filterButton.add(f_imagebox)
+        buttonContainer.pack_start(self.filterButton,False,False,2)
+        self.filterButton.set_sensitive(False)
         
         u_imagebox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
         u_imagebox.set_border_width(2)
@@ -552,6 +555,8 @@ class WindowController:
                     self.saveButton.set_sensitive(True)
                     self.editor_item.set_sensitive(True)
                     self.historical_item.set_sensitive(True)
+                    self.filter_item.set_sensitive(True)
+                    self.filterButton.set_sensitive(True)
                     
                     
                 else:
@@ -648,6 +653,10 @@ class WindowController:
             self.update_pdml_contents()
             self.save_item.set_sensitive(True)
             self.saveButton.set_sensitive(True)
+            self.filter_item.set_sensitive(True)
+            self.filterButton.set_sensitive(True)
+            self.editor_item.set_sensitive(True)
+            self.historical_item.set_sensitive(True)
             self.modeLabel.modify_fg(Gtk.StateFlags.NORMAL, Gdk.color_parse("yellow") )
             self.modeLabel.set_text("Filter")
         else:

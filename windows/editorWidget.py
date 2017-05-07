@@ -2,6 +2,9 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from PDMLSub.PDMLManager import pdmlmanager
+from FormatterSub.AnnotatingAction import AnnotatingAction
+from FormatterSub.HidingAction import HidingAction
+from FormatterSub.RenamingAction import RenamingAction
 
 
 class EditorWidget:
@@ -10,7 +13,10 @@ class EditorWidget:
             self.packetLabel = Gtk.Label()
             self.packetnum = ""
             self.packetproto = ""
-        
+            self.annotate_actions = []
+            self.hiding_actions = []
+            self.renaming_actions = []
+            
         def create_widget(self):
 
             
@@ -46,6 +52,7 @@ class EditorWidget:
             fieldcell2 = Gtk.CellRendererText()
             fieldcell2.set_property("editable", True)
             fieldcell2.connect("edited", self.text_edited)
+            #fieldcell2.connect("clicked", self.on_cell_clicked)
             
             fieldtvcolumn = Gtk.TreeViewColumn('Field')
             fieldtreeview.append_column(fieldtvcolumn)
@@ -63,6 +70,8 @@ class EditorWidget:
             fieldtreeview.set_search_column(0)
             fieldtreeview.set_reorderable(True)
             fieldtreeview.connect('size-allocate', self.treeview_changed)
+            fieldtreeview.connect('button-press-event', self.on_cell_clicked)
+            
 
             
             
@@ -85,7 +94,13 @@ class EditorWidget:
             
             return vbox
 
-            
+        def on_cell_clicked(self, treeview, event):
+            if(event.button == 3):
+                path = treeview.get_path_at_pos(event.x, event.y)
+                print(self.fieldtreestore[path[0]][1])
+                #print(self.fieldtreestore[path][0])
+                print("right click detected")
+                
 
         def treeview_changed(self, widget, event, data = None):
             adj = self.fieldscrolledview.get_vadjustment()
@@ -129,15 +144,23 @@ class EditorWidget:
             print(attribsnames)
             print(attribvalues)
             x = 0
-            while(x < len(attribsnames)):
-#                 print(attribsnames[x])
-                if(attribsnames[x] == attribname):
-                    attribvalues[x] = text
-                    print("set ", attribsnames[x], " to ", text)
-                x+=1
+            
+            if(attribname == "Annotate"):
+                self.annotate_actions.append(AnnotatingAction(attribname, text, fieldname))
+            else:
+                while(x < len(attribsnames)):
+    #                 print(attribsnames[x])
+                    if(attribsnames[x] == attribname):
+                        if(attribvalues[x] != text):
+                            attribvalues[x] = text
+                            print("set ", attribsnames[x], " to ", text)
+                            self.renaming_actions.append(RenamingAction(attribname, text, fieldname))
+                    x+=1
             
             self.fieldtreestore[path][1] = text
-
+            
+            print(self.annotate_actions)
+            print(self.renaming_actions)
             
         
         def clear_list(self):
@@ -164,7 +187,7 @@ class EditorWidget:
                 while(y < len(fieldnames)):
                     self.fieldtreestore.append(fielditer, ["["+str(y-1)+"] "+fieldnames[y],fieldvalues[y]])
                     y+=1
-                
+                self.fieldtreestore.append(fielditer, ["Annotate",""])
                 x+=1
                 
             
