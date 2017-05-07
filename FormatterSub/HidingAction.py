@@ -6,4 +6,4 @@ from FormatterSub.Action import Action
 
 class HidingAction(Action):
     def __init__(self, value, key):
-    	super(Action).__init__("hide",value,key)
+    	super().__init__("hide",value,key)

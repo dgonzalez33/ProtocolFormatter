@@ -1,4 +1,4 @@
-from Filter import Filter
+from FormatterSub.Filter import Filter
 import copy
 class Rule:
     def __init__(self):
