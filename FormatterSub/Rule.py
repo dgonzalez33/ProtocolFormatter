@@ -10,8 +10,12 @@ class Rule:
         self.filter.setFilter()
     def getFilter(self):
         return self.filter
+    def getFilterName(self):
+        return self.filter.getName()
     def addAction(self, action):
         self.actionList.append(action)
+    def getActions(self):
+        return self.actionList
     def applyRule(self, pdml):
         changes = {}
         # print(type(self.filter))

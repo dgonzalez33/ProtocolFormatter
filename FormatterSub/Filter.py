@@ -158,6 +158,12 @@ class Filter:
         dir_path = os.path.dirname(os.path.realpath(__file__))
         with open(dir_path+"/Filters/"+name+".json", "w") as f:
             json.dump(filterJson,f)
+        self.name = name
+    def getName(self):
+        # if self.name == None:
+        return self.bpfFilter
+        # else:
+            # return self.name
     def filterToJson(self):
         filterJson = {}
         filterJson["bpf"] = self.bpfFilter
@@ -175,6 +181,7 @@ class Filter:
         self.conjuctions = ['and', 'or','&&', '||']
         self.dirs = ['src','dst']
         self.bpfFilter = ""
+        self.name = ""
         self.iContentFilter = ""
         self.viewProtos = list()
         self.eContentFilter = ""
