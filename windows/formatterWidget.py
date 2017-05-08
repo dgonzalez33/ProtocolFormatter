@@ -110,8 +110,8 @@ class FormatterWidget:
         def set_pdmlman(self, pdmlman):
             self.personalman = pdmlman
             protocols = self.personalman.get_all_protocol_names()
-            for i in range(0, len(self.appliedlistbox)):
-                         self.appliedlistbox.remove(self.appliedlistbox.get_row_at_index(i))
+#             for i in range(0, len(self.appliedlistbox)):
+#                          #self.appliedlistbox.remove(self.appliedlistbox.get_row_at_index(i))
             for proto in protocols:
                   self.formatters.append(Formatter(self.personalman,proto))
                   row = FormatterRow(self.appliedlistbox,proto,self.formatterList,-1)
