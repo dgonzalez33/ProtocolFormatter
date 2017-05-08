@@ -6,6 +6,7 @@ from FormatterSub.AnnotatingAction import AnnotatingAction
 from FormatterSub.HidingAction import HidingAction
 from FormatterSub.RenamingAction import RenamingAction
 from FormatterSub.HookAction import HookAction
+from windows.hookWidget import HookWidget
 import os.path as os
 
 class EditorWidget:
@@ -102,7 +103,13 @@ class EditorWidget:
             return vbox
         def get_actions(self):
             return self.actions
-        
+        def create_hook_window(self, fieldelement, proto):
+            hook_widget = HookWidget(self.actions, proto)
+            hookbox = hook_widget.create_widget(fieldelement)
+            hook_window = Gtk.Window()
+            hook_window.set_size_request(500, 300)
+            hook_window.add(hookbox)
+            hook_window.show_all()
         def on_cell_clicked(self, treeview, event):
             if(event.button == 3):
                 path = treeview.get_path_at_pos(event.x, event.y)
@@ -124,34 +131,34 @@ class EditorWidget:
                 print("fieldname",fieldname)
                 print("attribname", attribname)
                 
-                
-                w = Gtk.Window(Gtk.WindowType.POPUP)
-                self.opendialog = Gtk.FileChooserDialog("Please choose a Hook", w,
-                    Gtk.FileChooserAction.OPEN,
-                    (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
-                     Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
-                # print("./"+os.getcwd()+"/Scripts")
-                # self.opendialog.set_current_folder("./"+os.getcwd()+"/Scripts")
-                self.opendialog.set_current_folder(os.abspath('../Scripts'))
-                self.opendialog.set_transient_for(w)
-                w.add(self.opendialog)
-                response = self.opendialog.run()
-                if response == Gtk.ResponseType.OK:
-                    print("Open clicked")
-                    self.chosenfile = self.opendialog.get_filename()
-                    print("filename chosen",self.chosenfile)
-                    #self.scriptBuffer.set_text(self.read_file(self.chosenfile))
-                    #self.hook_actions[proto].append(HookAction(self.chosenfile, self.fieldtreestore[val[0]][1]))
-                    try:
-                        self.actions[proto].append(HookAction(self.chosenfile, self.fieldtreestore[val[0]][1]))
-                    except KeyError:
-                        self.actions[proto] = list()
-                        self.actions[proto].append(HookAction(self.chosenfile, self.fieldtreestore[val[0]][1]))
+                self.create_hook_window([(fieldname,attribname)], proto)
+                # w = Gtk.Window(Gtk.WindowType.POPUP)
+                # self.opendialog = Gtk.FileChooserDialog("Please choose a Hook", w,
+                #     Gtk.FileChooserAction.OPEN,
+                #     (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+                #      Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
+                # # print("./"+os.getcwd()+"/Scripts")
+                # # self.opendialog.set_current_folder("./"+os.getcwd()+"/Scripts")
+                # self.opendialog.set_current_folder(os.abspath('../Scripts'))
+                # self.opendialog.set_transient_for(w)
+                # w.add(self.opendialog)
+                # response = self.opendialog.run()
+                # if response == Gtk.ResponseType.OK:
+                #     print("Open clicked")
+                #     self.chosenfile = self.opendialog.get_filename()
+                #     print("filename chosen",self.chosenfile)
+                #     #self.scriptBuffer.set_text(self.read_file(self.chosenfile))
+                #     #self.hook_actions[proto].append(HookAction(self.chosenfile, self.fieldtreestore[val[0]][1]))
+                #     try:
+                #         self.actions[proto].append(HookAction(self.chosenfile, self.fieldtreestore[val[0]][1]))
+                #     except KeyError:
+                #         self.actions[proto] = list()
+                #         self.actions[proto].append(HookAction(self.chosenfile, self.fieldtreestore[val[0]][1]))
     
-                elif response == Gtk.ResponseType.CANCEL:
-                    print("Cancel clicked")
-                self.opendialog.destroy()
-                w.destroy()
+                # elif response == Gtk.ResponseType.CANCEL:
+                #     print("Cancel clicked")
+                # self.opendialog.destroy()
+                # w.destroy()
                 
                 print(self.annotate_actions)
                 print(self.renaming_actions)

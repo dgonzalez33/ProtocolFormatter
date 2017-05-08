@@ -77,7 +77,7 @@ class WindowController:
         self.script_widget = ScriptWidget()
         self.filter_widget = FilterWidget()
         self.filterbar_widget = FilterBarWidget()
-        self.hook_widget = HookWidget()
+        self.hook_widget = HookWidget({},"")
         self.command_widget = CommandLineWidget()
         self.history_widget = HistoricalCopyWidget()
         #boxes
@@ -89,7 +89,7 @@ class WindowController:
         self.scriptbox = self.script_widget.create_widget()
         self.filterbox = self.filter_widget.create_widget()
         self.filterbarbox = self.filterbar_widget.create_widget()
-        self.hookbox = self.hook_widget.create_widget()
+        self.hookbox = self.hook_widget.create_widget([("","")])
         self.commandbox = self.command_widget.create_widget()
         self.historybox = self.history_widget.create_widget()
         self.filter_widget.set_formatter_widget(self.formatter_widget)
@@ -321,7 +321,7 @@ class WindowController:
         if(not hookOpen):
             self.hook_window = Gtk.Window()
             self.hook_window.set_size_request(500, 300)
-            self.hookbox = self.hook_widget.create_widget()
+            self.hookbox = self.hook_widget.create_widget([("","")])
             self.insert_widget_to_window("Hook Window", self.hookbox, self.hook_window)
             hookOpen = True
 

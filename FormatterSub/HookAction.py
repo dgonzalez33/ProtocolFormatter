@@ -22,4 +22,7 @@ class HookAction(Action):
         resultString = hook.applyScript()
         #parse result string here, change attribute and value found and return
         #new target
-        return resultString
+        newtarget = self.copyfieldelement(target)
+        if newtarget.set_field_attrib(arguments[0], arguments[1]) == -1:
+            newtarget.set_field_attrib(arguments[0], arguments[1])
+        return newtarget

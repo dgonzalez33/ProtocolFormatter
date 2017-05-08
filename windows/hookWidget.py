@@ -1,15 +1,21 @@
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-from windows.filterList import FilterList
+from windows.hookList import HookList
 from windows.filterRow import FilterRow
 from windows.scriptWidget import ScriptWidget
+from FormatterSub.HookAction import HookAction
 import os.path as osp
 class HookWidget:
-            
-        def create_widget(self):
+        def __init__(self, actions, proto):
+            self.actions = actions
+            self.proto = proto
+            return
+
+
+        def create_widget(self, fieldList):
             vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-            
+            self.hooks = ["",""]
             fieldContainer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
             vbox.pack_start(fieldContainer,True,True,0)
 
@@ -18,7 +24,7 @@ class HookWidget:
             fieldLabel.set_alignment(xalign=0, yalign=1) 
             fieldContainer.pack_start(fieldLabel,True,True,0)
 
-            self.expLists = FilterList()
+            self.expLists = HookList(fieldList)
             hoodAdd = Gtk.Box(spacing = 6)
             fieldContainer.pack_start(hoodAdd,True,True,0)
             hoodAdd.pack_start(self.expLists.getList(),True,True,0)
@@ -63,7 +69,7 @@ class HookWidget:
             self.box.pack_start(self.butCancel,False,False,0)
             
             return vbox
-            
+        
         def add_script_clicked(self, widget):
             w = Gtk.Window(Gtk.WindowType.POPUP)
             self.opendialog = Gtk.FileChooserDialog("Please choose a file", w,
@@ -86,7 +92,12 @@ class HookWidget:
         def set_fields(self,fields):
             print("eventually")
         def on_butCreate_clicked(self, widget):
-            print("eventually")
+            try:
+                self.actions[self.proto].append(HookAction(self.chosenfile, self.hooks))
+            except KeyError:
+                self.actions[self.proto] = list()
+                self.actions[self.proto].append(HookAction(self.chosenfile, self.hooks))
+            return
         def on_butReset_clicked(self, widget):
             print("Resetting FIlter!")
         def create_script_clicked(self, widget):
@@ -98,12 +109,11 @@ class HookWidget:
             self.script_window.add(self.scriptbox)
             self.script_window.show_all()
             
-        def on_excludeBut_clicked(self, widget):
-            print("Including!") 
         def on_addField_clicked(self, widget):
             selected = self.expLists.getSelected()
             print(selected[0])
             row = FilterRow(self.listbox,selected[0],selected[1],list())
             self.listbox.add(row.getRow())
-            self.listbox.show_all()    
+            self.listbox.show_all()
+            self.hooks = [selected[0],selected[1]]    
 
