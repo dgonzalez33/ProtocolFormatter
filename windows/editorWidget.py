@@ -5,6 +5,8 @@ from PDMLSub.PDMLManager import pdmlmanager
 from FormatterSub.AnnotatingAction import AnnotatingAction
 from FormatterSub.HidingAction import HidingAction
 from FormatterSub.RenamingAction import RenamingAction
+from FormatterSub.HookAction import HookAction
+import os.path as os
 
 class EditorWidget:
     
@@ -15,6 +17,7 @@ class EditorWidget:
             self.annotate_actions = {}
             self.hiding_actions = {}
             self.renaming_actions = {}
+            self.hook_actions = {}
             self.actions = {}
             
         def create_widget(self):
@@ -99,10 +102,62 @@ class EditorWidget:
             return vbox
         def get_actions(self):
             return self.actions
+        
         def on_cell_clicked(self, treeview, event):
             if(event.button == 3):
                 path = treeview.get_path_at_pos(event.x, event.y)
-                print(self.fieldtreestore[path[0]][1])
+                print(path[0])
+                val = path[0]
+                print(val)
+                num = self.packetnum
+                proto = self.packetproto
+                fieldname = self.fieldtreestore[val[0]][1]
+                fieldname = fieldname.split(' ', 1)[-1]
+                
+                attribname = self.fieldtreestore[val][0]
+                attribname = attribname.split(' ', 1)[-1]
+    
+                fieldelement = self.pdmlman.get_field_element(int(num), proto, fieldname)
+                
+                print("packetnum",num)
+                print("proto", proto)
+                print("fieldname",fieldname)
+                print("attribname", attribname)
+                
+                
+                w = Gtk.Window(Gtk.WindowType.POPUP)
+                self.opendialog = Gtk.FileChooserDialog("Please choose a Hook", w,
+                    Gtk.FileChooserAction.OPEN,
+                    (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+                     Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
+                # print("./"+os.getcwd()+"/Scripts")
+                # self.opendialog.set_current_folder("./"+os.getcwd()+"/Scripts")
+                self.opendialog.set_current_folder(os.abspath('../Scripts'))
+                self.opendialog.set_transient_for(w)
+                w.add(self.opendialog)
+                response = self.opendialog.run()
+                if response == Gtk.ResponseType.OK:
+                    print("Open clicked")
+                    self.chosenfile = self.opendialog.get_filename()
+                    print("filename chosen",self.chosenfile)
+                    #self.scriptBuffer.set_text(self.read_file(self.chosenfile))
+                    #self.hook_actions[proto].append(HookAction(self.chosenfile, self.fieldtreestore[val[0]][1]))
+                    try:
+                        self.actions[proto].append(HookAction(self.chosenfile, self.fieldtreestore[val[0]][1]))
+                    except KeyError:
+                        self.actions[proto] = list()
+                        self.actions[proto].append(HookAction(self.chosenfile, self.fieldtreestore[val[0]][1]))
+    
+                elif response == Gtk.ResponseType.CANCEL:
+                    print("Cancel clicked")
+                self.opendialog.destroy()
+                w.destroy()
+                
+                print(self.annotate_actions)
+                print(self.renaming_actions)
+                print(self.hiding_actions)
+                print(self.hook_actions)
+#                 print(self.fieldtreestore[path[0]][1])
                 #print(self.fieldtreestore[path][0])
                 print("right click detected")
                 
@@ -155,6 +210,7 @@ class EditorWidget:
             print(self.annotate_actions)
             print(self.renaming_actions)
             print(self.hiding_actions)
+            print(self.hook_actions)
             return   
                 
         def on_annotate_clicked(self, button):
