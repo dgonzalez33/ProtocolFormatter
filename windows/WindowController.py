@@ -594,6 +594,7 @@ class WindowController:
                     self.script_item.set_sensitive(True)
                     self.hook_item.set_sensitive(True)
                     self.commandline_item.set_sensitive(True)
+                    self.filterbar_widget.activate_button()
                     
                     
                     
@@ -707,6 +708,7 @@ class WindowController:
             self.script_item.set_sensitive(True)
             self.hook_item.set_sensitive(True)
             self.commandline_item.set_sensitive(True)
+            self.filterbar_widget.activate_button()
             
             self.modeLabel.modify_fg(Gtk.StateFlags.NORMAL, Gdk.color_parse("yellow") )
             self.modeLabel.set_text("Filter")
@@ -741,6 +743,7 @@ class WindowController:
         self.script_item.set_sensitive(True)
         self.hook_item.set_sensitive(True)
         self.commandline_item.set_sensitive(True)
+        
 
     def destroyFilter(self, w):
         print("filter destroyed! \m/")
