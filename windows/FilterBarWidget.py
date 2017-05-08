@@ -57,8 +57,10 @@ class FilterBarWidget:
         if(self.protoEntry.get_text() == ""):
             self.p_widget.current_filter_language = None 
         else:
-            self.p_widget.current_filter_language = self.protoEntry.get_text()
-        self.p_widget.refilter_list()
+            templist = []
+            templist.append(self.protoEntry.get_text())
+            self.p_widget.set_filter_list_all_packets(templist)
+        #self.p_widget.refilter_list()
 
         
     def set_packet_widget(self, widget):

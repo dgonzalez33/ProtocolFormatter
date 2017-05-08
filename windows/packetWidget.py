@@ -97,16 +97,50 @@ class PacketWidget:
                                 self.filterlist[filterindex] = "True"
                                 print("filterIndex"+str(filterindex))
                                 break                            
-                        # if(self.currentpackets[x].packetid == self.daList[x][0] and protos[y].proto_attributes_values[0] == self.daList[x][1]):
-                        #     print("packet",x," and proto",y)
-                        #     self.filterlist[filterindex] = "True"
-                        #     print("true")
-                        #     filterindex+=1
-                        # else:
-                        #     print("packet",x," and proto",y)
-                        #     self.filterlist[filterindex] = "False"
-                        #     print("false")
-                        #     filterindex+=1
+          
+                            
+                        print(str(filterindex)+":"+str(self.filterlist[filterindex]))
+                        filterindex+=1
+                        y+=1
+                    x+=1
+                
+            self.clear_list()
+            self.update_packet_window(self.currentpackets)   
+            self.refilter_list()
+            print("yay ", self.filterlist)
+        
+        def set_filter_list_all_packets(self, flist):
+            self.daList = flist
+           
+            if(len(self.daList) < 1):
+                x = 0
+                self.filterlist.clear()
+                print("i was empty")
+                while(x < len(self.currentpackets)):
+                    proto = self.currentpackets[x].get_proto_element()
+                    y = 0 
+                    while(y < len(proto)):
+                    
+                        self.filterlist.append("False")
+                        y+=1
+                    x+=1
+            else:
+                filterindex = 0
+                x = 0
+
+                while(x < len(self.currentpackets)):
+                    protos = self.currentpackets[x].get_proto_element()
+                    y = 0
+                    while(y < len(protos)):
+                        self.filterlist[filterindex] = "False"
+                        
+                        print(protos[y].proto_attributes_values[0], " ", self.daList[0])
+                        if(protos[y].proto_attributes_values[0] == self.daList[0]):
+                            #print(str(tup[0])+":"+str(tup))
+                            self.filterlist[filterindex] = "True"
+                            print("filterIndex"+str(filterindex))
+                                                        
+          
                             
                         print(str(filterindex)+":"+str(self.filterlist[filterindex]))
                         filterindex+=1
