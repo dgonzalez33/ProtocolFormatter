@@ -1,7 +1,7 @@
 from FormatterSub.Action import Action
 from PDMLSub.FieldElement import fieldelement
 from FileSub.Script import Script
-from FormatterSub.RenamingAction import RenamingAction
+
 
 class HookAction(Action):
     arguments = []
@@ -18,8 +18,8 @@ class HookAction(Action):
     def getActionResult(self, target):
         #Still need to parse through what script returns
         #format is: "attribute\r\nvalue..."
-        hook = Script(self.scriptPath, arguments)
+        hook = Script(self.scriptPath, self.arguments)
         resultString = hook.applyScript()
         #parse result string here, change attribute and value found and return
         #new target
-        return
+        return resultString
