@@ -19,9 +19,6 @@ class EditorWidget:
             
         def create_widget(self):
 
-            
-
-            
             vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
             self.packetLabel = Gtk.Label()
             self.packetLabel.set_markup("<b>NO PACKET SELECTED</b>")
@@ -35,31 +32,34 @@ class EditorWidget:
             contentBox.pack_start(self.fieldscrolledview, True, True, 0)
             
             
-            self.fieldtreestore = Gtk.TreeStore(str, str)
-            fieldtreeview = Gtk.TreeView(self.fieldtreestore)
-            self.fieldscrolledview.add(fieldtreeview)
+            self.fieldtreestore = Gtk.TreeStore(str, str, bool)
+            self.fieldtreeview = Gtk.TreeView(self.fieldtreestore)
+            self.fieldscrolledview.add(self.fieldtreeview)
             
             
             
             fieldcheckCell = Gtk.CellRendererToggle();
-            fieldcheckCell.connect("toggled", self.on_cell_toggled)
+            fieldcheckCell.set_property('activatable', True)
+            fieldcheckCell.connect("toggled", self.toggled_cb, (self.fieldtreestore, 2))
+            
             fieldcell = Gtk.CellRendererText()
             fieldcell.set_property("editable", False)
             fieldcell.connect("edited", self.text_edited)
             
-            #fieldcheckCell2 = Gtk.CellRendererToggle();
-            #fieldcheckCell2.connect("toggled", self.on_cell_toggled)
+
             fieldcell2 = Gtk.CellRendererText()
             fieldcell2.set_property("editable", True)
             fieldcell2.connect("edited", self.text_edited)
             #fieldcell2.connect("clicked", self.on_cell_clicked)
             
             fieldtvcolumn = Gtk.TreeViewColumn('Field')
-            fieldtreeview.append_column(fieldtvcolumn)
+            self.fieldtreeview.append_column(fieldtvcolumn)
             fieldtvcolumn2 = Gtk.TreeViewColumn('Value')
-            fieldtreeview.append_column(fieldtvcolumn2)
+            self.fieldtreeview.append_column(fieldtvcolumn2)
+            fieldtvcolumn3 = Gtk.TreeViewColumn('Hide')
+            self.fieldtreeview.append_column(fieldtvcolumn3)
             
-            fieldtvcolumn.pack_start(fieldcheckCell, True)
+            #fieldtvcolumn.pack_start(fieldcheckCell, True)
             fieldtvcolumn.pack_start(fieldcell, True)
             fieldtvcolumn.add_attribute(fieldcell, 'text', 0)
             
@@ -67,10 +67,14 @@ class EditorWidget:
             #fieldtvcolumn2.pack_start(fieldcheckCell2, True)
             fieldtvcolumn2.add_attribute(fieldcell2, 'text', 1)
             
-            fieldtreeview.set_search_column(0)
-            fieldtreeview.set_reorderable(True)
-            fieldtreeview.connect('size-allocate', self.treeview_changed)
-            fieldtreeview.connect('button-press-event', self.on_cell_clicked)
+            fieldtvcolumn3.pack_start(fieldcheckCell, True)
+            fieldtvcolumn3.add_attribute(fieldcheckCell, "active", 2)
+            
+            
+            self.fieldtreeview.set_search_column(0)
+            self.fieldtreeview.set_reorderable(True)
+            self.fieldtreeview.connect('size-allocate', self.treeview_changed)
+            self.fieldtreeview.connect('button-press-event', self.on_cell_clicked)
             
 
             
@@ -114,11 +118,44 @@ class EditorWidget:
                 state = "off"
             print("Button", name, "was turned", state)
             
+
+            
+        def toggled_cb(self,cell, path, user_data):
+            model, column = user_data
+            print(path)
+            model[path][column] = not model[path][column]
+            
+            if(model[path][column]):
+                text = "True"
+            else:
+                text = "False"
+            num = self.packetnum
+            proto = self.packetproto
+            fieldname = self.fieldtreestore[path[0]][1]
+            fieldname = fieldname.split(' ', 1)[-1]
+            
+            attribname = self.fieldtreestore[path][0]
+            attribname = attribname.split(' ', 1)[-1]
+
+            fieldelement = self.pdmlman.get_field_element(int(num), proto, fieldname)
+            
+            print("packetnum",num)
+            print("proto", proto)
+            print("fieldname",fieldname)
+            print("attribname", attribname)
+            print(fieldelement)
+            
+            self.hiding_actions[proto] = (HidingAction(text, fieldname))
+            
+            print(self.annotate_actions)
+            print(self.renaming_actions)
+            print(self.hiding_actions)
+            return   
+                
         def on_annotate_clicked(self, button):
             print("\"Annotate\" button was clicked")     
             
-        def on_cell_toggled(self, widget, path):
-            print(path)
+        
             
         def text_edited(self, widget, path, text):
 #             print("Added "+text+" at path:", path)
@@ -161,6 +198,7 @@ class EditorWidget:
             
             print(self.annotate_actions)
             print(self.renaming_actions)
+            print(self.hiding_actions)
             
         
         def clear_list(self):
@@ -182,12 +220,12 @@ class EditorWidget:
                 fieldnames = fields[x].get_all_field_attributes_name()
                 fieldvalues = fields[x].get_all_field_attributes_value()
 
-                fielditer = self.fieldtreestore.append(None, ["("+str(x)+") "+fieldnames[0], fieldvalues[0]])
+                fielditer = self.fieldtreestore.append(None, ["("+str(x)+") "+fieldnames[0], fieldvalues[0], False])
                 y = 1
                 while(y < len(fieldnames)):
-                    self.fieldtreestore.append(fielditer, ["["+str(y-1)+"] "+fieldnames[y],fieldvalues[y]])
+                    self.fieldtreestore.append(fielditer, ["["+str(y-1)+"] "+fieldnames[y],fieldvalues[y], False])
                     y+=1
-                self.fieldtreestore.append(fielditer, ["Annotate",""])
+                self.fieldtreestore.append(fielditer, ["Annotate","", False])
                 x+=1
                 
             
@@ -198,3 +236,5 @@ class EditorWidget:
             
             
             
+
+        
