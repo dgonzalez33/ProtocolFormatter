@@ -5,20 +5,23 @@ from windows.filterList import FilterList
 from windows.filterRow import FilterRow
 from FormatterSub.Filter import Filter
 from windows.packetWidget import PacketWidget
-
+from windows.formatterWidget import FormatterWidget
 class FilterWidget:
 
         def __init__(self):
             self.filterlist = []
             self.bpf = ""
+            self.model_filter = Filter()
             self.packetwidget = PacketWidget()
             
         def set_packet_widget(self, pwidget):
             self.packetwidget = pwidget
-
+        def set_formatter_widget(self, fwidget):
+            print("formatterWidget set")
+            self.formatterWidget = fwidget
         def create_widget(self):
             vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-            self.model_filter = Filter()
+            self.formatterWidget  = None
             bpfContainer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
             vbox.pack_start(bpfContainer,True,True,0)
             filterContainer = Gtk.Box(spacing=6)
@@ -128,6 +131,7 @@ class FilterWidget:
             self.filterlist = self.model_filter.getViewProtos()
             print(self.filterlist)
             self.packetwidget.set_filter_list(self.filterlist)
+            self.formatterWidget.set_filter(self.model_filter)
             print("Applying Filter!")
             
         def on_butReset_clicked(self, widget):

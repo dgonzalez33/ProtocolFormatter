@@ -17,6 +17,8 @@ class Formatter:
             self.loadFormatter()
         self.tracker = Tracker()
         return
+    def get_name(self):
+        return self.formatterName
     def applyFormatter(self):
 
         for rule in self.ruleList:

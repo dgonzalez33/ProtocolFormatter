@@ -6,7 +6,6 @@ from FormatterSub.AnnotatingAction import AnnotatingAction
 from FormatterSub.HidingAction import HidingAction
 from FormatterSub.RenamingAction import RenamingAction
 
-
 class EditorWidget:
     
         def __init__(self):
@@ -16,6 +15,7 @@ class EditorWidget:
             self.annotate_actions = {}
             self.hiding_actions = {}
             self.renaming_actions = {}
+            self.actions = {}
             
         def create_widget(self):
 
@@ -97,7 +97,8 @@ class EditorWidget:
             legendBox.pack_start(annotateEntry,True,True,0)
             
             return vbox
-
+        def get_actions(self):
+            return self.actions
         def on_cell_clicked(self, treeview, event):
             if(event.button == 3):
                 path = treeview.get_path_at_pos(event.x, event.y)
@@ -146,7 +147,11 @@ class EditorWidget:
             print(fieldelement)
             
             self.hiding_actions[proto] = (HidingAction(text, fieldname))
-            
+            try:
+                self.actions[proto].append(HidingAction(text, fieldname))
+            except KeyError:
+                self.actions[proto] = list()
+                self.actions[proto].append(HidingAction(text, fieldname))
             print(self.annotate_actions)
             print(self.renaming_actions)
             print(self.hiding_actions)
@@ -184,6 +189,11 @@ class EditorWidget:
             
             if(attribname == "Annotate"):
                 self.annotate_actions[proto] = (AnnotatingAction(attribname, text, fieldname))
+                try:
+                    self.actions[proto].append(AnnotatingAction(attribname, text, fieldname))
+                except KeyError:
+                    self.actions[proto] = list()
+                    self.actions[proto].append(AnnotatingAction(attribname, text, fieldname))
             else:
                 while(x < len(attribsnames)):
     #                 print(attribsnames[x])
@@ -192,6 +202,11 @@ class EditorWidget:
                             attribvalues[x] = text
                             print("set ", attribsnames[x], " to ", text)
                             self.renaming_actions[proto] = (RenamingAction(attribname, text, fieldname))
+                            try:
+                                self.actions[proto].append(RenamingAction(attribname, text, fieldname))
+                            except KeyError:
+                                self.actions[proto] = list()
+                                self.actions[proto].append(RenamingAction(attribname, text, fieldname))
                     x+=1
             
             self.fieldtreestore[path][1] = text

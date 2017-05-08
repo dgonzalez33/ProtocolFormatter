@@ -80,7 +80,6 @@ class WindowController:
         self.hook_widget = HookWidget()
         self.command_widget = CommandLineWidget()
         self.history_widget = HistoricalCopyWidget()
-        
         #boxes
         self.icon_box = self.create_icon_bar()
         self.filter_box = self.filter_widget.create_widget()
@@ -93,6 +92,7 @@ class WindowController:
         self.hookbox = self.hook_widget.create_widget()
         self.commandbox = self.command_widget.create_widget()
         self.historybox = self.history_widget.create_widget()
+        self.filter_widget.set_formatter_widget(self.formatter_widget)
 
         #Windows
         self.window_main = Gtk.Window()
@@ -679,6 +679,8 @@ class WindowController:
 
     def destroyEditor(self, w):
         print("editor destroyed! \m/")
+        actions = self.editor_widget.get_actions()
+        self.formatter_widget.set_action_list(actions)
         self.modeLabel.modify_fg(Gtk.StateFlags.NORMAL, Gdk.color_parse("yellow") )
         self.modeLabel.set_text("Filter")
         self.packet_widget.editorisopen = 0

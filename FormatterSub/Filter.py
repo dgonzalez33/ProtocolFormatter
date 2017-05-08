@@ -192,7 +192,8 @@ class Filter:
         self.iContentFilter = icontent
         self.eContentFilter = econtent
         self.bpfFilter = bpf+" "
-
+    def get_filter(self):
+        return [self.bpfFilter,self.iContentFilter,self.eContentFilter]
     
 
 

@@ -9,15 +9,15 @@ from FormatterSub.HidingAction import HidingAction
 
 class FormatterWidget:
 
-        
             
         def create_widget(self):
             vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
             self.formatterList = list()
             self.ruleList = list()
-            self.actionList = list()
+            self.actionList = {}
             self.currentSelected = -1
             self.formatters = list()
+            self.filter = None
             appliedFormattersContainer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
             vbox.pack_start(appliedFormattersContainer,True,True,0)
             
@@ -72,6 +72,23 @@ class FormatterWidget:
             buttonCont.pack_start(deleteRule,True,True,0)
 
             return vbox
+        def set_filter(self, filter):
+            self.filter = filter
+        def update_actions(self):
+            if(self.currentSelected >=0):
+                  formatter = self.formatters[self.currentSelected]
+                  for key in self.actionList.keys():
+                        if(formatter.get_name() == key):
+                              index = 0
+                              print(self.actionList[key])
+                              for action in self.actionList[key]:
+                                    row = FormatterRow(self.actionsListbox, type(action).__name__,self.actionList[key], index )
+                                    index += 1
+                                    self.actionsListbox.add(row.getRow())
+                  self.actionsListbox.show_all()
+        def set_action_list(self, actionList):
+            self.actionList = actionList
+            self.update_actions()
         def formatter_select(self, list_box, row):
             self.currentSelected = row.get_index()
             print(self.currentSelected)
@@ -83,6 +100,7 @@ class FormatterWidget:
                   self.rulesListbox.add(row.getRow())
                   ruleIndex+=1
             self.rulesListbox.show_all()
+            self.update_actions()
         def set_pdmlman(self, pdmlman):
             self.personalman = pdmlman
             protocols = self.personalman.get_all_protocol_names()
@@ -93,15 +111,15 @@ class FormatterWidget:
             self.appliedlistbox.show_all() 
         def on_Apply_clicked(self, widget):
             if(self.currentSelected >=0):
-                  
                   self.formatters[self.currentSelected].applyFormatter()
-            
+
         def on_Create_clicked(self, widget):
             if(self.currentSelected >=0):
                   nxtRule = Rule()
-                  nxtact = HidingAction("True", "ip.id")
-                  nxtRule.setFilter("ip src net 192 or tcp","","")
-                  nxtRule.addAction(nxtact)
+                  filterSet = self.filter.get_filter()
+                  nxtRule.setFilter(filterSet[0],filterSet[1],filterSet[2])
+                  for acts in self.actionList[self.formatters[self.currentSelected].get_name()]:
+                        nxtRule.addAction(nxtact)
                   self.formatters[self.currentSelected].addRule(nxtRule)
                   ruleString = self.formatters[self.currentSelected].get_rules_in_string()
                   row = FormatterRow(self.rulesListbox,ruleString[-1],self.ruleList, len(ruleString)-1)
