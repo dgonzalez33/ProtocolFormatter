@@ -134,7 +134,7 @@ class WindowController:
         self.file_menu.append(self.save_item)
         self.file_menu.append(self.close_item)
         
-        self.save_item.set_sensitive(False)
+        
         
         self.open_item.show()
         self.save_item.show()
@@ -183,7 +183,6 @@ class WindowController:
         #begin creating items for the drop down menu            
         self.filter_item = Gtk.MenuItem("Filter")
         self.filter_item.connect("activate",self.create_filter_window)
-        self.filter_item.set_sensitive(False)
 
         self.editor_item = Gtk.MenuItem("Editor")
         self.editor_item.connect("activate",self.create_editor_window)
@@ -200,8 +199,7 @@ class WindowController:
         self.historical_item = Gtk.MenuItem("Historical")
         self.historical_item.connect("activate", self.create_historical_window)
         
-        self.editor_item.set_sensitive(False)
-        self.historical_item.set_sensitive(False)
+
         
         
         #insert items into the drop down menu        
@@ -266,6 +264,24 @@ class WindowController:
         self.insert_widget_to_same_Frame("Formatter Window",self.formatter_box,
                                     self.fourth_container, self.mainbox)
 
+        self.save_item.set_sensitive(False)
+        self.saveButton.set_sensitive(False)
+        self.editor_item.set_sensitive(False)
+        self.historical_item.set_sensitive(False)
+        self.filter_item.set_sensitive(False)
+        self.filterButton.set_sensitive(False)
+        self.undo_item.set_sensitive(False)
+        self.redo_item.set_sensitive(False)
+        self.restore_item.set_sensitive(False)
+        self.copy_item.set_sensitive(False)
+        self.paste_item.set_sensitive(False)
+        self.cut_item.set_sensitive(False)
+        self.undoButton.set_sensitive(False)
+        self.redoButton.set_sensitive(False)
+        self.script_item.set_sensitive(False)
+        self.hook_item.set_sensitive(False)
+        self.commandline_item.set_sensitive(False)
+        
         
         self.window_main.show_all()
     
@@ -297,6 +313,14 @@ class WindowController:
             self.insert_widget_to_window("Editor Window", self.editorbox, self.editor_window)
             editorOpen = True
             
+            
+            self.historical_item.set_sensitive(False)
+            self.filter_item.set_sensitive(False)
+            self.filterButton.set_sensitive(False)
+            self.script_item.set_sensitive(False)
+            self.hook_item.set_sensitive(False)
+            self.commandline_item.set_sensitive(False)
+            
     def create_script_window(self, widget):
         global scriptOpen
         if(not scriptOpen):
@@ -315,6 +339,7 @@ class WindowController:
             self.filterbox = self.filter_widget.create_widget()
             self.insert_widget_to_window("Filter Window", self.filterbox, self.filter_window)
             filterOpen = True
+            self.editor_item.set_sensitive(False)
 
     def create_hook_window(self, widget):
         global hookOpen
@@ -377,11 +402,11 @@ class WindowController:
         o_imagebox.pack_start(o_label, False, False, 0)
         o_image.show()
         o_label.show()
-        openButton = Gtk.Button()
-        openButton.set_alignment(xalign=0.0, yalign=1)
-        openButton.connect("clicked",self.on_Open_clicked)
-        openButton.add(o_imagebox)
-        buttonContainer.pack_start(openButton,False,False,2)
+        self.openButton = Gtk.Button()
+        self.openButton.set_alignment(xalign=0.0, yalign=1)
+        self.openButton.connect("clicked",self.on_Open_clicked)
+        self.openButton.add(o_imagebox)
+        buttonContainer.pack_start(self.openButton,False,False,2)
         
         s_imagebox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
         s_imagebox.set_border_width(2)
@@ -398,7 +423,7 @@ class WindowController:
         self.saveButton.connect("clicked",self.on_Save_clicked)
         self.saveButton.add(s_imagebox)
         buttonContainer.pack_start(self.saveButton,False,False,2)
-        self.saveButton.set_sensitive(False)
+        
         
         f_imagebox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
         f_imagebox.set_border_width(2)
@@ -415,7 +440,7 @@ class WindowController:
         self.filterButton.connect("clicked",self.create_filter_window)
         self.filterButton.add(f_imagebox)
         buttonContainer.pack_start(self.filterButton,False,False,2)
-        self.filterButton.set_sensitive(False)
+        
         
         u_imagebox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
         u_imagebox.set_border_width(2)
@@ -427,11 +452,11 @@ class WindowController:
         u_imagebox.pack_start(u_label, False, False, 0)
         u_image.show()
         u_label.show()
-        undoButton = Gtk.Button()
-        undoButton.set_alignment(xalign=0.0, yalign=1)
-        undoButton.connect("clicked",self.on_Undo_clicked)
-        undoButton.add(u_imagebox)
-        buttonContainer.pack_start(undoButton,False,False,2)
+        self.undoButton = Gtk.Button()
+        self.undoButton.set_alignment(xalign=0.0, yalign=1)
+        self.undoButton.connect("clicked",self.on_Undo_clicked)
+        self.undoButton.add(u_imagebox)
+        buttonContainer.pack_start(self.undoButton,False,False,2)
 
         r_imagebox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
         r_imagebox.set_border_width(2)
@@ -443,11 +468,11 @@ class WindowController:
         r_imagebox.pack_start(r_label, False, False, 0)
         r_image.show()
         r_label.show()
-        redoButton = Gtk.Button()
-        redoButton.set_alignment(xalign=0.0, yalign=1)
-        redoButton.connect("clicked",self.on_Redo_clicked)
-        redoButton.add(r_imagebox)
-        buttonContainer.pack_start(redoButton,False,False,2)
+        self.redoButton = Gtk.Button()
+        self.redoButton.set_alignment(xalign=0.0, yalign=1)
+        self.redoButton.connect("clicked",self.on_Redo_clicked)
+        self.redoButton.add(r_imagebox)
+        buttonContainer.pack_start(self.redoButton,False,False,2)
         
         m_label = Gtk.Label("Mode of Operation:")
         
@@ -558,6 +583,18 @@ class WindowController:
                     self.historical_item.set_sensitive(True)
                     self.filter_item.set_sensitive(True)
                     self.filterButton.set_sensitive(True)
+                    self.undo_item.set_sensitive(True)
+                    self.redo_item.set_sensitive(True)
+                    self.restore_item.set_sensitive(True)
+                    self.copy_item.set_sensitive(True)
+                    self.paste_item.set_sensitive(True)
+                    self.cut_item.set_sensitive(True)
+                    self.undoButton.set_sensitive(True)
+                    self.redoButton.set_sensitive(True)
+                    self.script_item.set_sensitive(True)
+                    self.hook_item.set_sensitive(True)
+                    self.commandline_item.set_sensitive(True)
+                    
                     
                     
                 else:
@@ -655,10 +692,22 @@ class WindowController:
             self.update_pdml_contents()
             self.save_item.set_sensitive(True)
             self.saveButton.set_sensitive(True)
-            self.filter_item.set_sensitive(True)
-            self.filterButton.set_sensitive(True)
             self.editor_item.set_sensitive(True)
             self.historical_item.set_sensitive(True)
+            self.filter_item.set_sensitive(True)
+            self.filterButton.set_sensitive(True)
+            self.undo_item.set_sensitive(True)
+            self.redo_item.set_sensitive(True)
+            self.restore_item.set_sensitive(True)
+            self.copy_item.set_sensitive(True)
+            self.paste_item.set_sensitive(True)
+            self.cut_item.set_sensitive(True)
+            self.undoButton.set_sensitive(True)
+            self.redoButton.set_sensitive(True)
+            self.script_item.set_sensitive(True)
+            self.hook_item.set_sensitive(True)
+            self.commandline_item.set_sensitive(True)
+            
             self.modeLabel.modify_fg(Gtk.StateFlags.NORMAL, Gdk.color_parse("yellow") )
             self.modeLabel.set_text("Filter")
         else:
@@ -686,11 +735,18 @@ class WindowController:
         self.packet_widget.editorisopen = 0
         global editorOpen
         editorOpen = False   
+        self.historical_item.set_sensitive(True)
+        self.filter_item.set_sensitive(True)
+        self.filterButton.set_sensitive(True)
+        self.script_item.set_sensitive(True)
+        self.hook_item.set_sensitive(True)
+        self.commandline_item.set_sensitive(True)
 
     def destroyFilter(self, w):
         print("filter destroyed! \m/")
         global filterOpen
         filterOpen = False 
+        self.editor_item.set_sensitive(True)
 
     def destroyHook(self, w):
         print("hook destroyed! \m/")
