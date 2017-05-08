@@ -53,7 +53,7 @@ class WindowController:
         self.maincontroller = controller()
         self.capture = Capture()
         self.model_filter = Filter()
-        
+        self.formattersAdded = []
         #Dialog Window
         self.chosenfile = ""
         self.previousfile = ""
@@ -72,7 +72,7 @@ class WindowController:
         self.filter_widget = FilterBarWidget()
         self.packet_widget = PacketWidget()
         
-        self.formatter_widget = FormatterWidget()
+        self.formatter_widget = FormatterWidget(self.formattersAdded)
         self.editor_widget = EditorWidget()
         self.script_widget = ScriptWidget()
         self.filter_widget = FilterWidget()
@@ -490,6 +490,7 @@ class WindowController:
         print("help was clicked")
     
     def on_Undo_clicked(self, widget):
+        self.formattersAdded.pop().undoRule()
         print("undo was clicked")
         
     def on_Redo_clicked(self, widget):

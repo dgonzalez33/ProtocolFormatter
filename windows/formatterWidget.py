@@ -8,7 +8,8 @@ from FormatterSub.Rule import Rule
 from FormatterSub.HidingAction import HidingAction
 
 class FormatterWidget:
-
+        def __init__(self,formatterApplied):
+            self.formatterApplied = formatterApplied
             
         def create_widget(self):
             vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
@@ -109,6 +110,8 @@ class FormatterWidget:
         def set_pdmlman(self, pdmlman):
             self.personalman = pdmlman
             protocols = self.personalman.get_all_protocol_names()
+            for i in range(0, len(self.appliedlistbox)):
+                         self.appliedlistbox.remove(self.appliedlistbox.get_row_at_index(i))
             for proto in protocols:
                   self.formatters.append(Formatter(self.personalman,proto))
                   row = FormatterRow(self.appliedlistbox,proto,self.formatterList,-1)
@@ -117,6 +120,7 @@ class FormatterWidget:
         def on_Apply_clicked(self, widget):
             if(self.currentSelected >=0):
                   self.formatters[self.currentSelected].applyFormatter()
+                  self.formatterApplied.append(self.formatters[self.currentSelected])
 
         def on_Create_clicked(self, widget):
 

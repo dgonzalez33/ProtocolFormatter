@@ -16,6 +16,7 @@ class Formatter:
         if Path(osp.abspath('../FormatterSub/Formatters/')+"/"+self.formatterName+'.obj').is_file():
             self.loadFormatter()
         self.tracker = Tracker()
+        self.undoIndex = len(self.ruleList)
         return
     def get_name(self):
         return self.formatterName
@@ -29,7 +30,8 @@ class Formatter:
         return
     def undoRule(self):
         self.tracker.undoLastChange()
-        self.ruleList.pop()
+        if(len(self.ruleList) > self.undoIndex):
+            self.ruleList.pop()
     def removeRule(self):
         self.ruleList.pop()
     def get_rules_in_string(self):
