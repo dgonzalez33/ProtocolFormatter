@@ -4,6 +4,8 @@ from gi.repository import Gtk
 from windows.filterList import FilterList
 from windows.formatterRow import FormatterRow
 from FormatterSub.Formatter import Formatter
+from FormatterSub.Rule import Rule
+from FormatterSub.HidingAction import HidingAction
 
 class FormatterWidget:
 
@@ -75,23 +77,36 @@ class FormatterWidget:
             print(self.currentSelected)
             ruleString = self.formatters[row.get_index()].get_rules_in_string()
             self.ruleList = self.formatters[row.get_index()].get_rules()
+            ruleIndex = 0
             for rs in ruleString:
-                  row = FormatterRow(self.rulesListbox,rs,self.ruleList)
+                  row = FormatterRow(self.rulesListbox,rs,self.ruleList, ruleIndex)
                   self.rulesListbox.add(row.getRow())
+                  ruleIndex+=1
             self.rulesListbox.show_all()
         def set_pdmlman(self, pdmlman):
             self.personalman = pdmlman
             protocols = self.personalman.get_all_protocol_names()
             for proto in protocols:
                   self.formatters.append(Formatter(self.personalman,proto))
-                  row = FormatterRow(self.appliedlistbox,proto,self.formatterList)
+                  row = FormatterRow(self.appliedlistbox,proto,self.formatterList,-1)
                   self.appliedlistbox.add(row.getRow())
             self.appliedlistbox.show_all() 
         def on_Apply_clicked(self, widget):
             if(self.currentSelected >=0):
+                  
                   self.formatters[self.currentSelected].applyFormatter()
             
         def on_Create_clicked(self, widget):
-            print("Creating Rule!")
+            if(self.currentSelected >=0):
+                  nxtRule = Rule()
+                  nxtact = HidingAction("True", "ip.id")
+                  nxtRule.setFilter("ip src net 192 or tcp","","")
+                  nxtRule.addAction(nxtact)
+                  self.formatters[self.currentSelected].addRule(nxtRule)
+                  ruleString = self.formatters[self.currentSelected].get_rules_in_string()
+                  row = FormatterRow(self.rulesListbox,ruleString[-1],self.ruleList, len(ruleString)-1)
+                  self.rulesListbox.add(row.getRow())
+                  self.rulesListbox.show_all()
+
         def on_Delete_clicked(self, widget):
             print("Deleting Rule!") 

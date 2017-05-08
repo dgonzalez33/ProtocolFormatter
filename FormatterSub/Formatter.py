@@ -25,8 +25,10 @@ class Formatter:
     def addRule(self, rule):
         self.ruleList.append(rule)
         return
-    def removeRule(self):
+    def undoRule(self):
         self.tracker.undoLastChange()
+        self.ruleList.pop()
+    def removeRule(self):
         self.ruleList.pop()
     def get_rules_in_string(self):
         stringList = []
@@ -56,17 +58,17 @@ class Formatter:
 # form.applyFormatter()
 # # print(pdml.get_pdml_as_text())
 # # form.removeRule()
-# # rule = Rule()
-# # act = HidingAction("True","ip.len")
-# # rule.setFilter("ip","","")
-# # rule.addAction(act)
-# # nxtRule = Rule()
-# # nxtact = HidingAction("True", "ip.id")
-# # nxtRule.setFilter("ip src net 192 or tcp","","")
-# # nxtRule.addAction(nxtact)
-# # form.addRule(rule)
-# # form.addRule(nxtRule)
-# # form.applyFormatter()
+# rule = Rule()
+# act = HidingAction("True","ip.len")
+# rule.setFilter("ip","","")
+# rule.addAction(act)
+# nxtRule = Rule()
+# nxtact = HidingAction("True", "ip.id")
+# nxtRule.setFilter("ip src net 192 or tcp","","")
+# nxtRule.addAction(nxtact)
+# form.addRule(rule)
+# form.addRule(nxtRule)
+# form.applyFormatter()
 # # form.removeRule()
 # # form.saveFormatter()
 # # print(form.changeForm)

@@ -139,7 +139,6 @@ class FilterWidget:
             self.filterlist = self.model_filter.getViewProtos()
             print(self.filterlist)
             self.packetwidget.set_filter_list(self.filterlist)
-            self.listbox
             print("Applying Clear Filter!")
             
         def on_includeBut_clicked(self, widget):
