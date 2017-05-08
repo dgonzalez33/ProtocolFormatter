@@ -148,7 +148,7 @@ class WindowController:
         self.undo_item.connect_object("activate",self.on_Undo_clicked, "undo")
 
         self.redo_item = Gtk.MenuItem("Redo")
-        self.redo_item.connect_object("activate",self.on_Redo_clicked, "redo")
+        self.redo_item.connect_object("activate",self.create_editor_window, "redo")
 
         self.copy_item = Gtk.MenuItem("Copy")
         self.copy_item.connect_object("activate",self.on_Copy_clicked, "copy")
@@ -461,7 +461,7 @@ class WindowController:
         r_imagebox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
         r_imagebox.set_border_width(2)
         r_image = Gtk.Image()
-        r_label = Gtk.Label("Redo")
+        r_label = Gtk.Label("Editor")
         r_label.modify_font(Pango.FontDescription("sans 8"))
         r_image.set_from_file("../images/redo.png")
         r_imagebox.pack_start(r_image, False, False, 0)
@@ -470,7 +470,7 @@ class WindowController:
         r_label.show()
         self.redoButton = Gtk.Button()
         self.redoButton.set_alignment(xalign=0.0, yalign=1)
-        self.redoButton.connect("clicked",self.on_Redo_clicked)
+        self.redoButton.connect("clicked",self.create_editor_window)
         self.redoButton.add(r_imagebox)
         buttonContainer.pack_start(self.redoButton,False,False,2)
         
