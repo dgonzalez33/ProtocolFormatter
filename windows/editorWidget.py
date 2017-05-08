@@ -296,7 +296,7 @@ class EditorWidget:
                 while(y < len(fieldnames)):
                     self.fieldtreestore.append(fielditer, ["["+str(y-1)+"] "+fieldnames[y],fieldvalues[y], False])
                     y+=1
-                self.fieldtreestore.append(fielditer, ["Annotate","", False])
+                self.fieldtreestore.append(fielditer, ["<> Annotate","", False])
                 x+=1
                 
             
