@@ -33,15 +33,16 @@ class FilterBarWidget:
     
        
         
-        submitbutton = Gtk.Button("Submit")
-        submitbutton.connect("clicked", self.update_filter)
-        submitbutton.show()
+        self.submitbutton = Gtk.Button("Submit")
+        self.submitbutton.connect("clicked", self.update_filter)
+        self.submitbutton.show()
+        self.submitbutton.set_sensitive(False)
         
         
         filterbox.add(protolabel)
         filterbox.add(self.protoEntry)
 
-        filterbox.add(submitbutton)
+        filterbox.add(self.submitbutton)
         
         filterlabelframe.add(filterbox)
         
@@ -57,11 +58,16 @@ class FilterBarWidget:
         if(self.protoEntry.get_text() == ""):
             self.p_widget.current_filter_language = None 
         else:
-            self.p_widget.current_filter_language = self.protoEntry.get_text()
-        self.p_widget.refilter_list()
+            templist = []
+            templist.append(self.protoEntry.get_text())
+            self.p_widget.set_filter_list_all_packets(templist)
+        #self.p_widget.refilter_list()
 
         
     def set_packet_widget(self, widget):
         self.p_widget = widget
+        
+    def activate_button(self):
+        self.submitbutton.set_sensitive(True)
         
         
