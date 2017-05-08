@@ -10,6 +10,7 @@ class FilterWidget:
 
         def __init__(self):
             self.filterlist = []
+            self.formatterWidget = None
             self.bpf = ""
             self.model_filter = Filter()
             self.packetwidget = PacketWidget()
@@ -17,11 +18,10 @@ class FilterWidget:
         def set_packet_widget(self, pwidget):
             self.packetwidget = pwidget
         def set_formatter_widget(self, fwidget):
-            print("formatterWidget set")
+            print(fwidget)
             self.formatterWidget = fwidget
         def create_widget(self):
             vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-            self.formatterWidget  = None
             bpfContainer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
             vbox.pack_start(bpfContainer,True,True,0)
             filterContainer = Gtk.Box(spacing=6)
@@ -124,6 +124,7 @@ class FilterWidget:
                     self.bpf += " "+line
             print(self.bpf+"|")
             print(self.model_filter)
+            print(self.formatterWidget)
             self.model_filter.set_pdmlman(self.personalman)
             self.model_filter.set_bpf_filter(self.bpf, "","")
             self.model_filter.saveFilter(self.customName.get_text())
@@ -152,6 +153,7 @@ class FilterWidget:
             print("Including!") 
             
         def on_addFilter_clicked(self, widget):
+            print(self.formatterWidget)
             selected = self.expLists.getSelected()
             if(selected[1] == "Type"):
                 self.askForValue()

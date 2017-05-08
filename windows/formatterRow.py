@@ -7,6 +7,7 @@ class FormatterRow():
         self.row = Gtk.ListBoxRow()
         self.listBox = listBox
         self.rowList = rowList
+        self.index = index
         expression = Gtk.Box(spacing=6)
         self.field = Gtk.Label()
         self.field.set_text(fieldVal)
@@ -20,8 +21,8 @@ class FormatterRow():
     def getVals(self):
         return self.field.get_text()
     def on_delete_clicked(self, widget):
-        self.listBox.remove(self.row)
-        self.listBox.show_all()
         if(type(self.rowList).__name__ != "Formatter"):
-            if(index == len(self.rowList)-1):
+            if(self.index == len(self.rowList)-1):
+               self.listBox.remove(self.row)
+               self.listBox.show_all()
                self.rowList.pop()        

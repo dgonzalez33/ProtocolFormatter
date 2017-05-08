@@ -75,7 +75,10 @@ class FormatterWidget:
         def set_filter(self, filter):
             self.filter = filter
         def update_actions(self):
+
             if(self.currentSelected >=0):
+                  for i in range(0, len(self.actionsListbox)):
+                         self.actionsListbox.remove(self.actionsListbox.get_row_at_index(i))
                   formatter = self.formatters[self.currentSelected]
                   for key in self.actionList.keys():
                         if(formatter.get_name() == key):
@@ -95,6 +98,8 @@ class FormatterWidget:
             ruleString = self.formatters[row.get_index()].get_rules_in_string()
             self.ruleList = self.formatters[row.get_index()].get_rules()
             ruleIndex = 0
+            for i in range(0, len(self.rulesListbox)):
+                   self.rulesListbox.remove(self.rulesListbox.get_row_at_index(i))
             for rs in ruleString:
                   row = FormatterRow(self.rulesListbox,rs,self.ruleList, ruleIndex)
                   self.rulesListbox.add(row.getRow())
@@ -114,17 +119,27 @@ class FormatterWidget:
                   self.formatters[self.currentSelected].applyFormatter()
 
         def on_Create_clicked(self, widget):
+
             if(self.currentSelected >=0):
                   nxtRule = Rule()
-                  filterSet = self.filter.get_filter()
-                  nxtRule.setFilter(filterSet[0],filterSet[1],filterSet[2])
+                  if(self.filter == None):
+                        nxtRule.setFilter("","","")
+                  else:
+                        filterSet = self.filter.get_filter()
+                        nxtRule.setFilter(filterSet[0],filterSet[1],filterSet[2])
                   for acts in self.actionList[self.formatters[self.currentSelected].get_name()]:
-                        nxtRule.addAction(nxtact)
+                        nxtRule.addAction(acts)
                   self.formatters[self.currentSelected].addRule(nxtRule)
                   ruleString = self.formatters[self.currentSelected].get_rules_in_string()
                   row = FormatterRow(self.rulesListbox,ruleString[-1],self.ruleList, len(ruleString)-1)
                   self.rulesListbox.add(row.getRow())
                   self.rulesListbox.show_all()
 
+                  for i in range(0, len(self.actionsListbox)):
+                         self.actionsListbox.remove(self.actionsListbox.get_row_at_index(i))
+                         self.actionList[self.formatters[self.currentSelected].get_name()].pop()
+
         def on_Delete_clicked(self, widget):
-            print("Deleting Rule!") 
+            for i in range(0, len(self.actionsListbox)):
+                  self.actionsListbox.remove(self.actionsListbox.get_row_at_index(i))
+                  self.actionList[self.formatters[self.currentSelected].get_name()].pop()
