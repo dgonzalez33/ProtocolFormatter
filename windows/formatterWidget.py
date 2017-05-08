@@ -120,7 +120,9 @@ class FormatterWidget:
         def on_Apply_clicked(self, widget):
             if(self.currentSelected >=0):
                   self.formatters[self.currentSelected].applyFormatter()
-                  self.formatterApplied.append(self.formatters[self.currentSelected])
+                  for i in range(0,len(self.formatters[self.currentSelected].get_rules())):
+                        print(i)
+                        self.formatterApplied.append(self.formatters[self.currentSelected])
 
         def on_Create_clicked(self, widget):
 
